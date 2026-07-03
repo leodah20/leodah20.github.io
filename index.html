@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leonardo Cordeiro — Portfolio</title>
+<meta name="description" content="Leonardo Cordeiro — Computer Scientist transitioning into Sound &amp; Music Computing. Projects, skills, background.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="crt-overlay" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <span class="topbar__logo">leodah20@portfolio</span>
+    <nav class="topbar__nav">
+      <a href="#whoami">whoami</a>
+      <a href="#education">education</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+      <span data-theme-icon></span>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <section class="window" id="whoami">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">bash — 80x24</span>
+    </div>
+    <div class="window__body hero">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ <span id="typedCmd"></span><span class="caret" aria-hidden="true"></span></p>
+      <div id="typedOutput" class="hero__output"></div>
+    </div>
+  </section>
+
+  <section class="window" id="education">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">education.md</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat education.md</p>
+
+      <article class="entry">
+        <h3 class="entry__title">B.Sc. in Computer Science</h3>
+        <p class="entry__meta">Completed</p>
+        <p class="entry__desc">Core foundation in algorithms, software engineering and computer systems — the base I'm now bending toward audio and music.</p>
+      </article>
+
+      <article class="entry entry--active">
+        <h3 class="entry__title">M.Sc. in Sound and Music Computing (SMC) <span class="badge">in progress — applying 2027/2028</span></h3>
+        <p class="entry__meta">Universitat Pompeu Fabra, Barcelona — Music Technology Group (MTG)</p>
+        <p class="entry__desc">Preparing my application by building a portfolio of DSP and MIR (Music Information Retrieval) projects, and working through the
+        <em>Audio Signal Processing for Music Applications</em> MOOC (Xavier Serra, UPF · Julius O. Smith, Stanford/CCRMA).</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="window" id="skills">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">skills/</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la skills/</p>
+      <div id="skillsGrid" class="skills-grid"></div>
+    </div>
+  </section>
+
+  <section class="window" id="projects">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">projects/</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la projects/ --sort=date</p>
+      <div id="projectsGrid" class="projects-grid"></div>
+    </div>
+  </section>
+
+  <section class="window" id="contact">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">contact.txt</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat contact.txt</p>
+      <ul class="contact-list" id="contactList"></ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+
+<script src="js/content.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
