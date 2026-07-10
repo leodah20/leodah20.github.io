@@ -43,6 +43,96 @@
     setTimeout(() => typedOutputEl.classList.add("is-visible"), 150);
   });
 
+  /* ---------- experience ---------- */
+  const experienceList = document.getElementById("experienceList");
+  CONTENT.experience.forEach((job) => {
+    const entry = document.createElement("article");
+    entry.className = "entry" + (job.current ? " entry--active" : "");
+
+    const title = document.createElement("h3");
+    title.className = "entry__title";
+    title.textContent = job.role + " — " + job.company;
+    if (job.current) {
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = "atual";
+      title.appendChild(badge);
+    }
+    entry.appendChild(title);
+
+    const meta = document.createElement("p");
+    meta.className = "entry__meta";
+    meta.textContent = job.period;
+    entry.appendChild(meta);
+
+    const desc = document.createElement("p");
+    desc.className = "entry__desc";
+    desc.textContent = job.desc;
+    entry.appendChild(desc);
+
+    if (job.highlights && job.highlights.length) {
+      const list = document.createElement("ul");
+      list.className = "entry__highlights";
+      job.highlights.forEach((h) => {
+        const li = document.createElement("li");
+        li.textContent = h;
+        list.appendChild(li);
+      });
+      entry.appendChild(list);
+    }
+
+    experienceList.appendChild(entry);
+  });
+
+  /* ---------- education ---------- */
+  const educationList = document.getElementById("educationList");
+  CONTENT.education.forEach((ed) => {
+    const entry = document.createElement("article");
+    entry.className = "entry" + (ed.current ? " entry--active" : "");
+
+    const title = document.createElement("h3");
+    title.className = "entry__title";
+    title.textContent = ed.title;
+    entry.appendChild(title);
+
+    const meta = document.createElement("p");
+    meta.className = "entry__meta";
+    meta.textContent = ed.place + " — " + ed.period;
+    entry.appendChild(meta);
+
+    const desc = document.createElement("p");
+    desc.className = "entry__desc";
+    desc.textContent = ed.desc;
+    entry.appendChild(desc);
+
+    educationList.appendChild(entry);
+  });
+
+  /* ---------- certifications ---------- */
+  const certList = document.getElementById("certList");
+  CONTENT.certifications.forEach((c) => {
+    const li = document.createElement("li");
+    if (c.featured) li.className = "is-featured";
+
+    const name = document.createElement("span");
+    name.className = "cert-list__name";
+    name.textContent = c.name;
+    if (c.featured) {
+      const badge = document.createElement("span");
+      badge.className = "badge cert-list__badge";
+      badge.textContent = "destaque";
+      name.appendChild(badge);
+    }
+    li.appendChild(name);
+
+    const meta = document.createElement("span");
+    meta.className = "cert-list__meta";
+    meta.textContent = [c.issuer, c.date].filter(Boolean).join(" · ");
+    li.appendChild(meta);
+
+    certList.appendChild(li);
+  });
+
   /* ---------- skills ---------- */
   const skillsGrid = document.getElementById("skillsGrid");
   CONTENT.skills.forEach((group) => {
@@ -51,7 +141,7 @@
 
     const title = document.createElement("p");
     title.className = "skill-card__title";
-    title.textContent = group.category.replace(/_/g, "/");
+    title.textContent = group.category.replace(/_/g, " ");
     card.appendChild(title);
 
     const list = document.createElement("ul");
@@ -106,15 +196,37 @@
         card.appendChild(stack);
       }
 
+      if (p.note) {
+        const note = document.createElement("p");
+        note.className = "project-card__note";
+        note.textContent = p.note;
+        card.appendChild(note);
+      }
+
+      const links = document.createElement("div");
+      links.className = "project-card__links";
+
+      if (p.demo) {
+        const demo = document.createElement("a");
+        demo.className = "project-card__link";
+        demo.href = p.demo;
+        demo.target = "_blank";
+        demo.rel = "noopener noreferrer";
+        demo.textContent = "live demo";
+        links.appendChild(demo);
+      }
+
       if (p.link) {
         const link = document.createElement("a");
         link.className = "project-card__link";
         link.href = p.link;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
-        link.textContent = "view project";
-        card.appendChild(link);
+        link.textContent = "source";
+        links.appendChild(link);
       }
+
+      card.appendChild(links);
 
       projectsGrid.appendChild(card);
     });

@@ -20,8 +20,10 @@
     <span class="topbar__logo">leodah20@portfolio</span>
     <nav class="topbar__nav">
       <a href="#whoami">whoami</a>
+      <a href="#experience">experience</a>
       <a href="#education">education</a>
       <a href="#skills">skills</a>
+      <a href="#certifications">certifications</a>
       <a href="#projects">projects</a>
       <a href="#contact">contact</a>
     </nav>
@@ -44,6 +46,17 @@
     </div>
   </section>
 
+  <section class="window" id="experience">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">experience.md</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat experience.md</p>
+      <div id="experienceList"></div>
+    </div>
+  </section>
+
   <section class="window" id="education">
     <div class="window__chrome">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
@@ -51,19 +64,7 @@
     </div>
     <div class="window__body">
       <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat education.md</p>
-
-      <article class="entry">
-        <h3 class="entry__title">B.Sc. in Computer Science</h3>
-        <p class="entry__meta">Completed</p>
-        <p class="entry__desc">Core foundation in algorithms, software engineering and computer systems — the base I'm now bending toward audio and music.</p>
-      </article>
-
-      <article class="entry entry--active">
-        <h3 class="entry__title">M.Sc. in Sound and Music Computing (SMC) <span class="badge">in progress — applying 2027/2028</span></h3>
-        <p class="entry__meta">Universitat Pompeu Fabra, Barcelona — Music Technology Group (MTG)</p>
-        <p class="entry__desc">Preparing my application by building a portfolio of DSP and MIR (Music Information Retrieval) projects, and working through the
-        <em>Audio Signal Processing for Music Applications</em> MOOC (Xavier Serra, UPF · Julius O. Smith, Stanford/CCRMA).</p>
-      </article>
+      <div id="educationList"></div>
     </div>
   </section>
 
@@ -75,6 +76,17 @@
     <div class="window__body">
       <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la skills/</p>
       <div id="skillsGrid" class="skills-grid"></div>
+    </div>
+  </section>
+
+  <section class="window" id="certifications">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">certifications/</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la certifications/</p>
+      <ul class="cert-list" id="certList"></ul>
     </div>
   </section>
 

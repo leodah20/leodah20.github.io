@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestão de Avisos - Painel Administrativo (protótipo estático)</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/calendario_styles.css">
+    <link rel="stylesheet" href="static/css/common_buttons.css">
+    <link rel="stylesheet" href="static/css/toast.css">
+    <link rel="stylesheet" href="static/css/demo-banner.css">
+</head>
+<body class="page-body">
+    <header class="page-header">
+        <div class="header-top">
+            <div class="header-brand">
+                <a href="dashboard.html" style="text-decoration: none;">
+                    <img class="header-logo" src="https://api.builder.io/api/v1/image/assets/TEMP/fb4d5eed694b229a53829dcdc98665ec0db0d36c?width=558" alt="UNIP">
+                </a>
+                <h1 class="header-title">Painel Administrativo</h1>
+            </div>
+            <div class="header-user">
+                <div class="user-info-panel">
+                    <div class="user-name-text">Usuário Demo</div>
+                    <div class="user-email-text">demo@unip.br</div>
+                </div>
+                <a href="index.html" class="btn-logout">sair</a>
+            </div>
+        </div>
+        <div class="header-submenu">
+            <div class="submenu-wrapper">
+                <svg class="icon-menu" width="25" height="19" viewBox="0 0 25 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.9919 6.66468H1M23.9919 1H1M23.9919 12.3294H1M23.9919 17.994H1" stroke="white" stroke-width="1.9993" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="submenu-text">Menu</span>
+                <div class="dropdown-menu">
+                    <a href="dashboard.html" class="dropdown-item">Home</a>
+                    <a href="#" class="dropdown-item" data-demo-stub>Calendário</a>
+                    <a href="#" class="dropdown-item" data-demo-stub>Conteúdo</a>
+                    <a href="#" class="dropdown-item" data-demo-stub>Informações Docentes</a>
+                    <a href="#" class="dropdown-item" data-demo-stub>Informações Curso</a>
+                    <a href="avisos.html" class="dropdown-item">Avisos</a>
+                    <a href="#" class="dropdown-item" data-demo-stub>Dúvidas Frequentes</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-main">
+        <div class="container-card">
+            <div class="calendar-header">
+                <div class="calendar-title-wrapper">
+                    <svg class="calendar-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M35 15H5C3.61929 15 2.5 16.1193 2.5 17.5V32.5C2.5 33.8807 3.61929 35 5 35H35C36.3807 35 37.5 33.8807 37.5 32.5V17.5C37.5 16.1193 36.3807 15 35 15Z" fill="#3292F9"/>
+                        <path d="M35 5H5C3.61929 5 2.5 6.11929 2.5 7.5V12.5C2.5 13.8807 3.61929 15 5 15H35C36.3807 15 37.5 13.8807 37.5 12.5V7.5C37.5 6.11929 36.3807 5 35 5Z" fill="#3292F9"/>
+                        <path d="M8.75 8.75H31.25V11.25H8.75V8.75Z" fill="white"/>
+                        <path d="M8.75 20H31.25V22.5H8.75V20Z" fill="white"/>
+                        <path d="M8.75 25H31.25V27.5H8.75V25Z" fill="white"/>
+                        <path d="M8.75 30H31.25V32.5H8.75V30Z" fill="white"/>
+                    </svg>
+                    <h2 class="calendar-title">Avisos</h2>
+                </div>
+            </div>
+
+            <div class="separator-line"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                <a href="#" class="btn-add-inline" data-demo-stub>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Criar Novo Aviso</span>
+                </a>
+
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="search-avisos" placeholder="Buscar avisos..." style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; min-width: 200px;">
+                    <select id="filter-order" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; cursor: pointer;">
+                        <option value="recentes">Mais recentes</option>
+                        <option value="antigos">Mais antigos</option>
+                        <option value="titulo-asc">Título (A-Z)</option>
+                        <option value="titulo-desc">Título (Z-A)</option>
+                    </select>
+                </div>
+            </div>
+
+            <ul class="avisos-list" id="avisos-list">
+                <li class="aviso-item" data-titulo="prova de calculo remarcada" data-data="2026-06-10">
+                    <a href="#" class="aviso-link" data-demo-stub>
+                        <div class="aviso-main">
+                            <div class="aviso-title-text">Prova de Cálculo remarcada</div>
+                            <div class="aviso-meta-text">
+                                <span class="aviso-date">2026-06-10</span>
+                                <span class="aviso-author">Coordenador</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="aviso-actions">
+                        <a href="#" class="btn-edit-info" title="Editar" data-demo-stub>
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M23.375 4.00008C23.7361 3.64989 24.1649 3.3721 24.6367 3.18258C25.1086 2.99305 25.6143 2.89551 26.125 2.89551C26.6357 2.89551 27.1414 2.99305 27.6133 3.18258C28.0851 3.3721 28.5139 3.64989 28.875 4.00008C29.2361 4.35027 29.5226 4.76601 29.7181 5.22355C29.9135 5.6811 30.0141 6.1715 30.0141 6.66674C30.0141 7.16199 29.9135 7.65239 29.7181 8.10993C29.5226 8.56748 29.2361 8.98322 28.875 9.33341L10.3125 27.3334L2.75 29.3334L4.8125 22.0001L23.375 4.00008Z" stroke="#2C8DFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Editar</span>
+                        </a>
+                        <button type="button" class="btn-edit-info" style="background-color: #dc3545; color: white; border: none; cursor: pointer;" title="Remover" data-demo-stub>
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Apagar</span>
+                        </button>
+                    </div>
+                </li>
+
+                <li class="aviso-item" data-titulo="entrega do tcc: prazo final" data-data="2026-06-02">
+                    <a href="#" class="aviso-link" data-demo-stub>
+                        <div class="aviso-main">
+                            <div class="aviso-title-text">Entrega do TCC: prazo final</div>
+                            <div class="aviso-meta-text">
+                                <span class="aviso-date">2026-06-02</span>
+                                <span class="aviso-author">Professor</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="aviso-actions">
+                        <a href="#" class="btn-edit-info" title="Editar" data-demo-stub>
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M23.375 4.00008C23.7361 3.64989 24.1649 3.3721 24.6367 3.18258C25.1086 2.99305 25.6143 2.89551 26.125 2.89551C26.6357 2.89551 27.1414 2.99305 27.6133 3.18258C28.0851 3.3721 28.5139 3.64989 28.875 4.00008C29.2361 4.35027 29.5226 4.76601 29.7181 5.22355C29.9135 5.6811 30.0141 6.1715 30.0141 6.66674C30.0141 7.16199 29.9135 7.65239 29.7181 8.10993C29.5226 8.56748 29.2361 8.98322 28.875 9.33341L10.3125 27.3334L2.75 29.3334L4.8125 22.0001L23.375 4.00008Z" stroke="#2C8DFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Editar</span>
+                        </a>
+                        <button type="button" class="btn-edit-info" style="background-color: #dc3545; color: white; border: none; cursor: pointer;" title="Remover" data-demo-stub>
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Apagar</span>
+                        </button>
+                    </div>
+                </li>
+
+                <li class="aviso-item" data-titulo="atendimento do coordenador nesta sexta" data-data="2026-05-28">
+                    <a href="#" class="aviso-link" data-demo-stub>
+                        <div class="aviso-main">
+                            <div class="aviso-title-text">Atendimento do coordenador nesta sexta</div>
+                            <div class="aviso-meta-text">
+                                <span class="aviso-date">2026-05-28</span>
+                                <span class="aviso-author">Sistema</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="aviso-actions">
+                        <a href="#" class="btn-edit-info" title="Editar" data-demo-stub>
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M23.375 4.00008C23.7361 3.64989 24.1649 3.3721 24.6367 3.18258C25.1086 2.99305 25.6143 2.89551 26.125 2.89551C26.6357 2.89551 27.1414 2.99305 27.6133 3.18258C28.0851 3.3721 28.5139 3.64989 28.875 4.00008C29.2361 4.35027 29.5226 4.76601 29.7181 5.22355C29.9135 5.6811 30.0141 6.1715 30.0141 6.66674C30.0141 7.16199 29.9135 7.65239 29.7181 8.10993C29.5226 8.56748 29.2361 8.98322 28.875 9.33341L10.3125 27.3334L2.75 29.3334L4.8125 22.0001L23.375 4.00008Z" stroke="#2C8DFA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Editar</span>
+                        </a>
+                        <button type="button" class="btn-edit-info" style="background-color: #dc3545; color: white; border: none; cursor: pointer;" title="Remover" data-demo-stub>
+                            <svg class="icon-edit" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 6H5H21M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M10 11V17M14 11V17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Apagar</span>
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
+
+    <script src="static/js/toast.js" defer></script>
+    <script src="static/js/demo.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const avisoItems = document.querySelectorAll('.aviso-item');
+            const searchInput = document.getElementById('search-avisos');
+            const filterSelect = document.getElementById('filter-order');
+            const avisoList = document.getElementById('avisos-list');
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    avisoItems.forEach(item => {
+                        const titulo = item.dataset.titulo || '';
+                        item.style.display = (searchTerm === '' || titulo.includes(searchTerm)) ? '' : 'none';
+                    });
+                    applyOrder();
+                });
+            }
+
+            function applyOrder() {
+                if (!filterSelect || !avisoList) return;
+                const order = filterSelect.value;
+                const visibleItems = Array.from(avisoList.querySelectorAll('.aviso-item'))
+                    .filter(item => item.style.display !== 'none');
+
+                let sorted = visibleItems;
+                if (order === 'recentes') {
+                    sorted = visibleItems.sort((a, b) => new Date(b.dataset.data) - new Date(a.dataset.data));
+                } else if (order === 'antigos') {
+                    sorted = visibleItems.sort((a, b) => new Date(a.dataset.data) - new Date(b.dataset.data));
+                } else if (order === 'titulo-asc') {
+                    sorted = visibleItems.sort((a, b) => a.dataset.titulo.localeCompare(b.dataset.titulo, 'pt-BR'));
+                } else if (order === 'titulo-desc') {
+                    sorted = visibleItems.sort((a, b) => b.dataset.titulo.localeCompare(a.dataset.titulo, 'pt-BR'));
+                }
+                sorted.forEach(item => avisoList.appendChild(item));
+            }
+
+            if (filterSelect) filterSelect.addEventListener('change', applyOrder);
+        });
+    </script>
+</body>
+</html>
