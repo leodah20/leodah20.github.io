@@ -47,23 +47,53 @@
   const experienceList = document.getElementById("experienceList");
   CONTENT.experience.forEach((job) => {
     const entry = document.createElement("article");
-    entry.className = "entry" + (job.current ? " entry--active" : "");
+    const isCurrent = job.current || (job.roles && job.roles.some((r) => r.current));
+    entry.className = "entry" + (isCurrent ? " entry--active" : "");
 
     const title = document.createElement("h3");
     title.className = "entry__title";
-    title.textContent = job.role + " — " + job.company;
-    if (job.current) {
-      const badge = document.createElement("span");
-      badge.className = "badge";
-      badge.textContent = "atual";
-      title.appendChild(badge);
-    }
-    entry.appendChild(title);
 
-    const meta = document.createElement("p");
-    meta.className = "entry__meta";
-    meta.textContent = job.period;
-    entry.appendChild(meta);
+    if (job.roles && job.roles.length) {
+      job.roles.forEach((r, i) => {
+        if (i > 0) {
+          const arrow = document.createElement("span");
+          arrow.className = "entry__roles-arrow";
+          arrow.textContent = " → ";
+          title.appendChild(arrow);
+        }
+        const roleSpan = document.createElement("span");
+        roleSpan.className = "entry__roles-title" + (r.current ? " is-current" : "");
+        roleSpan.textContent = r.title;
+        title.appendChild(roleSpan);
+        if (r.current) {
+          const badge = document.createElement("span");
+          badge.className = "badge";
+          badge.textContent = "atual";
+          roleSpan.appendChild(badge);
+        }
+      });
+      title.appendChild(document.createTextNode(" — " + job.company));
+      entry.appendChild(title);
+
+      const meta = document.createElement("p");
+      meta.className = "entry__meta";
+      meta.textContent = job.roles.map((r) => r.period).join("  ·  ");
+      entry.appendChild(meta);
+    } else {
+      title.textContent = job.role + " — " + job.company;
+      if (job.current) {
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = "atual";
+        title.appendChild(badge);
+      }
+      entry.appendChild(title);
+
+      const meta = document.createElement("p");
+      meta.className = "entry__meta";
+      meta.textContent = job.period;
+      entry.appendChild(meta);
+    }
 
     const desc = document.createElement("p");
     desc.className = "entry__desc";

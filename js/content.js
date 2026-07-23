@@ -18,13 +18,15 @@ const CONTENT = {
     "MikroTik. Estudante de Ciencia da Computacao (UNIP, form. 2026)."
   ],
 
-  // Newest first.
+  // Newest first. Build Engenharia uses `roles` (an array) to show a real
+  // promotion; every other entry uses the flat role/period/current shape.
   experience: [
     {
       company: "Build Engenharia",
-      role: "Estagiario em Infraestrutura de TI e Automacao Predial",
-      period: "set. 2025 - atual",
-      current: true,
+      roles: [
+        { title: "Estagiario em Infraestrutura de TI e Automacao Predial", period: "set. 2025 - jul. 2026", current: false },
+        { title: "Analista de Redes Jr.", period: "jul. 2026 - atual", current: true }
+      ],
       desc: "Empresa especializada em tecnologia predial e seguranca eletronica. Atuacao dividida em tres frentes:",
       highlights: [
         "Servidores: montagem de hardware, instalacao e configuracao de Windows Server 2016/2019/2022 e Linux Ubuntu Server; DHCP, DNS e File Server; virtualizacao com VMware ESXi e Hyper-V.",
@@ -65,19 +67,18 @@ const CONTENT = {
     }
   ],
 
-  // EDIT ME: adjust categories/items to match your real skill set.
   skills: [
     {
       category: "redes",
-      items: ["TCP/IP", "VLANs", "DHCP / DNS", "SNMP", "Wireshark"]
+      items: ["TCP/IP", "VLANs", "DHCP / DNS", "SNMP", "Wireshark", "Cabeamento estruturado", "Cisco Packet Tracer"]
     },
     {
       category: "servidores_e_virtualizacao",
-      items: ["Windows Server 2016/2019/2022", "Linux Ubuntu Server", "VMware ESXi", "Hyper-V", "File Server"]
+      items: ["Windows Server 2016/2019/2022", "Linux Ubuntu Server", "VMware ESXi", "Hyper-V", "File Server", "Active Directory"]
     },
     {
       category: "seguranca_e_firewall",
-      items: ["pfSense", "FortiGate", "Zabbix (monitoramento)", "Controle de acesso", "CFTV"]
+      items: ["pfSense", "FortiGate", "Zabbix (monitoramento)", "Controle de acesso", "CFTV", "VPN", "Hardening basico"]
     },
     {
       category: "equipamentos",
@@ -85,7 +86,7 @@ const CONTENT = {
     },
     {
       category: "linguagens_e_dev",
-      items: ["Python", "Java", "JavaScript", "HTML5 / CSS3", "Git / GitHub"]
+      items: ["Python", "Java", "JavaScript", "HTML5 / CSS3", "Git / GitHub", "Bash"]
     },
     {
       category: "idiomas",
@@ -93,30 +94,27 @@ const CONTENT = {
     }
   ],
 
-  // EDIT ME: certifications marked "featured: true" get extra visual weight
-  // (shown first, with a highlighted badge). Currently only the AWS cert is
-  // confirmed from your resume — no Cisco certificate was in there. If you
-  // have one (e.g. CCNA / Cisco Networking Academy), add it here with
-  // featured: true and I'll wire it in.
+  // featured: true => rendered as a lit LED card in the "featured" row.
+  // Everything else renders as a compact dim-LED pill. Keep featured to a
+  // small set (3) or the LED wall stops reading as "featured".
   certifications: [
     { name: "AWS Educate: Introduction to Generative AI", issuer: "Amazon Web Services", date: "mar. 2025", featured: true },
+    { name: "Conceitos Basicos de Redes", issuer: "Cisco Networking Academy", date: "22 mai. 2026", featured: true },
+    { name: "Treinamento Invenzi W-Access", issuer: "Invenzi", date: "18 mai. 2026 (valido ate 18/06/2028)", featured: true },
+    { name: "Comecando com o Cisco Packet Tracer", issuer: "Cisco Networking Academy", date: "16 abr. 2026" },
+    { name: "Linux Essentials", issuer: "Cisco Networking Academy (NDG)", date: "22 mai. 2026" },
+    { name: "Linux Unhatched", issuer: "Cisco Networking Academy (NDG)", date: "22 mai. 2026" },
+    { name: "C++ Essentials 1", issuer: "Cisco Networking Academy (C++ Institute)", date: "27 mai. 2026" },
     { name: "Introducao a Ciberseguranca com o Santander", issuer: "Santander Brasil", date: "abr. 2025" },
-    { name: "Fundamentos de HTTP para Desenvolvedores", issuer: "LinkedIn Learning", date: "abr. 2025" },
-    { name: "Integrando Inteligencia Artificial nas Empresas", issuer: "Universidade Paulista", date: "out. 2024" },
-    { name: "Seguranca da Informacao e a Protecao de Dados nos Dias Atuais", issuer: "Universidade Paulista", date: "out. 2024" },
-    { name: "Linux Unhatched", issuer: "LinkedIn Learning", date: "" },
-    { name: "EFSET English Certificate 75/100 (C2 Proficient)", issuer: "EF SET", date: "set. 2021" }
+    { name: "Fundamentos de HTTP para Desenvolvedores", issuer: "LinkedIn Learning", date: "03 abr. 2025" },
+    { name: "Seguranca da Informacao e a Protecao de Dados nos Dias Atuais", issuer: "Universidade Paulista (palestra)", date: "21 out. 2024" },
+    { name: "Integrando Inteligencia Artificial nas Empresas", issuer: "Universidade Paulista (palestra)", date: "31 out. 2024" },
+    { name: "EFSET English Certificate 75/100 (C2 Proficient)", issuer: "EF SET", date: "22 set. 2021" }
   ],
 
-  // EDIT ME: add one object per project. Newest first.
-  // Example:
-  // {
-  //   name: "monitoramento-zabbix",
-  //   period: "2026",
-  //   desc: "Dashboard customizado de monitoramento de rede com Zabbix.",
-  //   stack: ["Zabbix", "SNMP"],
-  //   link: "https://github.com/leodah20/..."
-  // }
+  // EDIT ME: add one object per project. Newest first. `demo` presence
+  // controls the host-card status label (online vs source-only) — do not
+  // add a demo link unless it is a real, reachable URL.
   projects: [
     {
       name: "ecofuturo",

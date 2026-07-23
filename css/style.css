@@ -168,6 +168,9 @@ main{
   margin: 0 0 4px; font-size: 15px; color: var(--fg);
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
 }
+.entry__roles-arrow{ color: var(--fg-dim); margin: 0 4px; font-weight: 400; }
+.entry__roles-title{ color: var(--fg-dim); }
+.entry__roles-title.is-current{ color: var(--fg); }
 .entry__meta{ margin: 0 0 8px; color: var(--fg-dim); font-size: 13px; }
 .entry__desc{ margin: 0; color: var(--fg); font-size: 13.5px; max-width: 62ch; }
 .entry__highlights{ margin: 10px 0 0; padding: 0; list-style: none; }
