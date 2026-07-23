@@ -160,29 +160,52 @@
     educationList.appendChild(entry);
   });
 
-  /* ---------- certifications ---------- */
-  const certList = document.getElementById("certList");
+  /* ---------- certifications (led wall) ---------- */
+  const certsFeatured = document.getElementById("certsFeatured");
+  const certsRegular = document.getElementById("certsRegular");
+
   CONTENT.certifications.forEach((c) => {
-    const li = document.createElement("li");
-    if (c.featured) li.className = "is-featured";
-
-    const name = document.createElement("span");
-    name.className = "cert-list__name";
-    name.textContent = c.name;
     if (c.featured) {
-      const badge = document.createElement("span");
-      badge.className = "badge cert-list__badge";
-      badge.textContent = "destaque";
-      name.appendChild(badge);
+      const card = document.createElement("div");
+      card.className = "led-card";
+
+      const dot = document.createElement("span");
+      dot.className = "led-card__dot";
+      card.appendChild(dot);
+
+      const body = document.createElement("div");
+      const name = document.createElement("p");
+      name.className = "led-card__name";
+      name.textContent = c.name;
+      body.appendChild(name);
+
+      const meta = document.createElement("p");
+      meta.className = "led-card__meta";
+      meta.textContent = [c.issuer, c.date].filter(Boolean).join(" · ");
+      body.appendChild(meta);
+
+      card.appendChild(body);
+      certsFeatured.appendChild(card);
+    } else {
+      const pill = document.createElement("div");
+      pill.className = "led-pill";
+
+      const dot = document.createElement("span");
+      dot.className = "led-pill__dot";
+      pill.appendChild(dot);
+
+      const name = document.createElement("span");
+      name.className = "led-pill__name";
+      name.textContent = c.name;
+      pill.appendChild(name);
+
+      const meta = document.createElement("span");
+      meta.className = "led-pill__meta";
+      meta.textContent = [c.issuer, c.date].filter(Boolean).join(" · ");
+      pill.appendChild(meta);
+
+      certsRegular.appendChild(pill);
     }
-    li.appendChild(name);
-
-    const meta = document.createElement("span");
-    meta.className = "cert-list__meta";
-    meta.textContent = [c.issuer, c.date].filter(Boolean).join(" · ");
-    li.appendChild(meta);
-
-    certList.appendChild(li);
   });
 
   /* ---------- skills topology ---------- */
