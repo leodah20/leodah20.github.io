@@ -21,6 +21,28 @@
     applyTheme(current === "light" ? "dark" : "light");
   });
 
+  /* ---------- sidebar active-section tracking ---------- */
+  const sidebarLinks = Array.from(document.querySelectorAll(".sidebar__nav a"));
+  const observedSections = sidebarLinks
+    .map((a) => document.getElementById(a.dataset.section))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const id = entry.target.id;
+          sidebarLinks.forEach((a) => {
+            a.classList.toggle("is-active", a.dataset.section === id);
+          });
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+    );
+    observedSections.forEach((section) => sectionObserver.observe(section));
+  }
+
   /* ---------- hero typing effect ---------- */
   const typedCmdEl = document.getElementById("typedCmd");
   const typedOutputEl = document.getElementById("typedOutput");
