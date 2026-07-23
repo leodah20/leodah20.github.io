@@ -1,33 +1,36 @@
 /* ---------------------------------------------------------------------------
-   Theme tokens
+   Theme tokens — "Console Elevado"
 --------------------------------------------------------------------------- */
 :root{
-  --bg:        #0b0e11;
-  --bg-alt:    #12161b;
-  --bg-raised: #171c22;
-  --fg:        #d9e0e8;
-  --fg-dim:    #6d7a87;
-  --border:    #232b33;
+  --bg:        #0c1210;
+  --bg-alt:    #101d19;
+  --bg-raised: #16241f;
+  --fg:        #e6f2ee;
+  --fg-dim:    #7a8f8a;
+  --border:    #1e332c;
   --accent:    #5eead4;
   --accent-2:  #f5a623;
+  --accent-3:  #a78bfa;
   --danger:    #ff5f56;
   --warn:      #ffbd2e;
-  --ok:        #27c93f;
+  --ok:        #3ddc84;
   --shadow: 0 8px 30px rgba(0,0,0,.35);
   --radius: 7px;
+  --sidebar-w: 200px;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 :root[data-theme="light"]{
-  --bg:        #f3efe6;
-  --bg-alt:    #fffdf8;
+  --bg:        #eef3f1;
+  --bg-alt:    #ffffff;
   --bg-raised: #ffffff;
-  --fg:        #1c2126;
-  --fg-dim:    #6a6157;
-  --border:    #ddd5c4;
+  --fg:        #14201c;
+  --fg-dim:    #5b6b66;
+  --border:    #d7e2de;
   --accent:    #0d8a7c;
   --accent-2:  #b4530a;
-  --shadow: 0 8px 24px rgba(30,25,15,.08);
+  --accent-3:  #6d4fc7;
+  --shadow: 0 8px 24px rgba(20,30,25,.08);
 }
 
 *{ box-sizing: border-box; }
@@ -35,6 +38,8 @@ html{ scroll-behavior: smooth; }
 
 body{
   margin: 0;
+  min-height: 100vh;
+  display: flex;
   background: var(--bg);
   color: var(--fg);
   font-family: var(--mono);
@@ -60,6 +65,17 @@ a:hover{ text-decoration: underline; }
   );
   opacity: .5;
   mix-blend-mode: overlay;
+}
+
+/* ---------------------------------------------------------------------------
+   Decorative background grid — fills empty space on ultra-wide viewports
+--------------------------------------------------------------------------- */
+.bg-grid{
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(to right, var(--border) 0, var(--border) 1px, transparent 1px, transparent 64px),
+    repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 1px, transparent 1px, transparent 64px);
+  opacity: .35;
 }
 
 /* ---------------------------------------------------------------------------
