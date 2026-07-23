@@ -14,24 +14,21 @@
 <body>
 
 <div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
 
-<header class="topbar">
-  <div class="topbar__inner">
-    <span class="topbar__logo">leodah20@portfolio</span>
-    <nav class="topbar__nav">
-      <a href="#whoami">whoami</a>
-      <a href="#experience">experience</a>
-      <a href="#education">education</a>
-      <a href="#skills">skills</a>
-      <a href="#certifications">certifications</a>
-      <a href="#projects">projects</a>
-      <a href="#contact">contact</a>
-    </nav>
-    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
-      <span data-theme-icon></span>
-    </button>
-  </div>
-</header>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="#whoami" data-section="whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="#skills" data-section="skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="#certifications" data-section="certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="#projects" data-section="projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="#contact" data-section="contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
 
 <main>
 
@@ -71,33 +68,44 @@
   <section class="window" id="skills">
     <div class="window__chrome">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-      <span class="window__title">skills/</span>
+      <span class="window__title">skills/ — topology</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la skills/</p>
-      <div id="skillsGrid" class="skills-grid"></div>
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ map skills/ --topology</p>
+      <div class="topology">
+        <div class="topology__diagram">
+          <svg id="topologySvg" viewBox="0 0 460 460" role="img" aria-label="Diagrama de categorias de skills"></svg>
+        </div>
+        <div class="topology__detail" id="topologyDetail">
+          <p class="topology__hint">clique num nó para ver as skills daquela categoria</p>
+        </div>
+        <ul class="topology__fallback" id="topologyFallback"></ul>
+      </div>
     </div>
   </section>
 
   <section class="window" id="certifications">
     <div class="window__chrome">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-      <span class="window__title">certifications/</span>
+      <span class="window__title">certifications/ — led wall</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la certifications/</p>
-      <ul class="cert-list" id="certList"></ul>
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la certifications/ --led</p>
+      <div class="led-wall">
+        <div class="led-wall__featured" id="certsFeatured"></div>
+        <div class="led-wall__regular" id="certsRegular"></div>
+      </div>
     </div>
   </section>
 
   <section class="window" id="projects">
     <div class="window__chrome">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-      <span class="window__title">projects/</span>
+      <span class="window__title">projects/ — hosts</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la projects/ --sort=date</p>
-      <div id="projectsGrid" class="projects-grid"></div>
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ status hosts/ --all</p>
+      <div id="hostsGrid" class="hosts-grid"></div>
     </div>
   </section>
 
