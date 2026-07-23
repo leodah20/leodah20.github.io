@@ -259,41 +259,41 @@ main{
 }
 
 /* ---------------------------------------------------------------------------
-   Projects
+   Projects — host cards
 --------------------------------------------------------------------------- */
-.projects-grid{
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
-}
-.project-card{
+.hosts-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.host-card{
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px 18px;
   background: var(--bg-raised);
   transition: border-color .15s ease, transform .15s ease;
 }
-.project-card:hover{ border-color: var(--accent); transform: translateY(-2px); }
-.project-card__name{
-  margin: 0 0 4px; font-size: 14.5px; color: var(--fg);
-}
-.project-card__name::before{ content: "> "; color: var(--accent); }
-.project-card__period{ color: var(--fg-dim); font-size: 12px; margin: 0 0 8px; }
-.project-card__desc{ font-size: 13px; margin: 0 0 10px; color: var(--fg); }
-.project-card__stack{
-  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
-}
-.project-card__stack span{
+.host-card:hover{ border-color: var(--accent); transform: translateY(-2px); }
+.host-card__head{ display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+.host-card__name{ margin: 0; font-size: 14px; color: var(--fg); }
+.host-card__name::before{ content: "host: "; color: var(--fg-dim); }
+.host-card__status{ font-size: 11px; color: var(--fg-dim); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.host-card__status-dot{ width: 7px; height: 7px; border-radius: 50%; background: var(--ok); display: inline-block; }
+.host-card__status.is-source .host-card__status-dot{ background: var(--fg-dim); }
+.host-card__period{ color: var(--fg-dim); font-size: 12px; margin: 0 0 8px; }
+.host-card__desc{ font-size: 13px; margin: 0 0 10px; color: var(--fg); }
+.host-card__stack{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.host-card__stack span{
   font-size: 11px; color: var(--fg-dim);
   border: 1px solid var(--border); border-radius: 4px; padding: 1px 7px;
 }
-.project-card__note{ font-size: 12px; color: var(--fg-dim); font-style: italic; margin: 0 0 10px; }
-.project-card__links{ display: flex; gap: 16px; flex-wrap: wrap; }
-.project-card__link{ font-size: 13px; }
-.project-card__link::after{ content: " ->"; }
+.host-card__note{ font-size: 12px; color: var(--fg-dim); font-style: italic; margin: 0 0 10px; }
+.host-card__links{ display: flex; gap: 16px; flex-wrap: wrap; }
+.host-card__link{ font-size: 13px; }
+.host-card__link::after{ content: " ->"; }
 
-.empty-state{
-  color: var(--fg-dim); font-size: 13.5px; grid-column: 1 / -1;
-}
+.empty-state{ color: var(--fg-dim); font-size: 13.5px; grid-column: 1 / -1; }
 .empty-state::before{ content: "ls: "; }
+
+@media (max-width: 720px){
+  .hosts-grid{ grid-template-columns: 1fr; }
+}
 
 /* ---------------------------------------------------------------------------
    Certifications

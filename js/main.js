@@ -286,38 +286,52 @@
 
   selectSkillCategory(0);
 
-  /* ---------- projects ---------- */
-  const projectsGrid = document.getElementById("projectsGrid");
+  /* ---------- projects (host cards) ---------- */
+  const hostsGrid = document.getElementById("hostsGrid");
   if (!CONTENT.projects.length) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = "cannot access 'projects/*': entries coming soon";
-    projectsGrid.appendChild(empty);
+    empty.textContent = "cannot access 'hosts/*': entries coming soon";
+    hostsGrid.appendChild(empty);
   } else {
     CONTENT.projects.forEach((p) => {
       const card = document.createElement("article");
-      card.className = "project-card";
+      card.className = "host-card";
+
+      const head = document.createElement("div");
+      head.className = "host-card__head";
 
       const name = document.createElement("h3");
-      name.className = "project-card__name";
+      name.className = "host-card__name";
       name.textContent = p.name;
-      card.appendChild(name);
+      head.appendChild(name);
+
+      const isOnline = Boolean(p.demo);
+      const status = document.createElement("span");
+      status.className = "host-card__status" + (isOnline ? "" : " is-source");
+      const statusDot = document.createElement("span");
+      statusDot.className = "host-card__status-dot";
+      status.appendChild(statusDot);
+      status.appendChild(document.createTextNode(isOnline ? "online" : "source only"));
+      head.appendChild(status);
+
+      card.appendChild(head);
 
       if (p.period) {
         const period = document.createElement("p");
-        period.className = "project-card__period";
+        period.className = "host-card__period";
         period.textContent = p.period;
         card.appendChild(period);
       }
 
       const desc = document.createElement("p");
-      desc.className = "project-card__desc";
+      desc.className = "host-card__desc";
       desc.textContent = p.desc;
       card.appendChild(desc);
 
       if (p.stack && p.stack.length) {
         const stack = document.createElement("div");
-        stack.className = "project-card__stack";
+        stack.className = "host-card__stack";
         p.stack.forEach((s) => {
           const span = document.createElement("span");
           span.textContent = s;
@@ -328,17 +342,17 @@
 
       if (p.note) {
         const note = document.createElement("p");
-        note.className = "project-card__note";
+        note.className = "host-card__note";
         note.textContent = p.note;
         card.appendChild(note);
       }
 
       const links = document.createElement("div");
-      links.className = "project-card__links";
+      links.className = "host-card__links";
 
       if (p.demo) {
         const demo = document.createElement("a");
-        demo.className = "project-card__link";
+        demo.className = "host-card__link";
         demo.href = p.demo;
         demo.target = "_blank";
         demo.rel = "noopener noreferrer";
@@ -348,7 +362,7 @@
 
       if (p.link) {
         const link = document.createElement("a");
-        link.className = "project-card__link";
+        link.className = "host-card__link";
         link.href = p.link;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
@@ -358,7 +372,7 @@
 
       card.appendChild(links);
 
-      projectsGrid.appendChild(card);
+      hostsGrid.appendChild(card);
     });
   }
 
