@@ -223,18 +223,40 @@ main{
 }
 
 /* ---------------------------------------------------------------------------
-   Skills
+   Skills — topology diagram
 --------------------------------------------------------------------------- */
-.skills-grid{
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
+.topology{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+.topology__diagram svg{ width: 100%; height: auto; display: block; }
+.topology__detail{ background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; min-height: 160px; }
+.topology__hint{ color: var(--fg-dim); font-size: 13px; margin: 0; }
+.topology__detail-title{ color: var(--accent-2); font-size: 13px; margin: 0 0 8px; }
+.topology__detail-title::before{ content: "# "; color: var(--fg-dim); }
+.topology__detail-list{ list-style: none; margin: 0; padding: 0; }
+.topology__detail-list li{ font-size: 13.5px; padding: 2px 0; }
+.topology__detail-list li::before{ content: "- "; color: var(--fg-dim); }
+
+.topology-node{ cursor: pointer; }
+.topology-node circle{ fill: var(--bg-alt); stroke: var(--accent); stroke-width: 2; transition: stroke .15s ease, fill .15s ease; }
+.topology-node.is-center circle{ stroke: var(--accent); fill: var(--bg-raised); }
+.topology-node.is-active circle{ stroke: var(--accent-2); fill: color-mix(in srgb, var(--accent-2) 15%, var(--bg-alt)); }
+.topology-node text{ fill: var(--fg-dim); font-family: var(--mono); font-size: 12px; text-anchor: middle; }
+.topology-node.is-active text{ fill: var(--accent-2); }
+.topology-node.is-center text{ fill: var(--fg); }
+.topology-link{ stroke: var(--border); stroke-width: 1.5; }
+
+.topology__fallback{ display: none; list-style: none; margin: 0; padding: 0; grid-column: 1 / -1; }
+.topology__fallback li{ margin-bottom: 6px; }
+.topology__fallback button{
+  width: 100%; text-align: left; background: var(--bg-raised); border: 1px solid var(--border);
+  color: var(--fg); font-family: var(--mono); font-size: 13px; padding: 8px 10px; border-radius: var(--radius); cursor: pointer;
 }
-.skill-card__title{
-  color: var(--accent-2); font-size: 12.5px; margin: 0 0 8px;
+.topology__fallback button.is-active{ border-color: var(--accent-2); color: var(--accent-2); }
+
+@media (max-width: 720px){
+  .topology{ grid-template-columns: 1fr; }
+  .topology__diagram{ display: none; }
+  .topology__fallback{ display: block; }
 }
-.skill-card__title::before{ content: "# "; color: var(--fg-dim); }
-.skill-card__list{ list-style: none; margin: 0; padding: 0; }
-.skill-card__list li{ font-size: 13.5px; padding: 2px 0; }
-.skill-card__list li::before{ content: "- "; color: var(--fg-dim); }
 
 /* ---------------------------------------------------------------------------
    Projects

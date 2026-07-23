@@ -185,28 +185,106 @@
     certList.appendChild(li);
   });
 
-  /* ---------- skills ---------- */
-  const skillsGrid = document.getElementById("skillsGrid");
-  CONTENT.skills.forEach((group) => {
-    const card = document.createElement("div");
-    card.className = "skill-card";
+  /* ---------- skills topology ---------- */
+  function computeRadialPositions(count, cx, cy, radius, startAngleDeg) {
+    const positions = [];
+    const step = 360 / count;
+    for (let i = 0; i < count; i++) {
+      const angleDeg = startAngleDeg + step * i;
+      const angleRad = (angleDeg * Math.PI) / 180;
+      positions.push({
+        x: cx + radius * Math.cos(angleRad),
+        y: cy + radius * Math.sin(angleRad)
+      });
+    }
+    return positions;
+  }
 
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const topologySvg = document.getElementById("topologySvg");
+  const topologyDetail = document.getElementById("topologyDetail");
+  const topologyFallback = document.getElementById("topologyFallback");
+
+  const TOPOLOGY_CENTER = { x: 230, y: 230 };
+  const TOPOLOGY_RADIUS = 160;
+  const NODE_R = 20;
+  const CENTER_R = 24;
+
+  function makeSvgEl(tag, attrs) {
+    const el = document.createElementNS(SVG_NS, tag);
+    Object.keys(attrs).forEach((key) => el.setAttribute(key, attrs[key]));
+    return el;
+  }
+
+  const nodePositions = computeRadialPositions(
+    CONTENT.skills.length, TOPOLOGY_CENTER.x, TOPOLOGY_CENTER.y, TOPOLOGY_RADIUS, -90
+  );
+
+  CONTENT.skills.forEach((group, i) => {
+    const pos = nodePositions[i];
+    topologySvg.appendChild(makeSvgEl("line", {
+      class: "topology-link",
+      x1: TOPOLOGY_CENTER.x, y1: TOPOLOGY_CENTER.y, x2: pos.x, y2: pos.y
+    }));
+  });
+
+  const centerGroup = makeSvgEl("g", { class: "topology-node is-center" });
+  centerGroup.appendChild(makeSvgEl("circle", { cx: TOPOLOGY_CENTER.x, cy: TOPOLOGY_CENTER.y, r: CENTER_R }));
+  const centerLabel = makeSvgEl("text", { x: TOPOLOGY_CENTER.x, y: TOPOLOGY_CENTER.y + 4 });
+  centerLabel.textContent = "você";
+  centerGroup.appendChild(centerLabel);
+  topologySvg.appendChild(centerGroup);
+
+  const nodeGroups = CONTENT.skills.map((group, i) => {
+    const pos = nodePositions[i];
+    const g = makeSvgEl("g", { class: "topology-node", tabindex: "0", role: "button" });
+    g.appendChild(makeSvgEl("circle", { cx: pos.x, cy: pos.y, r: NODE_R }));
+    const label = makeSvgEl("text", { x: pos.x, y: pos.y + NODE_R + 16 });
+    label.textContent = group.category.replace(/_/g, " ");
+    g.appendChild(label);
+    g.addEventListener("click", () => selectSkillCategory(i));
+    g.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); selectSkillCategory(i); }
+    });
+    topologySvg.appendChild(g);
+    return g;
+  });
+
+  CONTENT.skills.forEach((group, i) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = group.category.replace(/_/g, " ");
+    btn.addEventListener("click", () => selectSkillCategory(i));
+    li.appendChild(btn);
+    topologyFallback.appendChild(li);
+  });
+
+  function selectSkillCategory(index) {
+    const group = CONTENT.skills[index];
+
+    nodeGroups.forEach((g, i) => g.classList.toggle("is-active", i === index));
+    Array.from(topologyFallback.querySelectorAll("button")).forEach((btn, i) => {
+      btn.classList.toggle("is-active", i === index);
+    });
+
+    topologyDetail.innerHTML = "";
     const title = document.createElement("p");
-    title.className = "skill-card__title";
+    title.className = "topology__detail-title";
     title.textContent = group.category.replace(/_/g, " ");
-    card.appendChild(title);
+    topologyDetail.appendChild(title);
 
     const list = document.createElement("ul");
-    list.className = "skill-card__list";
+    list.className = "topology__detail-list";
     group.items.forEach((item) => {
       const li = document.createElement("li");
       li.textContent = item;
       list.appendChild(li);
     });
-    card.appendChild(list);
+    topologyDetail.appendChild(list);
+  }
 
-    skillsGrid.appendChild(card);
-  });
+  selectSkillCategory(0);
 
   /* ---------- projects ---------- */
   const projectsGrid = document.getElementById("projectsGrid");

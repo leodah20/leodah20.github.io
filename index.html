@@ -68,11 +68,19 @@
   <section class="window" id="skills">
     <div class="window__chrome">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-      <span class="window__title">skills/</span>
+      <span class="window__title">skills/ — topology</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la skills/</p>
-      <div id="skillsGrid" class="skills-grid"></div>
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ map skills/ --topology</p>
+      <div class="topology">
+        <div class="topology__diagram">
+          <svg id="topologySvg" viewBox="0 0 460 460" role="img" aria-label="Diagrama de categorias de skills"></svg>
+        </div>
+        <div class="topology__detail" id="topologyDetail">
+          <p class="topology__hint">clique num nó para ver as skills daquela categoria</p>
+        </div>
+        <ul class="topology__fallback" id="topologyFallback"></ul>
+      </div>
     </div>
   </section>
 
