@@ -76,6 +76,11 @@ a:hover{ text-decoration: underline; }
     repeating-linear-gradient(to right, var(--border) 0, var(--border) 1px, transparent 1px, transparent 64px),
     repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 1px, transparent 1px, transparent 64px);
   opacity: .35;
+  animation: grid-drift 14s linear infinite;
+}
+@keyframes grid-drift{
+  0%{ background-position: 0 0, 0 0; }
+  100%{ background-position: 64px 64px, 64px 64px; }
 }
 
 /* ---------------------------------------------------------------------------
@@ -100,9 +105,10 @@ a:hover{ text-decoration: underline; }
   color: var(--fg-dim); font-size: 12.5px; white-space: nowrap;
 }
 .sidebar__nav a:hover, .sidebar__nav a.is-active{ color: var(--fg); background: var(--bg-raised); text-decoration: none; }
-.sidebar__nav a.is-active .sidebar__dot{ box-shadow: 0 0 6px var(--dot-color); }
+.sidebar__nav a.is-active .sidebar__dot{ box-shadow: 0 0 6px var(--dot-color); animation: pulse-glow 1.8s ease-in-out infinite; }
 .sidebar__dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--dot-color); flex-shrink: 0; }
 .sidebar .theme-toggle{ align-self: center; }
+.sidebar__uptime{ text-align: center; font-size: 10px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
 
 .theme-toggle{
   background: var(--bg-raised); border: 1px solid var(--border);
@@ -139,6 +145,7 @@ main{
   }
   .sidebar__nav{ flex-direction: row; flex: 1; gap: 14px; }
   .sidebar__brand{ display: none; }
+  .sidebar__uptime{ display: none; }
   main{ padding: 24px 16px 20px; }
 }
 
@@ -149,6 +156,15 @@ main{
   box-shadow: var(--shadow);
   overflow: hidden;
   scroll-margin-top: 70px;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+.window.is-revealed{ opacity: 1; transform: none; }
+
+@keyframes pulse-glow{
+  0%, 100%{ opacity: 1; }
+  50%{ opacity: .4; }
 }
 .window__chrome{
   display: flex; align-items: center; gap: 8px;
@@ -238,7 +254,16 @@ main{
 .topology-node{ cursor: pointer; }
 .topology-node circle{ fill: var(--bg-alt); stroke: var(--accent); stroke-width: 2; transition: stroke .15s ease, fill .15s ease; }
 .topology-node.is-center circle{ stroke: var(--accent); fill: var(--bg-raised); }
-.topology-node.is-active circle{ stroke: var(--accent-2); fill: color-mix(in srgb, var(--accent-2) 15%, var(--bg-alt)); }
+.topology-node.is-active circle{
+  stroke: var(--accent-2); fill: color-mix(in srgb, var(--accent-2) 15%, var(--bg-alt));
+  animation: node-pulse 1.6s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes node-pulse{
+  0%, 100%{ stroke-width: 2; }
+  50%{ stroke-width: 3.5; }
+}
 .topology-node text{ fill: var(--fg-dim); font-family: var(--mono); font-size: 12px; text-anchor: middle; }
 .topology-node.is-active text{ fill: var(--accent-2); }
 .topology-node.is-center text{ fill: var(--fg); }
@@ -259,6 +284,29 @@ main{
 }
 
 /* ---------------------------------------------------------------------------
+   Skills — distribution chart
+--------------------------------------------------------------------------- */
+.skills-chart{ margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.skills-chart__row{
+  display: grid; grid-template-columns: 160px 1fr 28px; align-items: center; gap: 10px;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.window.is-revealed .skills-chart__row{ opacity: 1; transform: none; }
+.skills-chart__label{ font-size: 12px; color: var(--fg-dim); }
+.skills-chart__track{ background: var(--bg-alt); border: 1px solid var(--border); border-radius: 100px; height: 10px; overflow: hidden; }
+.skills-chart__bar{
+  height: 100%; width: 0%; border-radius: 100px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  transition: width 1s cubic-bezier(.16,1,.3,1);
+}
+.skills-chart__count{ font-size: 11px; color: var(--fg-dim); text-align: right; }
+
+@media (max-width: 480px){
+  .skills-chart__row{ grid-template-columns: 96px 1fr 22px; }
+}
+
+/* ---------------------------------------------------------------------------
    Projects — host cards
 --------------------------------------------------------------------------- */
 .hosts-grid{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
@@ -274,8 +322,17 @@ main{
 .host-card__name{ margin: 0; font-size: 14px; color: var(--fg); }
 .host-card__name::before{ content: "host: "; color: var(--fg-dim); }
 .host-card__status{ font-size: 11px; color: var(--fg-dim); display: flex; align-items: center; gap: 5px; white-space: nowrap; }
-.host-card__status-dot{ width: 7px; height: 7px; border-radius: 50%; background: var(--ok); display: inline-block; }
+.host-card__status-dot{ position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--ok); display: inline-block; }
 .host-card__status.is-source .host-card__status-dot{ background: var(--fg-dim); }
+.host-card__status:not(.is-source) .host-card__status-dot::after{
+  content: ""; position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px solid var(--ok);
+  animation: status-ping 1.8s cubic-bezier(0,.6,.6,1) infinite;
+}
+@keyframes status-ping{
+  0%{ transform: scale(.6); opacity: .8; }
+  100%{ transform: scale(2); opacity: 0; }
+}
 .host-card__period{ color: var(--fg-dim); font-size: 12px; margin: 0 0 8px; }
 .host-card__desc{ font-size: 13px; margin: 0 0 10px; color: var(--fg); }
 .host-card__stack{ display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
@@ -305,7 +362,11 @@ main{
   border: 1px solid color-mix(in srgb, var(--accent-3) 45%, var(--border));
   border-radius: var(--radius); padding: 12px 14px;
 }
-.led-card__dot{ width: 9px; height: 9px; margin-top: 4px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 8px var(--accent-3); flex-shrink: 0; }
+.led-card__dot{
+  width: 9px; height: 9px; margin-top: 4px; border-radius: 50%;
+  background: var(--accent-3); box-shadow: 0 0 8px var(--accent-3); flex-shrink: 0;
+  animation: pulse-glow 2.4s ease-in-out infinite;
+}
 .led-card__name{ margin: 0 0 4px; font-size: 13px; color: var(--fg); }
 .led-card__meta{ margin: 0; font-size: 11.5px; color: var(--fg-dim); }
 
@@ -319,6 +380,32 @@ main{
 @media (max-width: 720px){
   .led-wall__featured{ grid-template-columns: 1fr; }
 }
+
+/* ---------------------------------------------------------------------------
+   Certifications — timeline
+--------------------------------------------------------------------------- */
+.cert-timeline{ position: relative; margin-top: 20px; padding-left: 22px; }
+.cert-timeline::before{
+  content: ""; position: absolute; left: 5px; top: 4px; bottom: 4px; width: 2px;
+  background: var(--border);
+}
+.cert-timeline__item{
+  position: relative; padding-bottom: 16px;
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.cert-timeline__item:last-child{ padding-bottom: 0; }
+.window.is-revealed .cert-timeline__item{ opacity: 1; transform: none; }
+.cert-timeline__dot{
+  position: absolute; left: -22px; top: 3px; width: 11px; height: 11px;
+  border-radius: 50%; background: var(--bg-alt); border: 2px solid var(--accent);
+}
+.cert-timeline__item.is-featured .cert-timeline__dot{
+  border-color: var(--accent-3); background: var(--accent-3); box-shadow: 0 0 8px var(--accent-3);
+}
+.cert-timeline__year{ margin: 0; font-size: 10.5px; color: var(--fg-dim); text-transform: uppercase; letter-spacing: .04em; }
+.cert-timeline__name{ margin: 2px 0; font-size: 13px; color: var(--fg); }
+.cert-timeline__meta{ margin: 0; font-size: 11.5px; color: var(--fg-dim); }
 
 /* ---------------------------------------------------------------------------
    Contact
@@ -343,3 +430,17 @@ main{
    Responsive (component-specific breakpoints live with their components;
    this block is only for cross-cutting page-level rules)
 --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   Reduced motion — disable decorative animation/transitions for anyone who
+   has asked the OS for it, keep the site fully usable either way.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+  .window, .skills-chart__row, .cert-timeline__item, .skills-chart__bar, .hero__output{
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .bg-grid{ animation: none !important; }
+}
