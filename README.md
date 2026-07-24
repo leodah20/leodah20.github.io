@@ -59,3 +59,13 @@ python -m http.server 4321
 ```
 
 Then open http://localhost:4321.
+
+## GitHub live status section
+
+The "github-status" section fetches real, live data from GitHub's public
+REST API client-side — no token, no backend, just `fetch()`. If it fails
+(rate limit, offline) it shows an error message instead of breaking the
+page. The one exception is the contribution-calendar heatmap, which needs a
+small Cloudflare Worker to hold a GitHub token securely — see
+[`worker/README.md`](worker/README.md) for setup. Until that's configured,
+the calendar shows a "not configured yet" note instead of anything fake.
