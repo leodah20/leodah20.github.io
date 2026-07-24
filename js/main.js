@@ -521,11 +521,10 @@
     });
   }
 
-  async function renderGithubContributions(workerUrl) {
-    if (!workerUrl) return;
+  async function renderGithubContributions(dataUrl) {
     try {
-      const res = await fetch(workerUrl);
-      if (!res.ok) throw new Error("worker error");
+      const res = await fetch(dataUrl);
+      if (!res.ok) throw new Error("contributions data not found");
       const calendar = await res.json();
       ghContributions.innerHTML = "";
 
@@ -571,7 +570,7 @@
           renderGithubSummary(cached.user, cached.repos);
           renderGithubLanguages(cached.repos);
           renderGithubActivity(cached.events);
-          renderGithubContributions(CONTENT.contributionsWorkerUrl);
+          renderGithubContributions("data/contributions.json");
           return;
         }
       }
@@ -596,7 +595,7 @@
       renderGithubSummary(user, repos);
       renderGithubLanguages(repos);
       renderGithubActivity(events);
-      renderGithubContributions(CONTENT.contributionsWorkerUrl);
+      renderGithubContributions("data/contributions.json");
     } catch (err) {
       ghSummary.innerHTML = "";
       const msg = document.createElement("p");
