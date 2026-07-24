@@ -68,6 +68,25 @@ a:hover{ text-decoration: underline; }
 }
 
 /* ---------------------------------------------------------------------------
+   Aurora glow — sits behind the grid lines, same page-background layer
+--------------------------------------------------------------------------- */
+.bg-aurora{
+  position: fixed; inset: -10%; z-index: -2; pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 55% 40% at 18% 12%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 65%),
+    radial-gradient(ellipse 50% 35% at 78% 8%, color-mix(in srgb, var(--accent-3) 20%, transparent), transparent 65%),
+    radial-gradient(ellipse 60% 45% at 50% 92%, color-mix(in srgb, var(--ok) 14%, transparent), transparent 65%),
+    radial-gradient(ellipse 45% 35% at 88% 75%, color-mix(in srgb, var(--accent-3) 16%, transparent), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 8% 80%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%);
+  animation: aurora-drift 24s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift{
+  0%{ transform: translate(0, 0) scale(1); }
+  50%{ transform: translate(2.5%, -3%) scale(1.06); }
+  100%{ transform: translate(-2%, 2.5%) scale(1.02); }
+}
+
+/* ---------------------------------------------------------------------------
    Decorative background grid — fills empty space on ultra-wide viewports
 --------------------------------------------------------------------------- */
 .bg-grid{
@@ -553,5 +572,5 @@ main{
     opacity: 1 !important;
     transform: none !important;
   }
-  .bg-grid, .topology__diagram svg, .window{ animation: none !important; }
+  .bg-grid, .bg-aurora, .topology__diagram svg, .window{ animation: none !important; }
 }
