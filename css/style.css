@@ -507,7 +507,7 @@ main{
   border-bottom: 1px dashed var(--border);
 }
 .contact-list li:last-child{ border-bottom: none; }
-.contact-list .k{ color: var(--fg-dim); min-width: 70px; }
+.contact-list .k{ color: var(--fg-dim); min-width: 70px; flex-shrink: 0; }
 
 /* ---------------------------------------------------------------------------
    Footer
