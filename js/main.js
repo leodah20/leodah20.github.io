@@ -417,7 +417,7 @@
   } else {
     CONTENT.projects.forEach((p) => {
       const card = document.createElement("article");
-      card.className = "host-card";
+      card.className = "host-card" + (p.featured ? " host-card--featured" : "");
 
       const head = document.createElement("div");
       head.className = "host-card__head";
@@ -425,6 +425,12 @@
       const name = document.createElement("h3");
       name.className = "host-card__name";
       name.textContent = p.name;
+      if (p.featured) {
+        const badge = document.createElement("span");
+        badge.className = "badge host-card__badge";
+        badge.textContent = "destaque";
+        name.appendChild(badge);
+      }
       head.appendChild(name);
 
       const isOnline = Boolean(p.demo);
@@ -459,6 +465,26 @@
           stack.appendChild(span);
         });
         card.appendChild(stack);
+      }
+
+      if (typeof p.progress === "number") {
+        const progressWrap = document.createElement("div");
+        progressWrap.className = "host-card__progress";
+
+        const track = document.createElement("div");
+        track.className = "host-card__progress-track";
+        const bar = document.createElement("div");
+        bar.className = "host-card__progress-bar";
+        bar.style.width = Math.max(0, Math.min(100, p.progress)) + "%";
+        track.appendChild(bar);
+        progressWrap.appendChild(track);
+
+        const label = document.createElement("p");
+        label.className = "host-card__progress-label";
+        label.textContent = p.progressLabel || (p.progress + "%");
+        progressWrap.appendChild(label);
+
+        card.appendChild(progressWrap);
       }
 
       if (p.note) {
