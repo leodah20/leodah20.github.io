@@ -126,6 +126,16 @@ const CONTENT = {
   // add a demo link unless it is a real, reachable URL.
   projects: [
     {
+      name: "pokemon-trainer-companion",
+      period: "2026 - atual",
+      featured: true,
+      progress: 94,
+      progressLabel: "94% — 34/36 features (v1.0 Beta)",
+      desc: "App mobile (React Native + backend NestJS) para treinadores de Pokemon GO: calculadora de IV, ranking de PvP, contadores de raid, Pokedex com lore, e um overlay flutuante com IA (Gemini) que le a tela via OCR e da dicas em tempo real, sem login na conta do jogo.",
+      stack: ["React Native", "TypeScript", "Kotlin", "NestJS", "Prisma", "Gemini AI"],
+      link: "https://github.com/leodah20/pokemon-trainer-companion"
+    },
+    {
       name: "ecofuturo",
       period: "2026",
       desc: "Site sobre energias renovaveis no Brasil, feito para a disciplina de Programacao Web Responsiva (UNIP). Tabela comparativa de fontes de energia, grafico interativo (Chart.js), calculadora de pegada de carbono, simulador de energia solar com dados do INPE/CRESESB e quiz interativo.",
