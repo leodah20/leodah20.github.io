@@ -25,6 +25,7 @@
     <li><a href="#projects" data-section="projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
     <li><a href="#contact" data-section="contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
   </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
   <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
     <span data-theme-icon></span>
   </button>
@@ -81,6 +82,8 @@
         </div>
         <ul class="topology__fallback" id="topologyFallback"></ul>
       </div>
+      <p class="line skills-chart__label-line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ wc -l skills/*</p>
+      <div class="skills-chart" id="skillsChart" aria-label="Distribuição de skills por categoria"></div>
     </div>
   </section>
 
@@ -95,6 +98,8 @@
         <div class="led-wall__featured" id="certsFeatured"></div>
         <div class="led-wall__regular" id="certsRegular"></div>
       </div>
+      <p class="line cert-timeline__label-line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ log certifications/ --timeline</p>
+      <div class="cert-timeline" id="certTimeline" aria-label="Linha do tempo de certificações"></div>
     </div>
   </section>
 

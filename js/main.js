@@ -21,6 +21,23 @@
     applyTheme(current === "light" ? "dark" : "light");
   });
 
+  /* ---------- session uptime ticker ---------- */
+  const uptimeEl = document.getElementById("sidebarUptime");
+  if (uptimeEl) {
+    const sessionStartedAt = Date.now();
+    function formatUptime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      return String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
+    }
+    function tickUptime() {
+      uptimeEl.textContent = formatUptime(Date.now() - sessionStartedAt);
+    }
+    tickUptime();
+    setInterval(tickUptime, 1000);
+  }
+
   /* ---------- sidebar active-section tracking ---------- */
   const sidebarLinks = Array.from(document.querySelectorAll(".sidebar__nav a"));
   const observedSections = sidebarLinks
@@ -208,6 +225,54 @@
     }
   });
 
+  /* ---------- certifications timeline (real dates, oldest first) ---------- */
+  const PT_MONTHS = { jan: 0, fev: 1, mar: 2, abr: 3, mai: 4, jun: 5, jul: 6, ago: 7, set: 8, out: 9, nov: 10, dez: 11 };
+
+  function parseCertDate(dateStr) {
+    if (!dateStr) return null;
+    const match = dateStr.match(/(\d{1,2}\s+)?([a-z]{3})\.\s*(\d{4})/i);
+    if (!match) return null;
+    const month = PT_MONTHS[match[2].toLowerCase()];
+    if (month === undefined) return null;
+    const day = match[1] ? parseInt(match[1], 10) : 1;
+    const year = parseInt(match[3], 10);
+    return new Date(year, month, day);
+  }
+
+  const certTimeline = document.getElementById("certTimeline");
+  const sortedCerts = CONTENT.certifications
+    .map((c) => ({ cert: c, parsedDate: parseCertDate(c.date) }))
+    .filter((entry) => entry.parsedDate)
+    .sort((a, b) => a.parsedDate - b.parsedDate);
+
+  sortedCerts.forEach((entry, i) => {
+    const c = entry.cert;
+    const item = document.createElement("div");
+    item.className = "cert-timeline__item" + (c.featured ? " is-featured" : "");
+    item.style.transitionDelay = (i * 0.05) + "s";
+
+    const dot = document.createElement("span");
+    dot.className = "cert-timeline__dot";
+    item.appendChild(dot);
+
+    const year = document.createElement("p");
+    year.className = "cert-timeline__year";
+    year.textContent = entry.parsedDate.getFullYear();
+    item.appendChild(year);
+
+    const name = document.createElement("p");
+    name.className = "cert-timeline__name";
+    name.textContent = c.name;
+    item.appendChild(name);
+
+    const meta = document.createElement("p");
+    meta.className = "cert-timeline__meta";
+    meta.textContent = [c.issuer, c.date].filter(Boolean).join(" · ");
+    item.appendChild(meta);
+
+    certTimeline.appendChild(item);
+  });
+
   /* ---------- skills topology ---------- */
   function computeRadialPositions(count, cx, cy, radius, startAngleDeg) {
     const positions = [];
@@ -308,6 +373,36 @@
   }
 
   selectSkillCategory(0);
+
+  /* ---------- skills distribution chart ---------- */
+  const skillsChart = document.getElementById("skillsChart");
+  const maxSkillCount = Math.max(...CONTENT.skills.map((group) => group.items.length));
+
+  CONTENT.skills.forEach((group, i) => {
+    const row = document.createElement("div");
+    row.className = "skills-chart__row";
+    row.style.transitionDelay = (i * 0.06) + "s";
+
+    const label = document.createElement("span");
+    label.className = "skills-chart__label";
+    label.textContent = group.category.replace(/_/g, " ");
+    row.appendChild(label);
+
+    const track = document.createElement("div");
+    track.className = "skills-chart__track";
+    const bar = document.createElement("div");
+    bar.className = "skills-chart__bar";
+    bar.dataset.width = Math.round((group.items.length / maxSkillCount) * 100) + "%";
+    track.appendChild(bar);
+    row.appendChild(track);
+
+    const count = document.createElement("span");
+    count.className = "skills-chart__count";
+    count.textContent = group.items.length;
+    row.appendChild(count);
+
+    skillsChart.appendChild(row);
+  });
 
   /* ---------- projects (host cards) ---------- */
   const hostsGrid = document.getElementById("hostsGrid");
@@ -420,4 +515,36 @@
 
     contactList.appendChild(li);
   });
+
+  /* ---------- scroll reveal (also triggers skills-chart bar widths) ---------- */
+  const revealTargets = Array.from(document.querySelectorAll(".window"));
+
+  function revealSection(section) {
+    if (section.classList.contains("is-revealed")) return;
+    section.classList.add("is-revealed");
+    section.querySelectorAll(".skills-chart__bar[data-width]").forEach((bar) => {
+      bar.style.width = bar.dataset.width;
+    });
+  }
+
+  if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            revealSection(entry.target);
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+    revealTargets.forEach((section) => revealObserver.observe(section));
+
+    // Safety net: never leave content permanently invisible if the observer
+    // is slow, throttled (e.g. backgrounded tab), or otherwise misbehaves.
+    setTimeout(() => revealTargets.forEach(revealSection), 1200);
+  } else {
+    revealTargets.forEach(revealSection);
+  }
 })();
