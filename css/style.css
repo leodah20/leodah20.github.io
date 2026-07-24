@@ -241,7 +241,9 @@ main{
 /* ---------------------------------------------------------------------------
    Skills — topology diagram
 --------------------------------------------------------------------------- */
-#skills .window__body{
+/* Starfield/nebula card background — every window shares this "floating in
+   space" material, not just the skills diagram card. */
+.window__body{
   position: relative;
   background-repeat: no-repeat;
   background-color: var(--bg-alt);
@@ -253,9 +255,27 @@ main{
     radial-gradient(1.5px 1.5px at 88% 78%, var(--fg-dim) 0%, transparent 60%),
     radial-gradient(1px 1px at 22% 88%, var(--fg-dim) 0%, transparent 60%),
     radial-gradient(1px 1px at 48% 40%, var(--fg-dim) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 25% 20%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
-    radial-gradient(ellipse 55% 45% at 80% 85%, color-mix(in srgb, var(--accent-3) 12%, transparent), transparent 70%);
+    radial-gradient(ellipse 60% 50% at 25% 20%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 80% 85%, color-mix(in srgb, var(--accent-3) 9%, transparent), transparent 70%);
 }
+
+/* Every card gently floats in place, each on its own phase so the page
+   reads as debris drifting in space rather than everything bobbing in
+   unison. Only starts once a card has finished its scroll-reveal transition
+   (see js/main.js) so the two transform animations never fight. */
+@keyframes card-float{
+  0%, 100%{ transform: translateY(0); }
+  50%{ transform: translateY(-6px); }
+}
+.window.is-revealed{ animation: card-float 7s ease-in-out infinite; }
+#whoami.is-revealed{ animation-delay: 0s; }
+#experience.is-revealed{ animation-delay: .9s; }
+#education.is-revealed{ animation-delay: 1.8s; }
+#skills.is-revealed{ animation-delay: .4s; }
+#certifications.is-revealed{ animation-delay: 1.3s; }
+#github-status.is-revealed{ animation-delay: 2.2s; }
+#projects.is-revealed{ animation-delay: .7s; }
+#contact.is-revealed{ animation-delay: 1.6s; }
 
 .topology{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
 .topology__diagram svg{
@@ -533,5 +553,5 @@ main{
     opacity: 1 !important;
     transform: none !important;
   }
-  .bg-grid, .topology__diagram svg{ animation: none !important; }
+  .bg-grid, .topology__diagram svg, .window{ animation: none !important; }
 }
