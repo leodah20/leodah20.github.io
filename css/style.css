@@ -241,8 +241,33 @@ main{
 /* ---------------------------------------------------------------------------
    Skills — topology diagram
 --------------------------------------------------------------------------- */
+#skills .window__body{
+  position: relative;
+  background-repeat: no-repeat;
+  background-color: var(--bg-alt);
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(1px 1px at 32% 68%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 58% 15%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(1px 1px at 78% 45%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 88% 78%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(1px 1px at 22% 88%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(1px 1px at 48% 40%, var(--fg-dim) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 25% 20%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 80% 85%, color-mix(in srgb, var(--accent-3) 12%, transparent), transparent 70%);
+}
+
 .topology{ display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
-.topology__diagram svg{ width: 100%; height: auto; display: block; }
+.topology__diagram svg{
+  width: 100%; height: auto; display: block;
+  animation: float-drift 9s ease-in-out infinite;
+}
+@keyframes float-drift{
+  0%, 100%{ transform: translate(0, 0); }
+  25%{ transform: translate(5px, -6px); }
+  50%{ transform: translate(-4px, 3px); }
+  75%{ transform: translate(-5px, -4px); }
+}
 .topology__detail{ background: var(--bg-raised); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; min-height: 160px; }
 .topology__hint{ color: var(--fg-dim); font-size: 13px; margin: 0; }
 .topology__detail-title{ color: var(--accent-2); font-size: 13px; margin: 0 0 8px; }
@@ -296,11 +321,25 @@ main{
 .skills-chart__label{ font-size: 12px; color: var(--fg-dim); }
 .skills-chart__track{ background: var(--bg-alt); border: 1px solid var(--border); border-radius: 100px; height: 10px; overflow: hidden; }
 .skills-chart__bar{
-  height: 100%; width: 0%; border-radius: 100px;
+  height: 100%; width: 0%; border-radius: 100px; transform-origin: left center;
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
   transition: width 1s cubic-bezier(.16,1,.3,1);
 }
 .skills-chart__count{ font-size: 11px; color: var(--fg-dim); text-align: right; }
+
+.skills-chart__row.is-active{
+  background: color-mix(in srgb, var(--accent-2) 8%, transparent);
+  border-radius: 6px; padding: 4px 8px; margin: -4px -8px;
+}
+.skills-chart__row.is-active .skills-chart__label{ color: var(--fg); font-weight: 700; }
+.skills-chart__row.is-active .skills-chart__count{ color: var(--accent-2); font-weight: 700; }
+.skills-chart__row.is-active .skills-chart__track{ border-color: var(--accent-2); }
+.skills-chart__row.is-active .skills-chart__bar{ animation: bar-grow .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes bar-grow{
+  0%{ transform: scaleX(.82); }
+  60%{ transform: scaleX(1.04); }
+  100%{ transform: scaleX(1); }
+}
 
 @media (max-width: 480px){
   .skills-chart__row{ grid-template-columns: 96px 1fr 22px; }
@@ -442,5 +481,5 @@ main{
     opacity: 1 !important;
     transform: none !important;
   }
-  .bg-grid{ animation: none !important; }
+  .bg-grid, .topology__diagram svg{ animation: none !important; }
 }

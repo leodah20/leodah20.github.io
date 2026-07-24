@@ -355,6 +355,9 @@
     Array.from(topologyFallback.querySelectorAll("button")).forEach((btn, i) => {
       btn.classList.toggle("is-active", i === index);
     });
+    Array.from(document.querySelectorAll(".skills-chart__row")).forEach((row, i) => {
+      row.classList.toggle("is-active", i === index);
+    });
 
     topologyDetail.innerHTML = "";
     const title = document.createElement("p");
@@ -371,8 +374,6 @@
     });
     topologyDetail.appendChild(list);
   }
-
-  selectSkillCategory(0);
 
   /* ---------- skills distribution chart ---------- */
   const skillsChart = document.getElementById("skillsChart");
@@ -403,6 +404,8 @@
 
     skillsChart.appendChild(row);
   });
+
+  selectSkillCategory(0);
 
   /* ---------- projects (host cards) ---------- */
   const hostsGrid = document.getElementById("hostsGrid");
