@@ -17,7 +17,7 @@ const CONTENT = {
     "",
     "Infraestrutura, servidores e redes corporativas em ambiente",
     "produtivo real: Windows Server, Linux, VMware, Zabbix, FortiGate,",
-    "MikroTik. Estudante de Ciencia da Computacao (UNIP, form. 2026)."
+    "MikroTik. Bacharel em Ciencia da Computacao (UNIP, form. jul. 2026)."
   ],
 
   // Newest first. Build Engenharia uses `roles` (an array) to show a real
@@ -63,9 +63,9 @@ const CONTENT = {
     {
       title: "Bacharelado em Ciencia da Computacao",
       place: "Universidade Paulista (UNIP), Sao Paulo",
-      period: "ago. 2022 - ago. 2026 (previsto)",
-      current: true,
-      desc: "Formacao em curso, conciliada com atuacao pratica em infraestrutura de TI."
+      period: "ago. 2022 - jul. 2026",
+      current: false,
+      desc: "Formacao concluida, conciliada com atuacao pratica em infraestrutura de TI."
     }
   ],
 
