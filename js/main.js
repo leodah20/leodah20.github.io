@@ -404,6 +404,207 @@
     skillsChart.appendChild(row);
   });
 
+  /* ---------- github live status ---------- */
+  const ghSummary = document.getElementById("ghSummary");
+  const ghLanguages = document.getElementById("ghLanguages");
+  const ghActivity = document.getElementById("ghActivity");
+  const ghContributions = document.getElementById("ghContributions");
+  const GH_CACHE_KEY = "gh-status-cache-v1";
+  const GH_CACHE_TTL_MS = 10 * 60 * 1000;
+
+  const GH_EVENT_LABELS = {
+    PushEvent: (e) => "push em " + e.repo.name + " (" + (e.payload.commits ? e.payload.commits.length : 0) + " commit(s))",
+    CreateEvent: (e) => "criou " + (e.payload.ref_type || "algo") + " em " + e.repo.name,
+    PublicEvent: (e) => "tornou " + e.repo.name + " publico",
+    WatchEvent: (e) => "deu star em " + e.repo.name,
+    IssuesEvent: (e) => (e.payload.action || "atualizou") + " issue em " + e.repo.name,
+    PullRequestEvent: (e) => (e.payload.action || "atualizou") + " pull request em " + e.repo.name,
+    ForkEvent: (e) => "fez fork de " + e.repo.name,
+    DeleteEvent: (e) => "removeu " + (e.payload.ref_type || "algo") + " em " + e.repo.name
+  };
+
+  function formatRelativeTime(isoDate) {
+    const diffMs = Date.now() - new Date(isoDate).getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 60) return "ha " + mins + "min";
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return "ha " + hours + "h";
+    const days = Math.floor(hours / 24);
+    return "ha " + days + "d";
+  }
+
+  function renderGithubSummary(user, repos) {
+    ghSummary.innerHTML = "";
+    const ownRepos = repos.filter((r) => !r.fork);
+    const stats = [
+      { value: user.public_repos, label: "repos publicos" },
+      { value: ownRepos.reduce((sum, r) => sum + r.stargazers_count, 0), label: "stars recebidas" },
+      { value: user.followers, label: "seguidores" },
+      { value: new Date(user.created_at).getFullYear(), label: "no github desde" }
+    ];
+    stats.forEach((s) => {
+      const stat = document.createElement("div");
+      stat.className = "gh-summary__stat";
+      const value = document.createElement("p");
+      value.className = "gh-summary__value";
+      value.textContent = s.value;
+      stat.appendChild(value);
+      const label = document.createElement("p");
+      label.className = "gh-summary__label";
+      label.textContent = s.label;
+      stat.appendChild(label);
+      ghSummary.appendChild(stat);
+    });
+  }
+
+  function renderGithubLanguages(repos) {
+    ghLanguages.innerHTML = "";
+    const counts = {};
+    repos.filter((r) => !r.fork && r.language).forEach((r) => {
+      counts[r.language] = (counts[r.language] || 0) + 1;
+    });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) return;
+    const max = entries[0][1];
+
+    entries.forEach(([lang, count], i) => {
+      const row = document.createElement("div");
+      row.className = "gh-lang-chart__row";
+
+      const label = document.createElement("span");
+      label.className = "gh-lang-chart__label";
+      label.textContent = lang;
+      row.appendChild(label);
+
+      const track = document.createElement("div");
+      track.className = "gh-lang-chart__track";
+      const bar = document.createElement("div");
+      bar.className = "gh-lang-chart__bar";
+      bar.style.width = Math.round((count / max) * 100) + "%";
+      track.appendChild(bar);
+      row.appendChild(track);
+
+      const countEl = document.createElement("span");
+      countEl.className = "gh-lang-chart__count";
+      countEl.textContent = count;
+      row.appendChild(countEl);
+
+      ghLanguages.appendChild(row);
+    });
+  }
+
+  function renderGithubActivity(events) {
+    ghActivity.innerHTML = "";
+    if (!events.length) {
+      const li = document.createElement("li");
+      li.textContent = "sem atividade publica recente";
+      ghActivity.appendChild(li);
+      return;
+    }
+    events.slice(0, 8).forEach((e) => {
+      const li = document.createElement("li");
+      const desc = document.createElement("span");
+      desc.className = "gh-activity__desc";
+      const format = GH_EVENT_LABELS[e.type];
+      desc.textContent = format ? format(e) : "atividade em " + e.repo.name;
+      li.appendChild(desc);
+
+      const time = document.createElement("span");
+      time.className = "gh-activity__time";
+      time.textContent = formatRelativeTime(e.created_at);
+      li.appendChild(time);
+
+      ghActivity.appendChild(li);
+    });
+  }
+
+  async function renderGithubContributions(workerUrl) {
+    if (!workerUrl) return;
+    try {
+      const res = await fetch(workerUrl);
+      if (!res.ok) throw new Error("worker error");
+      const calendar = await res.json();
+      ghContributions.innerHTML = "";
+
+      const grid = document.createElement("div");
+      grid.className = "gh-contributions__grid";
+      calendar.weeks.forEach((week) => {
+        week.contributionDays.forEach((day) => {
+          const cell = document.createElement("div");
+          cell.className = "gh-contributions__day";
+          cell.title = day.date + " — " + day.contributionCount + " contribuicao(oes)";
+          if (day.contributionCount > 0) {
+            const intensity = Math.min(1, day.contributionCount / 10);
+            cell.style.background = "color-mix(in srgb, var(--accent) " + Math.round(intensity * 100) + "%, var(--bg-alt))";
+            cell.style.borderColor = "var(--accent)";
+          }
+          grid.appendChild(cell);
+        });
+      });
+      ghContributions.appendChild(grid);
+
+      const total = document.createElement("p");
+      total.className = "gh-status__hint";
+      total.textContent = calendar.totalContributions + " contribuicoes no ultimo ano";
+      ghContributions.appendChild(total);
+    } catch (err) {
+      ghContributions.innerHTML = "";
+      const msg = document.createElement("p");
+      msg.className = "gh-status__error";
+      msg.textContent = "nao foi possivel carregar o calendario de contribuicoes agora.";
+      ghContributions.appendChild(msg);
+    }
+  }
+
+  async function loadGithubStatus() {
+    const username = CONTENT.githubUsername;
+    if (!username) return;
+
+    try {
+      const cachedRaw = sessionStorage.getItem(GH_CACHE_KEY);
+      if (cachedRaw) {
+        const cached = JSON.parse(cachedRaw);
+        if (Date.now() - cached.fetchedAt < GH_CACHE_TTL_MS) {
+          renderGithubSummary(cached.user, cached.repos);
+          renderGithubLanguages(cached.repos);
+          renderGithubActivity(cached.events);
+          renderGithubContributions(CONTENT.contributionsWorkerUrl);
+          return;
+        }
+      }
+    } catch (e) {
+      // Corrupt cache entry — ignore and re-fetch from the network below.
+    }
+
+    try {
+      const [userRes, reposRes, eventsRes] = await Promise.all([
+        fetch("https://api.github.com/users/" + username),
+        fetch("https://api.github.com/users/" + username + "/repos?per_page=100&type=owner"),
+        fetch("https://api.github.com/users/" + username + "/events/public?per_page=10")
+      ]);
+      if (!userRes.ok || !reposRes.ok || !eventsRes.ok) throw new Error("github api error");
+
+      const user = await userRes.json();
+      const repos = await reposRes.json();
+      const events = await eventsRes.json();
+
+      sessionStorage.setItem(GH_CACHE_KEY, JSON.stringify({ user, repos, events, fetchedAt: Date.now() }));
+
+      renderGithubSummary(user, repos);
+      renderGithubLanguages(repos);
+      renderGithubActivity(events);
+      renderGithubContributions(CONTENT.contributionsWorkerUrl);
+    } catch (err) {
+      ghSummary.innerHTML = "";
+      const msg = document.createElement("p");
+      msg.className = "gh-status__error";
+      msg.textContent = "nao foi possivel carregar os dados do GitHub agora (limite de requisicoes ou offline) — tente novamente mais tarde.";
+      ghSummary.appendChild(msg);
+    }
+  }
+
+  loadGithubStatus();
+
   /* ---------- projects (host cards) ---------- */
   const hostsGrid = document.getElementById("hostsGrid");
   if (!CONTENT.projects.length) {

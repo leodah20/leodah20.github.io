@@ -22,6 +22,7 @@
     <li><a href="#whoami" data-section="whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
     <li><a href="#skills" data-section="skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
     <li><a href="#certifications" data-section="certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="#github-status" data-section="github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
     <li><a href="#projects" data-section="projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
     <li><a href="#contact" data-section="contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
   </ul>
@@ -100,6 +101,30 @@
       </div>
       <p class="line cert-timeline__label-line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ log certifications/ --timeline</p>
       <div class="cert-timeline" id="certTimeline" aria-label="Linha do tempo de certificações"></div>
+    </div>
+  </section>
+
+  <section class="window" id="github-status">
+    <div class="window__chrome">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">github.com/leodah20 — live status</span>
+    </div>
+    <div class="window__body">
+      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ curl api.github.com/users/leodah20</p>
+      <div id="ghSummary" class="gh-summary">
+        <p class="gh-status__hint">carregando dados ao vivo do GitHub...</p>
+      </div>
+
+      <p class="line gh-section-label"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ curl api.github.com/users/leodah20/repos</p>
+      <div id="ghLanguages" class="gh-lang-chart"></div>
+
+      <p class="line gh-section-label"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ tail -f api.github.com/users/leodah20/events</p>
+      <ul id="ghActivity" class="gh-activity"></ul>
+
+      <p class="line gh-section-label"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cal --contributions</p>
+      <div id="ghContributions" class="gh-contributions">
+        <p class="gh-status__hint">calendário de contribuições: configuração pendente (requer backend próprio — ver README).</p>
+      </div>
     </div>
   </section>
 
