@@ -9,13 +9,6 @@ const CONTENT = {
 
   githubUsername: "leodah20",
 
-  // EDIT ME: after deploying the Cloudflare Worker described in
-  // worker/README.md, paste its URL here (e.g.
-  // "https://portfolio-contributions.<you>.workers.dev") to turn on the
-  // real contribution calendar. Leave empty to keep it off — the site
-  // shows a "not configured" note instead of a broken/fake graph.
-  contributionsWorkerUrl: "",
-
   // Lines typed out in the hero terminal, in order.
   heroTyped: "whoami",
   heroOutput: [
