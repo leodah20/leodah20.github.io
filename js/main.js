@@ -38,6 +38,34 @@
     setInterval(tickUptime, 1000);
   }
 
+  /* ---------- twinkling starfield ---------- */
+  function generateStarShadows(count, size) {
+    const w = window.innerWidth * 1.4;
+    const h = window.innerHeight * 1.4;
+    const offsetX = w * 0.2;
+    const offsetY = h * 0.2;
+    const shadows = [];
+    for (let i = 0; i < count; i++) {
+      const x = Math.round(Math.random() * w - offsetX);
+      const y = Math.round(Math.random() * h - offsetY);
+      shadows.push(x + "px " + y + "px 0 " + size + "px var(--fg)");
+    }
+    return shadows.join(",");
+  }
+
+  function paintStars(id, count, size) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.width = "1px";
+    el.style.height = "1px";
+    el.style.background = "transparent";
+    el.style.boxShadow = generateStarShadows(count, size);
+  }
+
+  paintStars("bgStarsLarge", 22, 1.6);
+  paintStars("bgStarsMedium", 40, 1.05);
+  paintStars("bgStarsSmall", 65, 0.6);
+
   /* ---------- sidebar active-section tracking ---------- */
   const sidebarLinks = Array.from(document.querySelectorAll(".sidebar__nav a"));
   const observedSections = sidebarLinks
@@ -304,6 +332,35 @@
     return el;
   }
 
+  // SVG <text> never wraps on its own (unlike HTML), so a long label like
+  // "servidores e virtualizacao" would render as one line and run past the
+  // viewBox edge, getting clipped. Greedily wraps on word boundaries instead.
+  function wrapSvgLabel(text, maxChars) {
+    const words = text.split(" ");
+    const lines = [];
+    let current = "";
+    words.forEach((word) => {
+      const candidate = current ? current + " " + word : word;
+      if (candidate.length > maxChars && current) {
+        lines.push(current);
+        current = word;
+      } else {
+        current = candidate;
+      }
+    });
+    if (current) lines.push(current);
+    return lines;
+  }
+
+  function setSvgTextLines(textEl, lines, lineHeight) {
+    const x = textEl.getAttribute("x");
+    lines.forEach((line, i) => {
+      const tspan = makeSvgEl("tspan", { x: x, dy: i === 0 ? 0 : lineHeight });
+      tspan.textContent = line;
+      textEl.appendChild(tspan);
+    });
+  }
+
   const nodePositions = computeRadialPositions(
     CONTENT.skills.length, TOPOLOGY_CENTER.x, TOPOLOGY_CENTER.y, TOPOLOGY_RADIUS, -90
   );
@@ -328,7 +385,7 @@
     const g = makeSvgEl("g", { class: "topology-node", tabindex: "0", role: "button" });
     g.appendChild(makeSvgEl("circle", { cx: pos.x, cy: pos.y, r: NODE_R }));
     const label = makeSvgEl("text", { x: pos.x, y: pos.y + NODE_R + 16 });
-    label.textContent = group.category.replace(/_/g, " ");
+    setSvgTextLines(label, wrapSvgLabel(group.category.replace(/_/g, " "), 16), 12);
     g.appendChild(label);
     g.addEventListener("click", () => selectSkillCategory(i));
     g.addEventListener("keydown", (e) => {

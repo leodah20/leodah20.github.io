@@ -15,6 +15,8 @@
   --warn:      #ffbd2e;
   --ok:        #3ddc84;
   --on-accent: #0c1210;
+  --aurora-blue: #3b82f6;
+  --aurora-pink: #ec4899;
   --shadow: 0 8px 30px rgba(0,0,0,.35);
   --radius: 7px;
   --sidebar-w: 200px;
@@ -40,6 +42,8 @@
   --warn:      #8a5a00;
   --ok:        #1f7a4c;
   --on-accent: #f8fbfb;
+  --aurora-blue: #2563eb;
+  --aurora-pink: #db2777;
   --shadow: 0 8px 24px rgba(15,25,20,.15);
 }
 
@@ -84,19 +88,33 @@ a:hover{ text-decoration: underline; }
 --------------------------------------------------------------------------- */
 .bg-aurora{
   position: fixed; top: -10vh; left: -10vw; width: 120vw; height: 120vh;
-  z-index: -2; pointer-events: none;
+  z-index: -3; pointer-events: none;
+  filter: blur(50px);
   background-image:
-    radial-gradient(ellipse 55% 40% at 18% 12%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 65%),
-    radial-gradient(ellipse 50% 35% at 78% 8%, color-mix(in srgb, var(--accent-3) 20%, transparent), transparent 65%),
-    radial-gradient(ellipse 60% 45% at 50% 92%, color-mix(in srgb, var(--ok) 14%, transparent), transparent 65%),
-    radial-gradient(ellipse 45% 35% at 88% 75%, color-mix(in srgb, var(--accent-3) 16%, transparent), transparent 60%),
-    radial-gradient(ellipse 50% 40% at 8% 80%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%);
-  animation: aurora-drift 24s ease-in-out infinite alternate;
+    radial-gradient(ellipse 90% 22% at 22% 8%, color-mix(in srgb, var(--aurora-blue) 34%, transparent), transparent 70%),
+    radial-gradient(ellipse 75% 18% at 65% 2%, color-mix(in srgb, var(--accent-3) 28%, transparent), transparent 70%),
+    radial-gradient(ellipse 85% 20% at 45% 96%, color-mix(in srgb, var(--aurora-pink) 22%, transparent), transparent 70%),
+    radial-gradient(ellipse 70% 16% at 85% 80%, color-mix(in srgb, var(--accent-3) 24%, transparent), transparent 65%),
+    radial-gradient(ellipse 70% 18% at 5% 85%, color-mix(in srgb, var(--aurora-blue) 26%, transparent), transparent 65%);
+  animation: aurora-drift 22s ease-in-out infinite alternate;
 }
 @keyframes aurora-drift{
-  0%{ transform: translate(0, 0) scale(1); }
-  50%{ transform: translate(2.5%, -3%) scale(1.06); }
-  100%{ transform: translate(-2%, 2.5%) scale(1.02); }
+  0%{ transform: translate(0, 0) scaleY(1) skewX(0deg); }
+  50%{ transform: translate(2.5%, -2%) scaleY(1.25) skewX(-4deg); }
+  100%{ transform: translate(-2%, 2%) scaleY(1.1) skewX(3deg); }
+}
+
+/* ---------------------------------------------------------------------------
+   Twinkling starfield — 3 layers (JS-generated box-shadow "stars"), each
+   with its own drift/twinkle timing for a parallax, asynchronous shimmer.
+--------------------------------------------------------------------------- */
+.bg-stars{ position: fixed; inset: 0; z-index: -2; pointer-events: none; border-radius: 50%; }
+.bg-stars--small{ animation: star-twinkle 4s ease-in-out infinite; }
+.bg-stars--medium{ animation: star-twinkle 5.5s ease-in-out infinite reverse; }
+.bg-stars--large{ animation: star-twinkle 3.2s ease-in-out infinite; }
+@keyframes star-twinkle{
+  0%, 100%{ opacity: .35; }
+  50%{ opacity: 1; }
 }
 
 /* ---------------------------------------------------------------------------
@@ -587,5 +605,5 @@ main{
     opacity: 1 !important;
     transform: none !important;
   }
-  .bg-grid, .bg-aurora, .topology__diagram svg, .window{ animation: none !important; }
+  .bg-grid, .bg-aurora, .bg-stars, .topology__diagram svg, .window{ animation: none !important; }
 }
