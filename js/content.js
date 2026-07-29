@@ -129,11 +129,11 @@ const CONTENT = {
       link: "https://github.com/leodah20/pokemon-trainer-companion"
     },
     {
-      name: "varzea-palpites",
+      name: "VZBet",
       period: "2026 - atual",
       desc: "App de palpites de placar para times de futebol de varzea (amador/local): torcedores preveem o placar de cada partida, ganham pontos por acerto (3 no placar exato, 1 no resultado certo, 0 no errado) e disputam um ranking. Sem dinheiro real - premios sao combinados por fora do app.",
       stack: ["NestJS", "Prisma", "PostgreSQL", "TypeScript", "React", "Vite"],
-      link: "https://github.com/leodah20/varzea-palpites"
+      link: "https://github.com/leodah20/vzbet"
     },
     {
       name: "ecofuturo",
