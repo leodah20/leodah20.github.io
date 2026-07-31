@@ -1,0 +1,49 @@
+{
+  "slug": "claude-remote-server",
+  "projectTitle": "claude-remote-server",
+  "seriesSummary": "Transformar um notebook velho parado + um MikroTik em um servidor pessoal 24/7 pra rodar o Claude Code de qualquer lugar, direto do celular, sem VPS paga e sem expor uma porta sequer pra internet. Cada capítulo pega uma camada — decisão de rede, WireGuard no RouterOS, o notebook virando servidor, tmux, o fluxo de uma sessão real — e mostra a decisão técnica antes da configuração.",
+  "repoUrl": "https://github.com/leodah20/claude-remote-server",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "A decisão de rede: por que VPN no MikroTik e não VPS paga nem porta aberta",
+      "articleTitle": "Um notebook velho, um MikroTik e zero portas abertas",
+      "oneLine": "As três saídas possíveis pro problema de acessar minha máquina de casa remotamente, o tradeoff de cada uma e o desenho final da topologia (VPN 10.10.10.0/24, notebook em 192.168.88.50, zero porta exposta).",
+      "status": "published",
+      "slug": "01-decisao-de-rede",
+      "subtitle": "Capítulo 1: por que a VPN mora no roteador, e não numa VPS paga nem atrás de um port forwarding.",
+      "readingMinutes": 6,
+      "file": "01-decisao-de-rede.md"
+    },
+    {
+      "number": 2,
+      "title": "WireGuard no RouterOS na prática: interface, peers, firewall e DDNS",
+      "oneLine": "O script .rsc linha por linha — criar a interface wg-mobile, adicionar peer por chave pública, ordenar as regras de firewall com place-before e resolver IP dinâmico com /ip cloud.",
+      "status": "planned"
+    },
+    {
+      "number": 3,
+      "title": "O notebook velho virando servidor: Ubuntu Server, IP fixo e setup.sh idempotente",
+      "oneLine": "Netplan com endereço estático, logind ignorando o fechamento da tampa, e por que o script de instalação checa tudo antes de instalar qualquer coisa.",
+      "status": "planned"
+    },
+    {
+      "number": 4,
+      "title": "tmux: sessões que não morrem quando o celular perde sinal",
+      "oneLine": "Uma sessão por projeto, o que acontece quando o app fecha no meio de um prompt, e a ideia de subir as sessões automaticamente no boot via systemd.",
+      "status": "planned"
+    },
+    {
+      "number": 5,
+      "title": "Do celular ao repo: o fluxo completo de uma sessão de código remota",
+      "oneLine": "Conectar a VPN, chegar no notebook, retomar a sessão e deixar o Claude rodar git, build e testes localmente — com o processamento de IA na nuvem da Anthropic.",
+      "status": "planned"
+    },
+    {
+      "number": 6,
+      "title": "Segurança em camadas e limitações honestas",
+      "oneLine": "As cinco camadas de proteção (rede, autenticação por peer, firewall, .gitignore, isolamento de sessão) e o que ainda falta pra isso ser 24/7 de verdade: energia, failover e redundância.",
+      "status": "planned"
+    }
+  ]
+}

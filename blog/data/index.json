@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "claude-remote-server",
+    "projectTitle": "claude-remote-server",
+    "seriesSummary": "Transformar um notebook velho parado + um MikroTik em um servidor pessoal 24/7 pra rodar o Claude Code de qualquer lugar, direto do celular, sem VPS paga e sem expor uma porta sequer pra internet. Cada capítulo pega uma camada — decisão de rede, WireGuard no RouterOS, o notebook virando servidor, tmux, o fluxo de uma sessão real — e mostra a decisão técnica antes da configuração.",
+    "repoUrl": "https://github.com/leodah20/claude-remote-server",
+    "publishedChapters": 1,
+    "latestChapter": {
+      "number": 1,
+      "title": "A decisão de rede: por que VPN no MikroTik e não VPS paga nem porta aberta",
+      "articleTitle": "Um notebook velho, um MikroTik e zero portas abertas",
+      "oneLine": "As três saídas possíveis pro problema de acessar minha máquina de casa remotamente, o tradeoff de cada uma e o desenho final da topologia (VPN 10.10.10.0/24, notebook em 192.168.88.50, zero porta exposta).",
+      "status": "published",
+      "slug": "01-decisao-de-rede",
+      "subtitle": "Capítulo 1: por que a VPN mora no roteador, e não numa VPS paga nem atrás de um port forwarding.",
+      "readingMinutes": 6,
+      "file": "01-decisao-de-rede.md"
+    }
+  },
+  {
+    "slug": "pokemon-trainer-companion",
+    "projectTitle": "Pokémon Trainer Companion",
+    "seriesSummary": "O PTC é um app de Pokémon GO em React Native com backend NestJS e um módulo nativo Android em Kotlin. O objetivo não é ser mais uma calculadora de IV: é uma janela flutuante que lê a tela ao vivo via OCR on-device e dá dicas contextuais, sem login na Niantic e sem tocar na memória do jogo. A decisão de arquitetura que sustenta o overlay, o módulo nativo, o pipeline de OCR, o backend, o grounding da IA e o que ficou deliberadamente fora do beta.",
+    "repoUrl": "https://github.com/leodah20/pokemon-trainer-companion",
+    "publishedChapters": 1,
+    "latestChapter": {
+      "number": 1,
+      "title": "Por que o overlay existe (e o que ele obriga na arquitetura)",
+      "articleTitle": "Pokémon Trainer Companion, cap. 1: um overlay que lê a tela do jogo",
+      "oneLine": "O problema real de sair do jogo pra usar um app, a restrição \"nada de integração com a Niantic\", e como React Native + NestJS + módulo nativo Kotlin foram organizados em volta disso.",
+      "status": "published",
+      "slug": "01-por-que-o-overlay-existe",
+      "subtitle": "Todo app de treinador na loja é a mesma calculadora de IV com uma skin diferente. Eu queria resolver o problema que ninguém resolve: ter que sair do jogo.",
+      "readingMinutes": 6,
+      "file": "01-por-que-o-overlay-existe.md"
+    }
+  },
+  {
+    "slug": "portfolio-noc-dashboard",
+    "projectTitle": "Portfólio como NOC Dashboard",
+    "seriesSummary": "Como reconstruí meu portfólio (leodah20.github.io) de uma coluna de texto monoespaçado para um \"NOC dashboard\": diagrama de topologia de skills clicável, cards estilo host monitorado, LED wall de certificações e calendário de contribuições real — tudo em HTML, CSS e JS puro, sem framework e sem build step.",
+    "repoUrl": "https://github.com/leodah20/leodah20.github.io",
+    "publishedChapters": 1,
+    "latestChapter": {
+      "number": 1,
+      "title": "Estático por decisão, não por preguiça",
+      "articleTitle": "Meu portfólio virou um NOC dashboard — e continua sendo HTML, CSS e JS puro",
+      "oneLine": "Por que mantive o portfólio em HTML/CSS/JS puro sem build step, o que isso obrigou a resolver na unha (SVG sem lib, dados sem backend) e como o calendário de contribuições virou um JSON commitado por GitHub Actions.",
+      "status": "published",
+      "slug": "01-estatico-por-decisao",
+      "subtitle": "Zero framework, zero build step, zero backend. A parte difícil não foi o visual: foi o calendário de contribuições do GitHub.",
+      "readingMinutes": 7,
+      "file": "01-estatico-por-decisao.md"
+    }
+  },
+  {
+    "slug": "vzbet",
+    "projectTitle": "VZBet",
+    "seriesSummary": "O VZBet é um app de palpites de placar para futebol de várzea: NestJS + Prisma + PostgreSQL no backend, Clean Architecture, e nenhum centavo passando por dentro do app. Modelagem do banco, camadas, armadilhas do Prisma 7, segurança e frontend — as decisões e os bugs reais no caminho. É um projeto pessoal em construção: onde ainda não fiz, eu digo que não fiz.",
+    "repoUrl": "https://github.com/leodah20/vzbet",
+    "publishedChapters": 1,
+    "latestChapter": {
+      "number": 1,
+      "title": "6 tabelas e uma função pura: a modelagem do VZBet",
+      "articleTitle": "VZBet #1 — 6 tabelas e uma função pura",
+      "oneLine": "O domínio do app, o diagrama ER real das 6 tabelas do Prisma e a regra de pontuação (simples 3/0, múltipla 7/0) que é o coração do produto.",
+      "status": "published",
+      "slug": "01-modelagem-do-vzbet",
+      "subtitle": "Antes de escrever endpoint, eu tive que decidir o que o app é: e a resposta cabe em um diagrama ER e numa função de 12 linhas.",
+      "readingMinutes": 7,
+      "file": "01-modelagem-do-vzbet.md"
+    }
+  }
+]

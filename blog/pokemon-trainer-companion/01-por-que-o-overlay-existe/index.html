@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon Trainer Companion, cap. 1: um overlay que lê a tela do jogo — Pokémon Trainer Companion</title>
+<meta name="description" content="Todo app de treinador na loja é a mesma calculadora de IV com uma skin diferente. Eu queria resolver o problema que ninguém resolve: ter que sair do jogo.">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../../blog/index.html" class="is-active"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog</span></a></li>
+    <li><a href="../../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <article class="article">
+    <p class="article__breadcrumb">
+      <a href="../../">#blog</a> / <a href="../">Pokémon Trainer Companion</a> / cap. 1
+    </p>
+    <h1 class="article__title">Pokémon Trainer Companion, cap. 1: um overlay que lê a tela do jogo</h1>
+    <p class="article__subtitle">Todo app de treinador na loja é a mesma calculadora de IV com uma skin diferente. Eu queria resolver o problema que ninguém resolve: ter que sair do jogo.</p>
+    <p class="article__meta">6 min de leitura</p>
+    <div class="article__body">
+<p>Todo app de Pokémon GO que eu instalei fazia a mesma coisa: calculadora de IV com uma skin diferente. E o fluxo pra usar qualquer um deles é sempre igual — você tá jogando, pega um Pokémon, sai do jogo, tira print, abre o outro app, escolhe o print na galeria, lê o resultado, volta pro jogo. Cinco passos pra responder &quot;vale a pena evoluir isso?&quot;.</p>
+<p>O problema real não é a matemática do IV. Essa parte é fácil, é fórmula pública e brute-force. O problema é o <strong>contexto</strong>: a informação chega tarde e no lugar errado. Foi por isso que eu comecei o Pokémon Trainer Companion (PTC), e é por isso que a feature principal dele não é nenhuma das calculadoras — é uma <strong>janela flutuante que fica por cima do jogo, lê a tela ao vivo e escreve a dica ali mesmo</strong>.</p>
+<p>As calculadoras, a Pokédex, os rankings de PvP e os counters de raid existem no projeto, funcionam, e são úteis sozinhos. Mas eles são a fundação, não o produto. O produto é o overlay.</p>
+<h2 id="a-restricao-que-define-tudo">A restrição que define tudo</h2>
+<p>Antes de escrever a primeira linha, uma decisão fechou metade do espaço de soluções: <strong>o app nunca conversa com o cliente do Pokémon GO</strong>.</p>
+<p>Não existe API pública oficial de conta ou de dados de jogo. As ferramentas que fazem login com a credencial do treinador, leem memória do processo ou chamam API privada engenharia-reversada violam os Termos de Uso da Niantic — e isso já resultou em ban permanente de conta e ação legal contra desenvolvedores. Eu documentei esse raciocínio em <code>docs/legal-compliance.md</code> porque, sinceramente, mostrar que a decisão foi tomada de propósito é parte do ponto do projeto.</p>
+<p>Então a única entrada de dados do jogo é: <strong>o que já está desenhado na tela do treinador</strong>. Print da galeria, ou frame capturado ao vivo. Daí vem OCR.</p>
+<p>Essa restrição não é só jurídica, ela decide arquitetura:</p>
+<ul><li><strong>OCR roda no dispositivo (ML Kit).</strong> Mandar o frame pro backend significaria transmitir e armazenar uma imagem do cliente do jogo — tratamento de dado desnecessário, e mataria a garantia de &quot;nada sai do aparelho&quot;. Só o <em>resultado</em> do OCR (espécie, CP, HP) sai do dispositivo, e só quando o treinador toca em &quot;Ask AI&quot;.</li><li><strong>O backend é opcional pro usuário final.</strong> Todo o núcleo do app funciona 100% offline com JSON embarcado. O backend só entra pros recursos de IA.</li><li><strong>React Native tinha que ser bare workflow.</strong> Janela flutuante e ML Kit em Kotlin exigem módulo nativo próprio; não dá pra fazer isso dentro de um workflow gerenciado.</li></ul>
+<h2 id="o-loop-que-virou-a-decisao-tecnica-mais-interessante-do-projeto">O loop que virou a decisão técnica mais interessante do projeto</h2>
+<p>A primeira versão do loop ao vivo era um <code>setInterval</code> em JavaScript: a cada X segundos, chama o nativo, pega um frame, roda OCR, atualiza o overlay. Funcionava lindamente — enquanto o PTC estava em primeiro plano.</p>
+<p>Que é exatamente a situação em que o overlay <strong>não serve pra nada</strong>. O ponto inteiro dele é ficar por cima do Pokémon GO, com o PTC em background. E aí o Android estrangula o timer do JS e o overlay congela na última leitura.</p>
+<p>A solução foi mover o loop inteiro pra dentro do foreground service em Kotlin. O comentário que eu deixei no <code>ScreenCaptureService.kt</code> explica o porquê melhor do que eu explicaria aqui de novo:</p>
+<div class="code-block"><span class="code-block__lang">kotlin</span><pre><code>/**
+ * Runs the whole &quot;grab a frame, OCR it, hand the text to JS&quot; loop natively on a Handler tied to
+ * this Service, instead of a JS setInterval in OverlayDemoScreen. A JS timer only reliably fires
+ * while its owning Activity is in the foreground -- once the trainer switches to the actual game
+ * (the entire point of this overlay), Android throttles it and the overlay would freeze on its
+ * last reading.
+ */
+private fun startPolling() { /* ... */ }
+
+private fun recognizeCurrentFrame() {
+  val bitmap = captureLatestFrame() ?: return
+  textRecognizer
+      .process(InputImage.fromBitmap(bitmap, 0))
+      .addOnSuccessListener { visionText -&gt; emitFrameText(visionText.text) }
+      .addOnCompleteListener { bitmap.recycle() }
+}</code></pre></div>
+<p>O service roda com <code>POLL_INTERVAL_MS = 4000L</code>, captura um frame único via <code>VirtualDisplay</code> + <code>ImageReader</code> (não vídeo contínuo — o OCR só precisa de um still por vez), roda ML Kit em Kotlin e emite o texto reconhecido pro JS. O trade-off: o loop virou código nativo, mais difícil de testar e de debugar que um <code>setInterval</code>. Em compensação, ele funciona na única hora que importa.</p>
+<p>O caminho completo hoje é esse:</p>
+<figure class="article__figure"><svg viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de sequência: ScreenCaptureService captura e faz OCR nativamente a cada 4 segundos, envia texto para o app React Native, que analisa e atualiza o overlay, opcionalmente consultando o backend para uma dica de IA">
+  <defs>
+    <marker id="arrow-ptc-seq" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path class="diagram-arrow-head" d="M0,0 L6,3 L0,6 Z"/>
+    </marker>
+  </defs>
+
+  <rect class="diagram-box" x="10" y="8" width="150" height="34" rx="6"/>
+  <text class="diagram-text" x="85" y="29" text-anchor="middle">ScreenCaptureService</text>
+
+  <rect class="diagram-box" x="220" y="8" width="160" height="34" rx="6"/>
+  <text class="diagram-text" x="300" y="29" text-anchor="middle">App React Native</text>
+
+  <rect class="diagram-box" x="440" y="8" width="140" height="34" rx="6"/>
+  <text class="diagram-text" x="510" y="29" text-anchor="middle">Backend NestJS</text>
+
+  <rect class="diagram-box" x="640" y="8" width="150" height="34" rx="6"/>
+  <text class="diagram-text" x="715" y="29" text-anchor="middle">Janela flutuante</text>
+
+  <line x1="85" y1="42" x2="85" y2="330" class="diagram-arrow--dashed"/>
+  <line x1="300" y1="42" x2="300" y2="330" class="diagram-arrow--dashed"/>
+  <line x1="510" y1="42" x2="510" y2="330" class="diagram-arrow--dashed"/>
+  <line x1="715" y1="42" x2="715" y2="330" class="diagram-arrow--dashed"/>
+
+  <text class="diagram-text--accent" x="14" y="58">↻ loop nativo, a cada 4s (dentro do foreground service)</text>
+
+  <path class="diagram-arrow" d="M85,72 L140,72 L140,90 L85,90" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="148" y="84">captureLatestFrame via ImageReader</text>
+
+  <path class="diagram-arrow" d="M85,104 L140,104 L140,122 L85,122" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="148" y="116">OCR com ML Kit</text>
+
+  <path class="diagram-arrow" d="M85,146 L300,146" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="192" y="140" text-anchor="middle">evento PTCOverlayFrameText (texto)</text>
+
+  <path class="diagram-arrow" d="M300,172 L360,172 L360,190 L300,190" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="368" y="184">analyzeOcrText → espécie, CP, HP, IV</text>
+
+  <path class="diagram-arrow" d="M300,212 L715,212" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="507" y="206" text-anchor="middle">updateOverlayText — dica rule-based (na hora)</text>
+
+  <path class="diagram-arrow" d="M300,242 L510,242" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="405" y="236" text-anchor="middle">POST /api/companion/suggest</text>
+
+  <path class="diagram-arrow diagram-arrow--dashed" d="M510,272 L300,272" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="405" y="266" text-anchor="middle">dica gerada pelo Gemini</text>
+
+  <path class="diagram-arrow" d="M300,302 L715,302" marker-end="url(#arrow-ptc-seq)"/>
+  <text class="diagram-text--dim" x="507" y="296" text-anchor="middle">updateOverlayText — dica da IA (substitui a anterior)</text>
+</svg></figure>
+<p>Repare no detalhe: a dica baseada em regras aparece <strong>na hora</strong>, e só depois é substituída pela resposta do Gemini quando ela chega. Se o backend estiver dormindo ou sem chave configurada, o texto que já está lá simplesmente fica. E a IA é chamada uma vez por espécie, não a cada tick — controlado por um <code>useRef</code>, não por state, justamente pra não reiniciar o effect e cancelar uma requisição em voo.</p>
+<h2 id="onde-a-clean-architecture-pagou-a-conta">Onde a Clean Architecture pagou a conta</h2>
+<p>O app mobile é separado em <code>domain/</code> (TypeScript puro, zero dependência de React Native), <code>use-cases/</code>, <code>data/</code> e <code>presentation/</code>. Isso soa burocrático até o dia em que você precisa alimentar o mesmo pipeline por dois caminhos diferentes.</p>
+<p>O fluxo da galeria tem uma URI de imagem. O loop nativo já tem o texto OCR pronto (porque o ML Kit rodou em Kotlin, não no cliente JS). Se a análise estivesse acoplada ao OCR, seriam dois pipelines. Como não estava, foi só quebrar em dois:</p>
+<div class="code-block"><span class="code-block__lang">typescript</span><pre><code>/**
+ * Split out from {@link analyzeScreenshot} so callers that already have OCR'd text (the native
+ * live-overlay loop runs ML Kit in Kotlin, not through this JS OCR client) can skip straight to
+ * analysis instead of re-running OCR on an image.
+ */
+export function analyzeOcrText(rawText: string): ScreenshotAnalysis { /* ... */ }
+
+export async function analyzeScreenshot(imageUri: string): Promise&lt;ScreenshotAnalysis&gt; {
+  const rawText = await recognizeTextFromImage(imageUri);
+  return analyzeOcrText(rawText);
+}</code></pre></div>
+<p>Um <code>analyzeOcrText</code> só, cuspindo espécie, CP, HP, as combinações de IV (brute-force nas 4096), ranking de PvP, percentil de bulk, cadeia de evolução e sugestões. Os dois fluxos consomem o mesmo resultado.</p>
+<p>O parsing também é função pura, e é onde a realidade bateu na cara do design. Eu tinha assumido que a tela mostra <code>HP: 175</code>. Não mostra:</p>
+<div class="code-block"><span class="code-block__lang">typescript</span><pre><code>// CP: &quot;CP 900&quot; / &quot;CP: 900&quot; (English), or &quot;PC3975&quot; — Pokemon GO's Portuguese label for Combat
+// Power (&quot;Poder de Combate&quot;), rendered with no space before the number.
+const CP_PATTERNS: readonly RegExp[] = [/(?:CP|PC)\s*[:\s]?\s*(\d+)/i];
+
+// HP: real Pokemon GO status screens put the label AFTER a &quot;current/max&quot; pair — &quot;175 / 175 HP&quot;
+// (English) or &quot;175 / 175 PS&quot; (Portuguese, &quot;Pontos de Saude&quot;) — not &quot;HP: 175&quot; as originally
+// assumed.
+const HP_PATTERNS: readonly RegExp[] = [/(\d+)\s*\/\s*\d+\s*(?:HP|PS)/i, /HP\s*[:\s]?\s*(\d+)/i];</code></pre></div>
+<p>Esse tipo de bug não aparece em teste unitário com string inventada. Aparece quando você aponta o app pra uma tela de verdade, em português.</p>
+<h2 id="onde-ta-agora-e-o-proximo-passo">Onde tá agora, e o próximo passo</h2>
+<p>O PTC está em <strong>v1.0 Beta</strong> (<code>1.0.0-beta.1</code>, versionCode 2), em teste fechado com amigos, com 34 de 36 features marcadas como prontas. O APK release é standalone: instala e abre, sem PC, sem Metro, sem <code>adb reverse</code>. O backend está no ar no free tier do Render.</p>
+<p>O que <strong>não</strong> está pronto, e eu prefiro escrever antes que alguém descubra:</p>
+<ul><li>A janela flutuante mostra hoje uma linha curta (espécie, CP, IV, dica). <strong>Os resultados mais profundos ainda vivem numa tela dentro do app</strong> — um toque de distância, porque o overlay é clicável e traz o PTC pra frente. Renderizar tudo dentro da janela é o próximo passo real.</li><li>A captura ao vivo foi verificada ponta a ponta <strong>no emulador</strong>. No aparelho físico, o que já rodou de verdade foram as telas do app e o Professor Mode.</li><li>A knowledge base que aterra a IA cobre <strong>251 espécies (Gen 1+2)</strong>, e só com os campos estruturados do PokeAPI. Expandir gerações e buscar fatos mais ricos é a maior peça de valor que sobrou.</li><li>O backend no free tier do Render <strong>dorme depois de 15 minutos sem uso</strong> — a primeira requisição depois disso leva uns 30 segundos pra acordar. Migrar pra Railway ou Fly.io resolve, está anotado como follow-up.</li><li>Sync entre dispositivos tem schema (<code>Trainer</code>, <code>SavedTeam</code>) e nenhum endpoint. Está travado em credencial de OAuth que eu preciso criar no Google Cloud Console.</li></ul>
+<p>No próximo capítulo eu entro no módulo nativo: <code>TYPE_APPLICATION_OVERLAY</code>, o fluxo de consentimento do <code>MediaProjection</code>, e três bugs que só existem em Android de verdade — incluindo um <code>CalledFromWrongThreadException</code> que me custou uma noite e um <code>IllegalStateException</code> que exige registrar um callback <em>antes</em> de criar o <code>VirtualDisplay</code>.</p>
+    </div>
+    
+  </article>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../../blog/blog.js"></script>
+</body>
+</html>

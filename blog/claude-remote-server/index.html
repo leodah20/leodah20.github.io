@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>claude-remote-server — série</title>
+<meta name="description" content="Transformar um notebook velho parado + um MikroTik em um servidor pessoal 24/7 pra rodar o Claude Code de qualquer lugar, direto do celular, sem VPS paga e sem expor uma porta sequer pra internet. Cada capítulo pega uma camada — decisão de rede, WireGuard no RouterOS, o notebook virando servidor, tmux, o fluxo de uma sessão real — e mostra a decisão técnica antes da configuração.">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../blog/index.html" class="is-active"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog</span></a></li>
+    <li><a href="../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <section class="series">
+    <p class="article__breadcrumb"><a href="../">#blog</a> / claude-remote-server</p>
+    <h1 class="series__title">claude-remote-server</h1>
+    <p class="series__summary">Transformar um notebook velho parado + um MikroTik em um servidor pessoal 24/7 pra rodar o Claude Code de qualquer lugar, direto do celular, sem VPS paga e sem expor uma porta sequer pra internet. Cada capítulo pega uma camada — decisão de rede, WireGuard no RouterOS, o notebook virando servidor, tmux, o fluxo de uma sessão real — e mostra a decisão técnica antes da configuração.</p>
+    <p class="series__repo-link"><a href="https://github.com/leodah20/claude-remote-server" target="_blank" rel="noopener noreferrer">source &rarr;</a></p>
+    <ol class="series-toc">
+<li class="series-toc__item series-toc__item--published">
+          <a href="01-decisao-de-rede/">
+            <span class="series-toc__number">01</span>
+            <span class="series-toc__title">A decisão de rede: por que VPN no MikroTik e não VPS paga nem porta aberta</span>
+          </a>
+          <p class="series-toc__oneline">As três saídas possíveis pro problema de acessar minha máquina de casa remotamente, o tradeoff de cada uma e o desenho final da topologia (VPN 10.10.10.0/24, notebook em 192.168.88.50, zero porta exposta).</p>
+        </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">02</span>
+        <span class="series-toc__title">WireGuard no RouterOS na prática: interface, peers, firewall e DDNS</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">O script .rsc linha por linha — criar a interface wg-mobile, adicionar peer por chave pública, ordenar as regras de firewall com place-before e resolver IP dinâmico com /ip cloud.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">03</span>
+        <span class="series-toc__title">O notebook velho virando servidor: Ubuntu Server, IP fixo e setup.sh idempotente</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Netplan com endereço estático, logind ignorando o fechamento da tampa, e por que o script de instalação checa tudo antes de instalar qualquer coisa.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">04</span>
+        <span class="series-toc__title">tmux: sessões que não morrem quando o celular perde sinal</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Uma sessão por projeto, o que acontece quando o app fecha no meio de um prompt, e a ideia de subir as sessões automaticamente no boot via systemd.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">05</span>
+        <span class="series-toc__title">Do celular ao repo: o fluxo completo de uma sessão de código remota</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Conectar a VPN, chegar no notebook, retomar a sessão e deixar o Claude rodar git, build e testes localmente — com o processamento de IA na nuvem da Anthropic.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">06</span>
+        <span class="series-toc__title">Segurança em camadas e limitações honestas</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">As cinco camadas de proteção (rede, autenticação por peer, firewall, .gitignore, isolamento de sessão) e o que ainda falta pra isso ser 24/7 de verdade: energia, failover e redundância.</p>
+      </li>
+    </ol>
+  </section>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../blog/blog.js"></script>
+</body>
+</html>

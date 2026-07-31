@@ -1,0 +1,55 @@
+{
+  "slug": "pokemon-trainer-companion",
+  "projectTitle": "Pokémon Trainer Companion",
+  "seriesSummary": "O PTC é um app de Pokémon GO em React Native com backend NestJS e um módulo nativo Android em Kotlin. O objetivo não é ser mais uma calculadora de IV: é uma janela flutuante que lê a tela ao vivo via OCR on-device e dá dicas contextuais, sem login na Niantic e sem tocar na memória do jogo. A decisão de arquitetura que sustenta o overlay, o módulo nativo, o pipeline de OCR, o backend, o grounding da IA e o que ficou deliberadamente fora do beta.",
+  "repoUrl": "https://github.com/leodah20/pokemon-trainer-companion",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Por que o overlay existe (e o que ele obriga na arquitetura)",
+      "articleTitle": "Pokémon Trainer Companion, cap. 1: um overlay que lê a tela do jogo",
+      "oneLine": "O problema real de sair do jogo pra usar um app, a restrição \"nada de integração com a Niantic\", e como React Native + NestJS + módulo nativo Kotlin foram organizados em volta disso.",
+      "status": "published",
+      "slug": "01-por-que-o-overlay-existe",
+      "subtitle": "Todo app de treinador na loja é a mesma calculadora de IV com uma skin diferente. Eu queria resolver o problema que ninguém resolve: ter que sair do jogo.",
+      "readingMinutes": 6,
+      "file": "01-por-que-o-overlay-existe.md"
+    },
+    {
+      "number": 2,
+      "title": "O módulo nativo Android: WindowManager, MediaProjection e um foreground service",
+      "oneLine": "Como o TYPE_APPLICATION_OVERLAY, o fluxo de consentimento de captura e o ScreenCaptureService foram montados — incluindo o CalledFromWrongThreadException, o registerCallback obrigatório e por que \"share one app\" nunca entrega frame no emulador.",
+      "status": "planned"
+    },
+    {
+      "number": 3,
+      "title": "Do texto bruto do ML Kit até espécie, CP e HP",
+      "oneLine": "parseOcrText, o bug de OCR que só aparece em tela de Pokémon GO em português (PC3975 e 175 / 175 PS), e o brute-force de 4096 combinações de IV que roda em cima do resultado.",
+      "status": "planned"
+    },
+    {
+      "number": 4,
+      "title": "O backend NestJS: Clean Architecture, Prisma opcional e deploy grátis",
+      "oneLine": "Os módulos Species, TypeChart, PvP e Raids, por que o PrismaService não crasha sem DATABASE_URL, e o que custa hospedar de graça no Render (spoiler: 15 minutos de idle).",
+      "status": "planned"
+    },
+    {
+      "number": 5,
+      "title": "Grounding do Gemini: knowledge base, prompt e Professor Mode",
+      "oneLine": "buildCompanionPrompt, a knowledge base de 251 espécies vinda do PokeAPI, e o chat multi-turno que usa o contents nativo do Gemini em vez de enfiar histórico dentro do prompt.",
+      "status": "planned"
+    },
+    {
+      "number": 6,
+      "title": "Do dev ao APK: assinatura, MAX_PATH no Windows e i18n",
+      "oneLine": "Release signing, o limite de 260 caracteres de path que quebrava o CMake, a instalação no Xiaomi e a tradução de todas as telas para EN/PT-BR/ES.",
+      "status": "planned"
+    },
+    {
+      "number": 7,
+      "title": "O que ficou fora do beta, e por quê",
+      "oneLine": "Sync entre dispositivos travado em credenciais OAuth, dark mode adiado por causa de um COLORS estático, knowledge base parada na Gen 2 — as dívidas que eu escolhi ter.",
+      "status": "planned"
+    }
+  ]
+}
