@@ -151,6 +151,11 @@ a:hover{ text-decoration: underline; }
 }
 .sidebar__brand{ color: var(--accent); font-weight: 700; font-size: 14px; text-align: center; }
 .sidebar__nav{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.sidebar__nav--secondary{
+  flex: 0 0 auto;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border);
+}
 .sidebar__nav a{
   display: flex; align-items: center; gap: 8px;
   padding: 8px 8px; border-radius: var(--radius);
@@ -197,6 +202,7 @@ main{
     z-index: 100;
   }
   .sidebar__nav{ flex-direction: row; flex: 0 1 auto; gap: 10px; justify-content: center; }
+  .sidebar__nav--secondary{ padding-top: 0; padding-left: 10px; border-top: none; border-left: 1px dashed var(--border); }
   .sidebar__nav a{ padding: 8px; }
   .sidebar__label{ display: none; }
   .sidebar__brand{ display: none; }
