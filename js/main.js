@@ -88,6 +88,24 @@
     observedSections.forEach((section) => sectionObserver.observe(section));
   }
 
+  // The observer's trigger band sits around 40-45% down the viewport, which
+  // the last section's top never reaches once the page runs out of room to
+  // scroll further -- so it never got marked active. Force it when scrolled
+  // to the bottom of the page.
+  const lastObservedSection = observedSections[observedSections.length - 1];
+  if (lastObservedSection) {
+    function markActiveIfAtBottom() {
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (!atBottom) return;
+      sidebarLinks.forEach((a) => {
+        a.classList.toggle("is-active", a.dataset.section === lastObservedSection.id);
+      });
+    }
+    window.addEventListener("scroll", markActiveIfAtBottom, { passive: true });
+    window.addEventListener("resize", markActiveIfAtBottom);
+    markActiveIfAtBottom();
+  }
+
   /* ---------- hero typing effect ---------- */
   const typedCmdEl = document.getElementById("typedCmd");
   const typedOutputEl = document.getElementById("typedOutput");
