@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu portfólio virou um NOC dashboard — e continua sendo HTML, CSS e JS puro — Portfólio como NOC Dashboard</title>
+<meta name="description" content="Zero framework, zero build step, zero backend. A parte difícil não foi o visual: foi o calendário de contribuições do GitHub.">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../../blog/index.html" class="is-active"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog</span></a></li>
+    <li><a href="../../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <article class="article">
+    <p class="article__breadcrumb">
+      <a href="../../">#blog</a> / <a href="../">Portfólio como NOC Dashboard</a> / cap. 1
+    </p>
+    <h1 class="article__title">Meu portfólio virou um NOC dashboard — e continua sendo HTML, CSS e JS puro</h1>
+    <p class="article__subtitle">Zero framework, zero build step, zero backend. A parte difícil não foi o visual: foi o calendário de contribuições do GitHub.</p>
+    <p class="article__meta">7 min de leitura</p>
+    <div class="article__body">
+<p>Meu portfólio já existia antes de tudo isso: HTML, CSS e JavaScript puro no GitHub Pages, visual de terminal monoespaçado, toggle claro/escuro. Funcionava. O problema é que quando eu abria em tela grande, era uma coluna de 820px centralizada com dois vãos vazios enormes dos lados, e dentro dela só texto. Na spec que escrevi antes de encostar no código, descrevi o resultado com as palavras que eu realmente usei na época: &quot;texto HTML cru&quot;.</p>
+<p>Duas coisas me incomodavam junto:</p>
+<ol><li><strong>Desperdício de espaço.</strong> <code>max-width: 820px</code> num monitor widescreen é literalmente jogar fora dois terços da tela.</li><li><strong>Aquilo não parecia comigo.</strong> Eu trabalho com infraestrutura — switch Cisco, MikroTik, pfSense, FortiGate, VLAN, Zabbix. Meu site parecia o de qualquer pessoa que abriu um template de terminal.</li></ol>
+<p>A ideia que fechou o redesign foi essa: se eu passo o dia olhando painel de monitoramento, por que meu portfólio não <strong>é</strong> um painel de monitoramento? Skills viram um diagrama de topologia clicável. Projetos viram cards de host monitorado. Certificações viram um LED wall. Tudo dentro da mesma linguagem de janela de terminal que já existia, pra não jogar fora o site anterior e sim evoluir ele.</p>
+<p>Mas a decisão que realmente definiu o resto do trabalho não foi visual. Foi essa: <strong>continuar 100% estático.</strong></p>
+<h2 id="por-que-nao-puxar-um-framework">Por que não puxar um framework</h2>
+<p>A tentação óbvia era React + Vite, ou pelo menos alguma lib de gráfico pro diagrama. Não fui por aí, e a razão é bem prática: esse site é meu currículo. Ele tem que estar no ar daqui a dois anos sem eu ter que lembrar qual versão de qual bundler estava usando, sem <code>npm install</code> quebrando por dependência abandonada, sem build step entre &quot;editei uma linha&quot; e &quot;está publicado&quot;.</p>
+<p>Coloquei isso como restrição fechada no plano de implementação, junto com a regra mais importante do projeto — <strong>nada de dado inventado</strong>:</p>
+<blockquote>No build step, no framework, no external JS/CSS libraries. (...) No fabricated data anywhere — e.g. project &quot;host&quot; cards must not show invented uptime/ping numbers, only a real online/source-only status derived from whether a <code>demo</code> link exists.</blockquote>
+<p>O site inteiro são quatro arquivos:</p>
+<p>| Arquivo | Responsabilidade | |---|---| | <code>index.html</code> | markup e estrutura, nada além das duas tags <code>&lt;script src&gt;</code> | | <code>css/style.css</code> | tokens de tema (claro/escuro), layout, todos os componentes | | <code>js/content.js</code> | conteúdo editável — dados puros, sem lógica de render | | <code>js/main.js</code> | renderização e interação |</p>
+<p>Sendo honesto sobre &quot;zero dependência externa&quot;: a única requisição externa que a página faz por design é a webfont JetBrains Mono do Google Fonts. Nada de bundler, nada de <code>node_modules</code>, nada de CDN de biblioteca.</p>
+<p>O trade-off é direto e eu topei conscientemente: <strong>tudo que uma lib faria por mim, eu escrevo na mão.</strong></p>
+<h2 id="o-que-sem-lib-custa-o-diagrama-de-topologia">O que &quot;sem lib&quot; custa: o diagrama de topologia</h2>
+<p><code>CONTENT.skills</code> é um array de 6 categorias (redes, servidores e virtualização, segurança e firewall, equipamentos, linguagens e dev, idiomas). Cada uma precisa virar um nó em volta de um nó central. Sem D3, sem lib de grafo — trigonometria e <code>createElementNS</code>:</p>
+<div class="code-block"><span class="code-block__lang">js</span><pre><code>function computeRadialPositions(count, cx, cy, radius, startAngleDeg) {
+  const positions = [];
+  const step = 360 / count;
+  for (let i = 0; i &lt; count; i++) {
+    const angleDeg = startAngleDeg + step * i;
+    const angleRad = (angleDeg * Math.PI) / 180;
+    positions.push({
+      x: cx + radius * Math.cos(angleRad),
+      y: cy + radius * Math.sin(angleRad)
+    });
+  }
+  return positions;
+}</code></pre></div>
+<p>É uma função pura, sem efeito colateral, e isso foi de propósito: esse repo não tem test runner (adicionar um violaria a regra do build step), então o &quot;teste&quot; dela é um <code>node -e</code> que confere se com <code>startAngleDeg = -90</code> o primeiro nó cai exatamente em cima do centro e se todos os nós ficam a distância exata do raio.</p>
+<p>E aí veio o primeiro tapa de quem veio do HTML: <strong><code>&lt;text&gt;</code> em SVG não quebra linha sozinho.</strong> Um rótulo como &quot;servidores e virtualizacao&quot; renderiza numa linha só e vaza do <code>viewBox</code>. O comentário que deixei no código é literalmente o registro do problema:</p>
+<div class="code-block"><span class="code-block__lang">js</span><pre><code>// SVG &lt;text&gt; never wraps on its own (unlike HTML), so a long label like
+// &quot;servidores e virtualizacao&quot; would render as one line and run past the
+// viewBox edge, getting clipped. Greedily wraps on word boundaries instead.
+function wrapSvgLabel(text, maxChars) { /* ... */ }</code></pre></div>
+<p>Coisa que qualquer lib de gráfico resolveria em zero linha. Aqui foram duas funções (<code>wrapSvgLabel</code> + <code>setSvgTextLines</code> gerando <code>&lt;tspan&gt;</code>). Foi o preço, e eu já sabia que ia pagar.</p>
+<h2 id="a-regra-que-mais-me-segurou">A regra que mais me segurou</h2>
+<p>Os cards de projeto parecem host monitorado — nome, dot de status, stack, links. A tentação de colocar &quot;uptime 99.9%&quot; ou &quot;ping 12ms&quot; era enorme, porque fica lindo. Não tem. O status é derivado de um dado que ou é verdade ou não existe:</p>
+<div class="code-block"><span class="code-block__lang">js</span><pre><code>const isOnline = Boolean(p.demo);</code></pre></div>
+<p>Se o projeto tem link de demo real e acessível, o card mostra &quot;online&quot; com dot verde. Se não tem, mostra &quot;source only&quot; com dot apagado. E deixei isso escrito no README pro meu eu do futuro não afrouxar a regra: <em>only set a <code>demo</code> link if it's real and reachable — nothing is fabricated.</em></p>
+<h2 id="o-problema-que-html-puro-nao-resolve-o-calendario-de-contribuicoes">O problema que HTML puro não resolve: o calendário de contribuições</h2>
+<p>A seção <code>#github-status</code> puxa dados de verdade do GitHub. Stats do perfil, breakdown de linguagens e atividade recente saem da <strong>REST API pública</strong> — dá pra fazer com <code>fetch()</code> direto do navegador, sem token, cacheado 10 minutos em <code>sessionStorage</code> pra não estourar rate limit, e com mensagem de erro visível se falhar em vez de quebrar a página.</p>
+<p>Mas o heatmap de contribuições, aqueles quadradinhos verdes, não está na REST. Só existe na <strong>GraphQL API</strong>, e GraphQL do GitHub <strong>exige requisição autenticada</strong>. Ou seja: precisaria de um token. E token em código client-side é token público — não dá.</p>
+<p>Minha primeira tentativa foi um Cloudflare Worker segurando o token como secret e devolvendo só o calendário público. Cheguei a escrever e commitar. Depois joguei fora, e o motivo está no commit: aquilo exigia <strong>criar conta em mais um serviço, fazer deploy e gerenciar um secret</strong> — pra um site cuja graça inteira é não depender de nada disso.</p>
+<p>A solução que ficou usa uma coisa que o repositório já tem de graça: o <code>GITHUB_TOKEN</code> automático do GitHub Actions.</p>
+<div class="code-block"><span class="code-block__lang">yaml</span><pre><code>on:
+  schedule:
+    - cron: &quot;0 */6 * * *&quot;
+  workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths-ignore:
+      - &quot;data/contributions.json&quot;
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch contribution calendar via GraphQL
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            query($login: String!) {
+              user(login: $login) {
+                contributionsCollection {
+                  contributionCalendar {
+                    totalContributions
+                    weeks { contributionDays { date contributionCount weekday } }
+                  }
+                }
+              }
+            }' -f login=&quot;leodah20&quot; \
+            --jq '.data.user.contributionsCollection.contributionCalendar' \
+            &gt; data/contributions.json</code></pre></div>
+<p>O <code>paths-ignore</code> no push existe pra evitar loop: o próprio workflow commita nesse arquivo, e sem isso o commit dele dispararia ele de novo.</p>
+<p>O fluxo completo:</p>
+<figure class="article__figure"><svg viewBox="0 0 640 316" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluxo do calendário de contribuições: GitHub Actions gera o JSON, o navegador consome via fetch">
+  <defs>
+    <marker id="arrow-pf" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path class="diagram-arrow-head" d="M0,0 L6,3 L0,6 Z"/>
+    </marker>
+  </defs>
+
+  <rect class="diagram-group" x="4" y="10" width="632" height="110" rx="6"/>
+  <text class="diagram-label" x="16" y="25">GitHub Actions — a cada 6h + push na main</text>
+
+  <rect class="diagram-box" x="5" y="40" width="190" height="60" rx="6"/>
+  <text class="diagram-text" x="100" y="60" text-anchor="middle">GITHUB_TOKEN</text>
+  <text class="diagram-text" x="100" y="75" text-anchor="middle">automático</text>
+  <text class="diagram-text--dim" x="100" y="90" text-anchor="middle">(não sai do runner)</text>
+
+  <line class="diagram-arrow diagram-arrow--dashed" x1="195" y1="70" x2="207" y2="70" marker-end="url(#arrow-pf)"/>
+
+  <rect class="diagram-box" x="210" y="47" width="200" height="46" rx="6"/>
+  <text class="diagram-text" x="310" y="66" text-anchor="middle">gh api graphql</text>
+  <text class="diagram-text--dim" x="310" y="81" text-anchor="middle">contributionCalendar</text>
+
+  <line class="diagram-arrow" x1="410" y1="70" x2="422" y2="70" marker-end="url(#arrow-pf)"/>
+
+  <rect class="diagram-box diagram-box--accent" x="425" y="47" width="205" height="46" rx="6"/>
+  <text class="diagram-text" x="527" y="66" text-anchor="middle">data/contributions.json</text>
+  <text class="diagram-text--dim" x="527" y="81" text-anchor="middle">commitado no próprio repo</text>
+
+  <path class="diagram-arrow" d="M528,93 L528,120 L125,120 L125,140" fill="none" marker-end="url(#arrow-pf)"/>
+  <text class="diagram-text--dim" x="326" y="113" text-anchor="middle">vira arquivo estático (mesmo commit)</text>
+
+  <rect class="diagram-group" x="4" y="140" width="466" height="166" rx="6"/>
+  <text class="diagram-label" x="16" y="156">Navegador do visitante</text>
+
+  <rect class="diagram-box" x="5" y="168" width="240" height="60" rx="6"/>
+  <text class="diagram-text" x="125" y="188" text-anchor="middle">fetch api.github.com</text>
+  <text class="diagram-text" x="125" y="203" text-anchor="middle">/users /repos /events</text>
+  <text class="diagram-text--dim" x="125" y="218" text-anchor="middle">(REST público)</text>
+
+  <line class="diagram-arrow" x1="245" y1="198" x2="257" y2="198" marker-end="url(#arrow-pf)"/>
+
+  <rect class="diagram-box" x="260" y="175" width="190" height="46" rx="6"/>
+  <text class="diagram-text" x="355" y="194" text-anchor="middle">stats + linguagens</text>
+  <text class="diagram-text--dim" x="355" y="209" text-anchor="middle">+ atividade</text>
+
+  <rect class="diagram-box diagram-box--accent" x="5" y="240" width="240" height="60" rx="6"/>
+  <text class="diagram-text" x="125" y="260" text-anchor="middle">fetch</text>
+  <text class="diagram-text" x="125" y="275" text-anchor="middle">data/contributions.json</text>
+  <text class="diagram-text--dim" x="125" y="290" text-anchor="middle">(mesma origem, estático)</text>
+
+  <line class="diagram-arrow" x1="245" y1="270" x2="257" y2="270" marker-end="url(#arrow-pf)"/>
+
+  <rect class="diagram-box" x="260" y="247" width="190" height="46" rx="6"/>
+  <text class="diagram-text" x="355" y="266" text-anchor="middle">heatmap de</text>
+  <text class="diagram-text--dim" x="355" y="281" text-anchor="middle">contribuições</text>
+</svg></figure>
+<p>O ponto que eu gosto: o site não sabe que existe GraphQL. Pra ele, <code>data/contributions.json</code> é só mais um arquivo estático servido pelo Pages, na mesma origem, igual ao CSS. O token nunca sai do runner. Não tem serviço externo, não tem secret pra rotacionar, não tem conta nova.</p>
+<h2 id="o-que-quebrou-no-caminho">O que quebrou no caminho</h2>
+<p>Um bug que vale registrar porque não tem nada a ver com o que eu esperava: no mobile o site rolava horizontalmente. A causa raiz não foi o fundo animado nem imagem larga. Era <code>main { margin: 0 auto }</code> — escrito pro layout desktop, onde o <code>body</code> é <code>flex-direction: row</code> e margem lateral automática é eixo principal, inofensiva. No breakpoint de 620px o <code>body</code> vira <code>column</code>, os eixos trocam, a margem automática passa a ser <strong>cross-axis</strong>, e pela spec do flexbox isso troca o <code>main</code> de &quot;estica pra preencher&quot; para &quot;encolhe pro tamanho do conteúdo&quot;. Resultado: <code>main</code> renderizando a 817px dentro de um pai de 372px.</p>
+<p>É o mesmo tipo de investigação que eu faço no trabalho quando alguém diz &quot;a rede está lenta&quot;: o sintoma nunca está onde você olha primeiro.</p>
+<h2 id="onde-ta-agora-e-o-proximo-passo">Onde tá agora, e o próximo passo</h2>
+<p>O site está no ar em <a href="https://leodah20.github.io" target="_blank" rel="noopener noreferrer">leodah20.github.io</a>: sidebar de navegação com tracking de seção via <code>IntersectionObserver</code>, diagrama de topologia com 6 categorias clicáveis, LED wall com 3 certificações em destaque e o resto em pills, 4 projetos como host cards, seção GitHub ao vivo, fundo com aurora boreal e starfield, e tema claro/escuro com contraste auditado (isso rendeu um capítulo inteiro dessa série — o tema claro que eu tinha feito estava reprovando em WCAG AA feio).</p>
+<p>E tem um problema que eu descobri <strong>escrevendo este capítulo</strong>, e corrigi assim que fechei a investigação: o workflow do calendário roda a cada 6 horas e todas as execuções aparecem verdes, mas <code>data/contributions.json</code> não recebia commit novo desde o seed inicial de 24/07 — o último dia dentro do arquivo continuava <code>2026-07-24</code>. Olhando o step de commit:</p>
+<div class="code-block"><span class="code-block__lang">bash</span><pre><code>git add data/contributions.json
+git diff --staged --quiet || git commit -m &quot;chore: refresh contribution calendar data&quot;
+git diff --staged --quiet || git push</code></pre></div>
+<p>Depois que o <code>git commit</code> roda, não sobra nada staged — então o segundo <code>git diff --staged --quiet</code> sai com sucesso e o <code>||</code> <strong>pula o <code>git push</code></strong>. O commit acontece dentro do runner e morre lá. O job termina verde porque nada falhou.</p>
+<p>Ou seja: o calendário que estava no ar era real, mas congelado. A correção foi trocar os dois <code>git diff --staged --quiet</code> independentes por um único <code>if</code>, garantindo que o push só é pulado quando o commit também foi:</p>
+<div class="code-block"><span class="code-block__lang">bash</span><pre><code>git add data/contributions.json
+if git diff --staged --quiet; then
+  echo &quot;no changes to contributions.json, skipping commit&quot;
+else
+  git commit -m &quot;chore: refresh contribution calendar data&quot;
+  git push
+fi</code></pre></div>
+<p>Prefiro registrar o bug e a correção aqui do que fingir que estava tudo funcionando desde o início. O capítulo 6 desta série entra em mais detalhe nesse diagnóstico — e no que mais eu quero automatizar no site sem adicionar backend.</p>
+    </div>
+    
+  </article>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../../blog/blog.js"></script>
+</body>
+</html>

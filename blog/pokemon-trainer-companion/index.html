@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pokémon Trainer Companion — série</title>
+<meta name="description" content="O PTC é um app de Pokémon GO em React Native com backend NestJS e um módulo nativo Android em Kotlin. O objetivo não é ser mais uma calculadora de IV: é uma janela flutuante que lê a tela ao vivo via OCR on-device e dá dicas contextuais, sem login na Niantic e sem tocar na memória do jogo. A decisão de arquitetura que sustenta o overlay, o módulo nativo, o pipeline de OCR, o backend, o grounding da IA e o que ficou deliberadamente fora do beta.">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../blog/index.html" class="is-active"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog</span></a></li>
+    <li><a href="../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <section class="series">
+    <p class="article__breadcrumb"><a href="../">#blog</a> / Pokémon Trainer Companion</p>
+    <h1 class="series__title">Pokémon Trainer Companion</h1>
+    <p class="series__summary">O PTC é um app de Pokémon GO em React Native com backend NestJS e um módulo nativo Android em Kotlin. O objetivo não é ser mais uma calculadora de IV: é uma janela flutuante que lê a tela ao vivo via OCR on-device e dá dicas contextuais, sem login na Niantic e sem tocar na memória do jogo. A decisão de arquitetura que sustenta o overlay, o módulo nativo, o pipeline de OCR, o backend, o grounding da IA e o que ficou deliberadamente fora do beta.</p>
+    <p class="series__repo-link"><a href="https://github.com/leodah20/pokemon-trainer-companion" target="_blank" rel="noopener noreferrer">source &rarr;</a></p>
+    <ol class="series-toc">
+<li class="series-toc__item series-toc__item--published">
+          <a href="01-por-que-o-overlay-existe/">
+            <span class="series-toc__number">01</span>
+            <span class="series-toc__title">Por que o overlay existe (e o que ele obriga na arquitetura)</span>
+          </a>
+          <p class="series-toc__oneline">O problema real de sair do jogo pra usar um app, a restrição &quot;nada de integração com a Niantic&quot;, e como React Native + NestJS + módulo nativo Kotlin foram organizados em volta disso.</p>
+        </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">02</span>
+        <span class="series-toc__title">O módulo nativo Android: WindowManager, MediaProjection e um foreground service</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Como o TYPE_APPLICATION_OVERLAY, o fluxo de consentimento de captura e o ScreenCaptureService foram montados — incluindo o CalledFromWrongThreadException, o registerCallback obrigatório e por que &quot;share one app&quot; nunca entrega frame no emulador.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">03</span>
+        <span class="series-toc__title">Do texto bruto do ML Kit até espécie, CP e HP</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">parseOcrText, o bug de OCR que só aparece em tela de Pokémon GO em português (PC3975 e 175 / 175 PS), e o brute-force de 4096 combinações de IV que roda em cima do resultado.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">04</span>
+        <span class="series-toc__title">O backend NestJS: Clean Architecture, Prisma opcional e deploy grátis</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Os módulos Species, TypeChart, PvP e Raids, por que o PrismaService não crasha sem DATABASE_URL, e o que custa hospedar de graça no Render (spoiler: 15 minutos de idle).</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">05</span>
+        <span class="series-toc__title">Grounding do Gemini: knowledge base, prompt e Professor Mode</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">buildCompanionPrompt, a knowledge base de 251 espécies vinda do PokeAPI, e o chat multi-turno que usa o contents nativo do Gemini em vez de enfiar histórico dentro do prompt.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">06</span>
+        <span class="series-toc__title">Do dev ao APK: assinatura, MAX_PATH no Windows e i18n</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Release signing, o limite de 260 caracteres de path que quebrava o CMake, a instalação no Xiaomi e a tradução de todas as telas para EN/PT-BR/ES.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">07</span>
+        <span class="series-toc__title">O que ficou fora do beta, e por quê</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Sync entre dispositivos travado em credenciais OAuth, dark mode adiado por causa de um COLORS estático, knowledge base parada na Gen 2 — as dívidas que eu escolhi ter.</p>
+      </li>
+    </ol>
+  </section>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../blog/blog.js"></script>
+</body>
+</html>

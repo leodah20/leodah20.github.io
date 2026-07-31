@@ -1,0 +1,55 @@
+{
+  "slug": "vzbet",
+  "projectTitle": "VZBet",
+  "seriesSummary": "O VZBet é um app de palpites de placar para futebol de várzea: NestJS + Prisma + PostgreSQL no backend, Clean Architecture, e nenhum centavo passando por dentro do app. Modelagem do banco, camadas, armadilhas do Prisma 7, segurança e frontend — as decisões e os bugs reais no caminho. É um projeto pessoal em construção: onde ainda não fiz, eu digo que não fiz.",
+  "repoUrl": "https://github.com/leodah20/vzbet",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "6 tabelas e uma função pura: a modelagem do VZBet",
+      "articleTitle": "VZBet #1 — 6 tabelas e uma função pura",
+      "oneLine": "O domínio do app, o diagrama ER real das 6 tabelas do Prisma e a regra de pontuação (simples 3/0, múltipla 7/0) que é o coração do produto.",
+      "status": "published",
+      "slug": "01-modelagem-do-vzbet",
+      "subtitle": "Antes de escrever endpoint, eu tive que decidir o que o app é: e a resposta cabe em um diagrama ER e numa função de 12 linhas.",
+      "readingMinutes": 7,
+      "file": "01-modelagem-do-vzbet.md"
+    },
+    {
+      "number": 2,
+      "title": "Clean Architecture no NestJS sem cerimônia",
+      "oneLine": "As 4 pastas (domain/use-cases/data/presentation) repetidas em 6 módulos, por que meus controllers instanciam use-cases na mão, e o sistema de erros de domínio com DomainErrorFilter global.",
+      "status": "planned"
+    },
+    {
+      "number": 3,
+      "title": "Prisma 7 é outro bicho: as armadilhas que eu paguei",
+      "oneLine": "Generator novo, moduleFormat cjs, driver adapter explícito, DATABASE_URL fora do schema.prisma e o dist/src/main que quase virou bloqueador de deploy.",
+      "status": "planned"
+    },
+    {
+      "number": 4,
+      "title": "Segurança: JWT, bcrypt e um timing attack que eu mesmo escrevi",
+      "oneLine": "Login timing-safe, fail-fast do JWT_SECRET, ADMIN só promovido via banco — e o que ainda está aberto (CORS liberado, sem rate limiting).",
+      "status": "planned"
+    },
+    {
+      "number": 5,
+      "title": "O frontend: React + Vite e o card de palpite simples/múltipla",
+      "oneLine": "Como a UI deriva o resultado a partir do placar digitado pra nunca mandar payload inconsistente, mais ranking, painel e emblemas.",
+      "status": "planned"
+    },
+    {
+      "number": 6,
+      "title": "Seed com dados reais da várzea de Ferraz de Vasconcelos",
+      "oneLine": "Popular o banco com times e resultados de verdade da Copa Metal Ferraz e da Copa das Comunidades — e o que muda quando o dado não é fake.",
+      "status": "planned"
+    },
+    {
+      "number": 7,
+      "title": "Deploy no Render: o próximo passo",
+      "oneLine": "O plano de subir backend e banco gerenciado no free tier do Render, o que já está mapeado e o que ainda pode quebrar.",
+      "status": "planned"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "slug": "portfolio-noc-dashboard",
+  "projectTitle": "Portfólio como NOC Dashboard",
+  "seriesSummary": "Como reconstruí meu portfólio (leodah20.github.io) de uma coluna de texto monoespaçado para um \"NOC dashboard\": diagrama de topologia de skills clicável, cards estilo host monitorado, LED wall de certificações e calendário de contribuições real — tudo em HTML, CSS e JS puro, sem framework e sem build step.",
+  "repoUrl": "https://github.com/leodah20/leodah20.github.io",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Estático por decisão, não por preguiça",
+      "articleTitle": "Meu portfólio virou um NOC dashboard — e continua sendo HTML, CSS e JS puro",
+      "oneLine": "Por que mantive o portfólio em HTML/CSS/JS puro sem build step, o que isso obrigou a resolver na unha (SVG sem lib, dados sem backend) e como o calendário de contribuições virou um JSON commitado por GitHub Actions.",
+      "status": "published",
+      "slug": "01-estatico-por-decisao",
+      "subtitle": "Zero framework, zero build step, zero backend. A parte difícil não foi o visual: foi o calendário de contribuições do GitHub.",
+      "readingMinutes": 7,
+      "file": "01-estatico-por-decisao.md"
+    },
+    {
+      "number": 2,
+      "title": "Um diagrama de topologia de skills em SVG puro",
+      "oneLine": "Como CONTENT.skills vira um grafo radial com createElementNS: computeRadialPositions, o problema de <text> não quebrar linha em SVG, estado de seleção, navegação por teclado e a lista de botões como fallback em telas pequenas.",
+      "status": "planned"
+    },
+    {
+      "number": 3,
+      "title": "Cards estilo host monitorado e o LED wall de certificações",
+      "oneLine": "Traduzir a linguagem visual de Zabbix/Grafana pra CSS: status online vs source-only derivado só de dados reais, LEDs featured vs pills, e a timeline de certificações montada a partir de datas em português parseadas na mão.",
+      "status": "planned"
+    },
+    {
+      "number": 4,
+      "title": "O tema claro que eu tinha feito errado",
+      "oneLine": "Auditoria WCAG AA que mostrou borda com 1.33:1, accent reprovando por 0.25 e tokens de status herdados silenciosamente do tema escuro — e por que a correção foi reestruturar a hierarquia de superfícies, não só escurecer cor.",
+      "status": "planned"
+    },
+    {
+      "number": 5,
+      "title": "Aurora boreal, starfield e o bug de overflow no mobile",
+      "oneLine": "Fundo animado com radial-gradient e box-shadow gerado em JS, e o bug real que isso expôs: margin:0 auto virando margem de cross-axis quando o body troca pra flex-direction:column, fazendo o main renderizar a 817px dentro de um viewport de 372px.",
+      "status": "planned"
+    },
+    {
+      "number": 6,
+      "title": "Consertando o refresh do calendário e o que vem depois",
+      "oneLine": "O workflow rodava verde a cada 6h mas o git push nunca acontecia por causa de um segundo guard `git diff --staged --quiet ||` — diagnóstico completo, a correção e o que mais quero automatizar no site sem adicionar backend.",
+      "status": "planned"
+    }
+  ]
+}

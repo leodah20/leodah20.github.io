@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VZBet #1 — 6 tabelas e uma função pura — VZBet</title>
+<meta name="description" content="Antes de escrever endpoint, eu tive que decidir o que o app é: e a resposta cabe em um diagrama ER e numa função de 12 linhas.">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../../blog/index.html" class="is-active"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog</span></a></li>
+    <li><a href="../../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <article class="article">
+    <p class="article__breadcrumb">
+      <a href="../../">#blog</a> / <a href="../">VZBet</a> / cap. 1
+    </p>
+    <h1 class="article__title">VZBet #1 — 6 tabelas e uma função pura</h1>
+    <p class="article__subtitle">Antes de escrever endpoint, eu tive que decidir o que o app é: e a resposta cabe em um diagrama ER e numa função de 12 linhas.</p>
+    <p class="article__meta">7 min de leitura</p>
+    <div class="article__body">
+<p>Quem joga ou acompanha futebol de várzea já entrou num bolão de grupo de WhatsApp. Alguém manda a tabela da rodada, o pessoal responde o palpite no grupo, e no domingo à noite tem sempre a mesma discussão: quem acertou o quê, quem mandou o palpite depois do jogo já ter começado, e quem tá na frente.</p>
+<p>O VZBet nasceu dessa cena. É um app de palpites de placar para times e campeonatos de várzea — no seed eu usei times reais das ligas amadoras de Ferraz de Vasconcelos/SP (Copa Metal Ferraz Municipal e Copa das Comunidades). O torcedor se cadastra, dá o palpite antes do apito inicial, ganha pontos conforme acerta, e disputa um ranking.</p>
+<p>Só que antes de escrever qualquer endpoint eu tive que decidir uma coisa que definiu o projeto inteiro.</p>
+<h2 id="a-decisao-que-veio-antes-do-codigo-nenhum-dinheiro-passa-pelo-app">A decisão que veio antes do código: nenhum dinheiro passa pelo app</h2>
+<p>A ideia original era aposta de verdade. Aí eu fui ler a Lei 14.790/2023: aposta de quota fixa com dinheiro real no Brasil exige autorização SPA/MF, R$30M de capital social, R$30M de outorga e R$5M de reserva. Isso não é &quot;barreira alta pra um projeto indie&quot;, isso é outro planeta.</p>
+<p>Então pivotei: o VZBet é um jogo de pontos e ranking. Nenhum valor monetário circula dentro do app. Se um grupo quiser combinar um prêmio, isso é resolvido inteiramente fora dele — o app não sabe, não registra, não intermedeia.</p>
+<p>Isso não é um detalhe de rodapé, é uma decisão de modelagem. Não existe tabela de carteira, saldo, transação ou odd no schema. O que existe é palpite e ponto. Todo o resto do banco existe pra alimentar isso.</p>
+<h2 id="as-6-tabelas">As 6 tabelas</h2>
+<p>O banco é PostgreSQL 16 com Prisma 7.9.1, e tem exatamente seis tabelas. Esse é o DER real do <code>schema.prisma</code> de hoje (campos reduzidos aos mais relevantes — a lista completa de tipos está no schema):</p>
+<figure class="article__figure"><svg viewBox="0 0 720 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama entidade-relacionamento do VZBet: seis tabelas — Championship, Team, User, Match, Player e Prediction">
+  <defs>
+    <marker id="arrow-vzbet-er" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path class="diagram-arrow-head" d="M0,0 L6,3 L0,6 Z"/>
+    </marker>
+  </defs>
+
+  <!-- CHAMPIONSHIP -->
+  <rect class="diagram-box" x="20" y="20" width="190" height="90" rx="6"/>
+  <text class="diagram-text" x="115" y="36" text-anchor="middle" font-weight="700">CHAMPIONSHIP</text>
+  <line x1="20" y1="44" x2="210" y2="44" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="30" y="60">id PK</text>
+  <text class="diagram-text--dim" x="30" y="78">name, season</text>
+  <text class="diagram-text--dim" x="30" y="96">format (pontos corridos / mata-mata)</text>
+
+  <!-- TEAM -->
+  <rect class="diagram-box" x="250" y="20" width="190" height="90" rx="6"/>
+  <text class="diagram-text" x="345" y="36" text-anchor="middle" font-weight="700">TEAM</text>
+  <line x1="250" y1="44" x2="440" y2="44" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="260" y="60">id PK</text>
+  <text class="diagram-text--dim" x="260" y="78">name, region</text>
+  <text class="diagram-text--dim" x="260" y="96">foundedYear (opcional)</text>
+
+  <!-- USER -->
+  <rect class="diagram-box" x="490" y="20" width="190" height="90" rx="6"/>
+  <text class="diagram-text" x="585" y="36" text-anchor="middle" font-weight="700">USER</text>
+  <line x1="490" y1="44" x2="680" y2="44" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="500" y="60">id PK</text>
+  <text class="diagram-text--dim" x="500" y="78">email UK, passwordHash</text>
+  <text class="diagram-text--dim" x="500" y="96">role (ADMIN / TORCEDOR)</text>
+
+  <!-- MATCH -->
+  <rect class="diagram-box diagram-box--accent" x="130" y="180" width="230" height="122" rx="6"/>
+  <text class="diagram-text" x="245" y="196" text-anchor="middle" font-weight="700">MATCH</text>
+  <line x1="130" y1="204" x2="360" y2="204" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="140" y="220">id PK</text>
+  <text class="diagram-text--dim" x="140" y="238">championshipId FK</text>
+  <text class="diagram-text--dim" x="140" y="256">homeTeamId FK · awayTeamId FK</text>
+  <text class="diagram-text--dim" x="140" y="274">homeScore, awayScore, status</text>
+
+  <!-- PLAYER -->
+  <rect class="diagram-box" x="490" y="180" width="190" height="90" rx="6"/>
+  <text class="diagram-text" x="585" y="196" text-anchor="middle" font-weight="700">PLAYER</text>
+  <line x1="490" y1="204" x2="680" y2="204" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="500" y="220">id PK</text>
+  <text class="diagram-text--dim" x="500" y="238">teamId FK</text>
+  <text class="diagram-text--dim" x="500" y="256">position, number</text>
+
+  <!-- PREDICTION -->
+  <rect class="diagram-box diagram-box--accent" x="130" y="340" width="230" height="122" rx="6"/>
+  <text class="diagram-text" x="245" y="356" text-anchor="middle" font-weight="700">PREDICTION</text>
+  <line x1="130" y1="364" x2="360" y2="364" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="140" y="380">id PK</text>
+  <text class="diagram-text--dim" x="140" y="398">userId FK · matchId FK (UK juntos)</text>
+  <text class="diagram-text--dim" x="140" y="416">predictedOutcome, predictedHome/Away</text>
+  <text class="diagram-text--dim" x="140" y="434">pointsEarned (nulo até pontuar)</text>
+
+  <!-- CHAMPIONSHIP -> MATCH -->
+  <path class="diagram-arrow" d="M115,110 L115,150 L170,150 L170,180" marker-end="url(#arrow-vzbet-er)"/>
+  <text class="diagram-text--accent" x="145" y="146" text-anchor="middle">organiza · 1–N</text>
+
+  <!-- TEAM -> MATCH (casa) -->
+  <path class="diagram-arrow" d="M300,110 L300,160 L245,160 L245,180" marker-end="url(#arrow-vzbet-er)"/>
+  <text class="diagram-text--accent" x="300" y="156" text-anchor="middle">casa · 1–N</text>
+
+  <!-- TEAM -> MATCH (fora) -->
+  <path class="diagram-arrow" d="M400,110 L400,170 L320,170 L320,180" marker-end="url(#arrow-vzbet-er)"/>
+  <text class="diagram-text--accent" x="400" y="166" text-anchor="middle">fora · 1–N</text>
+
+  <!-- TEAM -> PLAYER -->
+  <path class="diagram-arrow" d="M440,65 L465,65 L465,225 L490,225" marker-end="url(#arrow-vzbet-er)"/>
+  <text class="diagram-text--accent" x="467" y="150" text-anchor="middle">tem · 1–N</text>
+
+  <!-- USER -> PREDICTION (routed right of PLAYER to avoid overlap) -->
+  <path class="diagram-arrow" d="M585,110 L585,130 L700,130 L700,401 L360,401" marker-end="url(#arrow-vzbet-er)"/>
+  <text class="diagram-text--accent" x="700" y="265" text-anchor="middle" transform="rotate(90 700 265)">envia · 1–N</text>
+
+  <!-- MATCH -> PREDICTION -->
+  <path class="diagram-arrow" d="M245,302 L245,340" marker-end="url(#arrow-vzbet-er)"/>
+  <text class="diagram-text--accent" x="280" y="322" text-anchor="start">recebe · 1–N</text>
+</svg></figure>
+<p>Três detalhes desse schema que valem mais do que parecem:</p>
+<p><strong><code>Match</code> aponta duas vezes pra <code>Team</code>.</strong> Quando um model referencia o outro duas vezes, o Prisma não tem como adivinhar qual foreign key é qual. A solução é nomear as relações: <code>@relation(&quot;HomeTeam&quot;)</code> de um lado, <code>@relation(&quot;AwayTeam&quot;)</code> do outro. Sem isso o <code>prisma generate</code> simplesmente não sabe montar o client.</p>
+<p><strong><code>@@unique([userId, matchId])</code> no <code>Prediction</code>.</strong> Isso é &quot;um palpite por torcedor por partida&quot; garantido no banco, não na aplicação. E é justamente o que me permitiu não ter endpoint de update: o <code>SubmitPredictionUseCase</code> faz <code>upsert</code> nessa chave composta, então o torcedor reenviando o palpite antes do apito sobrescreve a linha existente em vez de criar uma duplicada. Editar palpite é o mesmo <code>POST /predictions</code> de sempre.</p>
+<p><strong><code>pointsEarned</code> é nullable de propósito.</strong> Um palpite nasce sem pontuação. Ele só é preenchido quando o admin registra o resultado da partida. E se a partida for cancelada em vez de finalizada, aquele <code>pointsEarned</code> fica <code>null</code> pra sempre — partida cancelada não pontua, e o schema reflete isso em vez de fingir que zero e &quot;ainda não pontuado&quot; são a mesma coisa.</p>
+<h2 id="a-regra-de-pontuacao-que-eu-reescrevi-inteira">A regra de pontuação (que eu reescrevi inteira)</h2>
+<p>A primeira versão era o clássico: placar exato = 3 pontos, acertou só o resultado = 1 ponto, errou = 0. Funcionava, tava testada, tava documentada como o mecanismo principal do projeto.</p>
+<p>E era chata. Genérica demais. Não tinha risco nenhum — chutar um placar sempre valia mais do que não chutar, porque no pior caso você ainda levava o ponto do resultado.</p>
+<p>Então eu troquei por uma mecânica inspirada em aposta múltipla (parlay), com duas pernas dentro da mesma partida:</p>
+<ul><li><strong>Simples</strong> — só o resultado (<code>CASA</code>/<code>EMPATE</code>/<code>FORA</code>): acertou, 3 pontos. Errou, 0.</li><li><strong>Múltipla</strong> — resultado + placar exato: acertou o placar, 7 pontos. Errou o placar, <strong>0</strong> — mesmo que o resultado estivesse certo.</li></ul>
+<p>Esse último caso é o ponto inteiro da mecânica. Arriscar a múltipla troca a garantia dos 3 pontos por uma chance de 7, tudo ou nada. Tem risco de verdade.</p>
+<p>O código disso é uma função pura, sem NestJS, sem Prisma, sem nada — <code>backend/src/predictions/domain/scoring.ts</code>:</p>
+<div class="code-block"><span class="code-block__lang">typescript</span><pre><code>export function calculatePredictionPoints(guess: PredictionGuess, result: MatchResult): number {
+  const actualOutcome = outcomeOf(result.homeScore, result.awayScore);
+  const isMultipla = guess.predictedHome !== null &amp;&amp; guess.predictedAway !== null;
+
+  if (!isMultipla) {
+    return guess.predictedOutcome === actualOutcome ? 3 : 0;
+  }
+
+  const scoreCorrect = guess.predictedHome === result.homeScore &amp;&amp; guess.predictedAway === result.awayScore;
+  return scoreCorrect ? 7 : 0;
+}</code></pre></div>
+<figure class="article__figure"><svg viewBox="0 0 750 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluxograma da função calculatePredictionPoints: aposta simples vale 3 ou 0, aposta múltipla vale 7 ou 0 (tudo ou nada)">
+  <defs>
+    <marker id="arrow-vzbet-score" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path class="diagram-arrow-head" d="M0,0 L6,3 L0,6 Z"/>
+    </marker>
+  </defs>
+
+  <rect class="diagram-box" x="210" y="10" width="280" height="42" rx="6"/>
+  <text class="diagram-text" x="350" y="36" text-anchor="middle">calculatePredictionPoints(guess, result)</text>
+
+  <line class="diagram-arrow" x1="350" y1="52" x2="350" y2="64" marker-end="url(#arrow-vzbet-score)"/>
+
+  <rect class="diagram-box diagram-box--accent" x="170" y="70" width="360" height="56" rx="6"/>
+  <text class="diagram-text" x="350" y="93" text-anchor="middle">predictedHome e predictedAway</text>
+  <text class="diagram-text" x="350" y="110" text-anchor="middle">preenchidos?</text>
+
+  <path class="diagram-arrow" d="M260,126 L260,150 L170,150 L170,164" marker-end="url(#arrow-vzbet-score)"/>
+  <text class="diagram-text--accent" x="215" y="145" text-anchor="middle">não (simples)</text>
+
+  <path class="diagram-arrow" d="M440,126 L440,150 L540,150 L540,164" marker-end="url(#arrow-vzbet-score)"/>
+  <text class="diagram-text--accent" x="490" y="145" text-anchor="middle">sim (múltipla)</text>
+
+  <rect class="diagram-box diagram-box--accent" x="30" y="170" width="280" height="56" rx="6"/>
+  <text class="diagram-text" x="170" y="193" text-anchor="middle">predictedOutcome ==</text>
+  <text class="diagram-text" x="170" y="210" text-anchor="middle">resultado real?</text>
+
+  <rect class="diagram-box diagram-box--accent" x="400" y="170" width="280" height="56" rx="6"/>
+  <text class="diagram-text" x="540" y="193" text-anchor="middle">placar exato</text>
+  <text class="diagram-text" x="540" y="210" text-anchor="middle">bate?</text>
+
+  <path class="diagram-arrow" d="M100,226 L100,280" marker-end="url(#arrow-vzbet-score)"/>
+  <text class="diagram-text--accent" x="112" y="250">sim</text>
+  <rect class="diagram-box" x="30" y="280" width="140" height="46" rx="6"/>
+  <text class="diagram-text" x="100" y="308" text-anchor="middle">3 pontos</text>
+
+  <path class="diagram-arrow" d="M240,226 L240,250 L260,250 L260,280" marker-end="url(#arrow-vzbet-score)"/>
+  <text class="diagram-text--accent" x="250" y="245" text-anchor="middle">não</text>
+  <rect class="diagram-box" x="190" y="280" width="140" height="46" rx="6"/>
+  <text class="diagram-text" x="260" y="308" text-anchor="middle">0 pontos</text>
+
+  <path class="diagram-arrow" d="M470,226 L470,280" marker-end="url(#arrow-vzbet-score)"/>
+  <text class="diagram-text--accent" x="482" y="250">sim</text>
+  <rect class="diagram-box" x="400" y="280" width="140" height="46" rx="6"/>
+  <text class="diagram-text" x="470" y="308" text-anchor="middle">7 pontos</text>
+
+  <path class="diagram-arrow" d="M610,226 L610,250 L645,250 L645,280" marker-end="url(#arrow-vzbet-score)"/>
+  <text class="diagram-text--accent" x="620" y="245" text-anchor="middle">não</text>
+  <rect class="diagram-box diagram-box--accent" x="550" y="280" width="190" height="56" rx="6"/>
+  <text class="diagram-text" x="645" y="303" text-anchor="middle">0 pontos —</text>
+  <text class="diagram-text" x="645" y="320" text-anchor="middle">tudo ou nada</text>
+</svg></figure>
+<p>Ser função pura não é purismo. É que essa regra é a coisa mais importante do produto e eu queria conseguir testá-la sem subir banco, sem subir servidor, sem mock nenhum. O teste que mais me importa é justamente o do caso perverso:</p>
+<div class="code-block"><span class="code-block__lang">typescript</span><pre><code>it('awards 0 points for a múltipla with the right outcome but the wrong exact score (all-or-nothing)', () =&gt; {
+  const points = calculatePredictionPoints(
+    { predictedOutcome: 'CASA', predictedHome: 2, predictedAway: 1 },
+    { homeScore: 3, awayScore: 0 },
+  );
+  expect(points).toBe(0);
+});</code></pre></div>
+<h2 id="um-estado-impossivel-que-o-banco-nao-bloqueia-sozinho">Um estado impossível que o banco não bloqueia sozinho</h2>
+<p>O schema deixa <code>predictedHome</code> e <code>predictedAway</code> nullable, mas na regra do produto eles são <strong>os dois nulos</strong> (simples) ou <strong>os dois preenchidos</strong> (múltipla) — nunca um só. E se vierem preenchidos, o resultado derivado deles tem que bater com o <code>predictedOutcome</code> escolhido. Não existe palpitar &quot;empate&quot; e &quot;2x1&quot; ao mesmo tempo.</p>
+<p>Isso o Postgres não garante por mim, então mora no use case:</p>
+<div class="code-block"><span class="code-block__lang">typescript</span><pre><code>const hasHome = data.predictedHome !== null &amp;&amp; data.predictedHome !== undefined;
+const hasAway = data.predictedAway !== null &amp;&amp; data.predictedAway !== undefined;
+if (hasHome !== hasAway) {
+  throw new ValidationError('Both predictedHome and predictedAway must be provided together, or neither');
+}
+
+if (hasHome &amp;&amp; hasAway) {
+  if (data.predictedHome! &lt; 0 || data.predictedAway! &lt; 0) {
+    throw new ValidationError('Predicted score cannot be negative');
+  }
+  const derivedOutcome = outcomeOf(data.predictedHome!, data.predictedAway!);
+  if (derivedOutcome !== data.predictedOutcome) {
+    throw new ValidationError('predictedOutcome is inconsistent with the predicted score');
+  }
+}</code></pre></div>
+<p>No frontend a UI já seleciona o resultado automaticamente quando você digita o placar, então na prática essa inconsistência nunca chega ao backend. A validação existe como defesa em profundidade — nunca confiar cegamente no cliente.</p>
+<h2 id="pontuar-tem-que-ser-tudo-ou-nada-a-nivel-de-transacao-tambem">Pontuar tem que ser tudo ou nada (a nível de transação também)</h2>
+<p>A primeira versão do <code>RegisterMatchResultUseCase</code> gravava o resultado da partida e <strong>depois</strong> rodava um loop atualizando os pontos palpite por palpite. Uma falha no meio desse loop deixava a partida <code>FINALIZADA</code> com só parte dos palpites pontuados — e como o próprio guard bloqueia registrar resultado em partida já finalizada, aquele estado parcial ficava travado pra sempre, sem retry possível.</p>
+<p>Corrigi juntando tudo num <code>$transaction</code> do Prisma, em <code>PrismaPredictionRepository</code>:</p>
+<div class="code-block"><span class="code-block__lang">typescript</span><pre><code>await this.prisma.$transaction([
+  this.prisma.match.update({
+    where: { id: matchId },
+    data: { homeScore: result.homeScore, awayScore: result.awayScore, status: 'FINALIZADA' },
+  }),
+  ...scoredPredictions.map((sp) =&gt;
+    this.prisma.prediction.update({ where: { id: sp.predictionId }, data: { pointsEarned: sp.points } }),
+  ),
+]);</code></pre></div>
+<p>O use case calcula os pontos de todos os palpites em memória (chamando a função pura) e só então manda tudo num commit só. Ou a partida inteira pontua, ou nada acontece. O ranking nunca reflete um jogo &quot;meio pontuado&quot;.</p>
+<h2 id="onde-ta-agora-e-qual-e-o-proximo-passo">Onde tá agora e qual é o próximo passo</h2>
+<p>O backend está funcionando localmente: 6 módulos em Clean Architecture (auth, teams, players, championships, matches, predictions), testes unitários com repositórios mockados, e um seed com times e resultados históricos reais das duas ligas de Ferraz. O frontend em React + Vite já existe e consome a API — telas de partidas, ranking, classificação, meus palpites e um painel inicial.</p>
+<p>O que <strong>não</strong> existe ainda, pra ser claro: <strong>deploy</strong>. Nada do VZBet está hospedado em lugar nenhum. O plano é Render (Web Service no free tier + PostgreSQL gerenciado), e as configurações que costumam derrubar o primeiro deploy já estão mapeadas, mas eu ainda não subi.</p>
+<p>Outras pendências que estou rastreando e não vou fingir que não existem: o <code>app.enableCors()</code> está liberado pra qualquer origem, não tem rate limiting em <code>/auth/login</code>, o e2e smoke test gerado pelo CLI do NestJS continua quebrado (ts-jest não resolve os imports ESM do client gerado pelo Prisma), e o <code>README.md</code> e parte dos docs ainda descrevem a regra antiga de 3/1/0 — a documentação ficou pra trás da reescrita da pontuação e precisa ser atualizada.</p>
+<p>No próximo capítulo eu entro na estrutura de camadas em si: as quatro pastas que se repetem em todos os 6 módulos, por que meus controllers instanciam os use-cases na mão em vez de usar o container de DI do Nest, e o sistema de erros de domínio que nasceu de um code review achando que &quot;time não encontrado&quot; estava virando 500.</p>
+    </div>
+    
+  </article>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../../blog/blog.js"></script>
+</body>
+</html>

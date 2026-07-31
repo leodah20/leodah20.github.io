@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Um notebook velho, um MikroTik e zero portas abertas — claude-remote-server</title>
+<meta name="description" content="Capítulo 1: por que a VPN mora no roteador, e não numa VPS paga nem atrás de um port forwarding.">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../../blog/index.html" class="is-active"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog</span></a></li>
+    <li><a href="../../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <article class="article">
+    <p class="article__breadcrumb">
+      <a href="../../">#blog</a> / <a href="../">claude-remote-server</a> / cap. 1
+    </p>
+    <h1 class="article__title">Um notebook velho, um MikroTik e zero portas abertas</h1>
+    <p class="article__subtitle">Capítulo 1: por que a VPN mora no roteador, e não numa VPS paga nem atrás de um port forwarding.</p>
+    <p class="article__meta">6 min de leitura</p>
+    <div class="article__body">
+<p>Tem um notebook velho parado num canto da minha casa e uma vontade recorrente de mexer nos meus projetos pessoais em horário que não combina com estar sentado na frente do PC. Ideia no ônibus, bug que me ocorre no almoço, meia hora livre no meio da tarde. A resposta era sempre a mesma: anota aí e vê em casa.</p>
+<p>O que eu queria era fácil de descrever e chato de resolver: rodar o Claude Code nos meus repositórios, do celular, de qualquer lugar, sem pagar mensalidade e sem deixar nada meu exposto na internet.</p>
+<p>Antes de escrever uma linha de script, esse projeto era uma decisão de rede. Então é por ela que a série começa.</p>
+<h2 id="as-tres-saidas-possiveis">As três saídas possíveis</h2>
+<p><strong>Opção 1: alugar uma VPS.</strong> Funciona, é rápido, e é o que a maioria faz. Mas é mensalidade recorrente pra um projeto pessoal, e todos os meus repositórios passariam a morar em servidor de terceiro. Não é o fim do mundo — só não é o que eu quero pagar nem o que eu quero aprender.</p>
+<p><strong>Opção 2: port forwarding do SSH no roteador.</strong> Custo zero, dez minutos de configuração. E também: um serviço meu visível pra qualquer scanner automatizado varrendo a internet atrás de porta aberta. Quem mexe com firewall no dia a dia sabe que porta exposta não fica sozinha muito tempo. Descartada.</p>
+<p><strong>Opção 3: aproveitar o que eu já tenho.</strong> Eu já tenho um MikroTik na rede. RouterOS 7 tem WireGuard nativo, sem instalar nada. O notebook velho já está lá, encostado. Custo mensal: zero, só energia elétrica.</p>
+<p>Escolhi a 3, e por um motivo que vai além do dinheiro: montar VPN, firewall e roteamento do zero num projeto meu, de ponta a ponta, tem mais valor de portfólio do que assinar um serviço pronto. É o que eu faço como Analista de Redes Jr — só que aqui eu decido tudo.</p>
+<h2 id="por-que-o-wireguard-mora-no-roteador-e-nao-no-notebook">Por que o WireGuard mora no roteador, e não no notebook</h2>
+<p>Essa foi a segunda decisão, e ela é menos óbvia. Dava pra subir o WireGuard direto no Ubuntu do notebook e mandar o roteador encaminhar a porta UDP pra ele. Não fiz por dois motivos.</p>
+<p>O primeiro: o MikroTik <strong>já é</strong> o ponto de entrada natural da rede. Ele é o roteador. Colocar o gateway VPN nele significa que o notebook nunca precisa ficar exposto diretamente — ele existe só dentro da rede local, atrás do roteador, como qualquer outro host.</p>
+<p>O segundo: o túnel deixa de depender do notebook estar de pé. Se eu reiniciar a máquina, mexer no Ubuntu ou quebrar alguma coisa lá dentro, o endpoint da VPN continua respondendo. O que quebrou fica do lado de dentro.</p>
+<p>Sobre a criptografia em si: WireGuard usa ChaCha20, é moderno e leve o suficiente pra rodar numa VPN de celular sem detonar a bateria — que é exatamente o caso de uso aqui.</p>
+<h2 id="a-topologia">A topologia</h2>
+<figure class="article__figure"><svg viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Topologia de rede: celular conecta via VPN WireGuard ao MikroTik, que encaminha para o notebook na LAN local; o notebook troca prompts com a nuvem da Anthropic">
+  <defs>
+    <marker id="arrow-crs-topo" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path class="diagram-arrow-head" d="M0,0 L6,3 L0,6 Z"/>
+    </marker>
+  </defs>
+
+  <rect class="diagram-box" x="10" y="85" width="170" height="90" rx="6"/>
+  <text class="diagram-text" x="95" y="105" text-anchor="middle" font-weight="700">Celular</text>
+  <text class="diagram-text--dim" x="95" y="123" text-anchor="middle">WireGuard + app Claude</text>
+  <text class="diagram-text--dim" x="95" y="141" text-anchor="middle">10.10.10.2/24</text>
+
+  <path class="diagram-arrow" d="M180,130 L258,130" marker-end="url(#arrow-crs-topo)"/>
+  <text class="diagram-text--accent" x="219" y="112" text-anchor="middle">VPN WireGuard (UDP)</text>
+  <text class="diagram-text--dim" x="219" y="150" text-anchor="middle">sem porta exposta</text>
+
+  <rect class="diagram-box diagram-box--accent" x="260" y="60" width="210" height="140" rx="6"/>
+  <text class="diagram-text" x="365" y="80" text-anchor="middle" font-weight="700">MikroTik · RouterOS 7+</text>
+  <line x1="260" y1="88" x2="470" y2="88" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="270" y="106">interface wg-mobile</text>
+  <text class="diagram-text--dim" x="270" y="124">10.10.10.1/24</text>
+  <text class="diagram-text--dim" x="270" y="142">gateway VPN · firewall</text>
+  <text class="diagram-text--dim" x="270" y="160">DDNS (/ip cloud)</text>
+
+  <path class="diagram-arrow" d="M470,130 L548,130" marker-end="url(#arrow-crs-topo)"/>
+  <text class="diagram-text--accent" x="509" y="112" text-anchor="middle">LAN</text>
+  <text class="diagram-text--dim" x="509" y="150" text-anchor="middle">cabo, se possível</text>
+
+  <rect class="diagram-box" x="550" y="75" width="200" height="110" rx="6"/>
+  <text class="diagram-text" x="650" y="95" text-anchor="middle" font-weight="700">Notebook · Ubuntu Server</text>
+  <line x1="550" y1="103" x2="750" y2="103" stroke="var(--border)"/>
+  <text class="diagram-text--dim" x="560" y="121">192.168.88.50</text>
+  <text class="diagram-text--dim" x="560" y="139">Claude Code CLI</text>
+  <text class="diagram-text--dim" x="560" y="157">tmux (1 sessão/projeto)</text>
+
+  <path class="diagram-arrow diagram-arrow--dashed" d="M650,185 L650,210" marker-end="url(#arrow-crs-topo)"/>
+  <text class="diagram-text--dim" x="662" y="200">prompts / respostas</text>
+
+  <rect class="diagram-box diagram-box--dashed" x="550" y="212" width="200" height="56" rx="6"/>
+  <text class="diagram-text" x="650" y="234" text-anchor="middle">Anthropic Cloud</text>
+  <text class="diagram-text--dim" x="650" y="252" text-anchor="middle">processamento de IA</text>
+</svg></figure>
+<p>Duas redes separadas, de propósito: <code>10.10.10.0/24</code> é a rede da VPN (o roteador é o <code>.1</code>, o celular é o <code>.2</code>), e <code>192.168.88.0/24</code> é a LAN de casa, onde o notebook tem IP fixo em <code>192.168.88.50</code>.</p>
+<p>O notebook precisa de IP fixo porque eu vou apontar pra ele toda vez que conectar — DHCP trocando o endereço no meio do caminho seria dor de cabeça garantida:</p>
+<div class="code-block"><span class="code-block__lang">yaml</span><pre><code>network:
+  ethernets:
+    enp0s3:  # confira o nome real da sua interface com `ip a`
+      dhcp4: no
+      addresses: [192.168.88.50/24]  # IP fixo do notebook na rede local
+      routes:
+        - to: default
+          via: 192.168.88.1  # IP do mikrotik (gateway)
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]
+  version: 2</code></pre></div>
+<p>Uma coisa que vale deixar clara, porque quase todo mundo entende errado quando eu explico: <strong>o processamento de IA não roda no notebook</strong>. Isso fica 100% na nuvem da Anthropic. O notebook só guarda os repositórios e executa os comandos locais — git, build, testes — que o Claude decide rodar. Por isso o hardware pode ser velho.</p>
+<h2 id="a-configuracao-que-sustenta-isso">A configuração que sustenta isso</h2>
+<p>O script do RouterOS está versionado no repo com placeholders (chave real nunca entra no git). A parte que define a topologia é essa:</p>
+<div class="code-block"><span class="code-block__lang">routeros</span><pre><code># 1. Criar a interface WireGuard no mikrotik
+/interface wireguard
+add name=wg-mobile listen-port=13231 mtu=1420 comment=&quot;VPN pro acesso remoto via celular&quot;
+
+# 2. Atribuir IP à interface (rede da VPN)
+/ip address
+add address=10.10.10.1/24 interface=wg-mobile
+
+# 3. Adicionar o celular como peer autorizado
+#    (a chave pública é gerada no app WireGuard do celular)
+/interface wireguard peers
+add interface=wg-mobile \
+    public-key=&quot;SEU_CHAVE_PUBLICA_DO_CELULAR&quot; \
+    allowed-address=10.10.10.2/32 \
+    comment=&quot;celular - acesso remoto&quot;</code></pre></div>
+<p>Cada peer com a própria chave. Isso não é detalhe estético: se eu perder o celular, revogo aquele peer e o resto continua funcionando.</p>
+<p>E aí vem a parte que separa &quot;configurei&quot; de &quot;funciona&quot;:</p>
+<div class="code-block"><span class="code-block__lang">routeros</span><pre><code># 4. Liberar a porta do WireGuard no firewall (UDP)
+/ip firewall filter
+add chain=input protocol=udp dst-port=13231 action=accept place-before=0 comment=&quot;wireguard vpn&quot;
+
+# 5. Permitir que o tráfego da VPN alcance a rede local
+/ip firewall filter
+add chain=forward src-address=10.10.10.0/24 action=accept place-before=0 comment=&quot;vpn -&gt; rede local&quot;
+add chain=forward dst-address=10.10.10.0/24 action=accept place-before=0 comment=&quot;rede local -&gt; vpn&quot;</code></pre></div>
+<p>O <code>place-before=0</code> existe porque no MikroTik as regras são avaliadas em ordem. Se você tem um drop no fim da chain <code>input</code> e adiciona o accept depois dele, a regra nunca é alcançada — a VPN simplesmente não conecta e você fica meia hora achando que errou a chave.</p>
+<p>A regra 4 é a única coisa que responde de fora. Nada de SSH, nada de HTTP: só UDP na porta do WireGuard, e mesmo assim só pra quem tem a chave privada de um peer autorizado. As regras 5 são o que permite o tráfego já autenticado chegar até <code>192.168.88.50</code>.</p>
+<p>Do lado do celular tem o espelho disso, que é o erro clássico: o <code>AllowedIPs</code> do app precisa incluir a rede local (<code>192.168.88.0/24</code>), não só a rede da VPN. Senão você conecta lindamente e não alcança o notebook.</p>
+<h2 id="ip-dinamico">IP dinâmico</h2>
+<p>Internet residencial no Brasil é IP dinâmico. Se o endpoint do celular for o IP público, ele quebra sozinho toda vez que a operadora trocar o endereço. O RouterOS resolve isso nativamente:</p>
+<div class="code-block"><span class="code-block__lang">routeros</span><pre><code>/ip cloud
+set ddns-enabled=yes</code></pre></div>
+<p>Isso me dá um nome fixo do tipo <code>xxxxx.sn.mynetname.net</code> que sempre aponta pro IP atual. Configuro o celular uma vez e esqueço — com a ressalva de que a propagação depois de uma troca de IP pode levar alguns minutos.</p>
+<h2 id="o-que-eu-ja-aceitei-perder">O que eu já aceitei perder</h2>
+<p>Não vou vender isso como infraestrutura séria, porque não é. As limitações estão documentadas no repo justamente pra eu não me enganar:</p>
+<ul><li>Depende do notebook e da internet residencial. Sem redundância, sem failover.</li><li>Se eu remover a bateria do notebook (que é o recomendado pra um equipamento que fica ligado direto), queda de energia derruba tudo até a luz voltar.</li><li>Latência acima de ~100–150ms já incomoda em uso interativo, e isso é rede — não tem tuning de servidor que resolva.</li></ul>
+<h2 id="onde-ta-agora">Onde tá agora</h2>
+<p>Hoje o repositório tem a arquitetura decidida e documentada, o script <code>.rsc</code> do MikroTik, o <code>setup.sh</code> idempotente do notebook, o exemplo de netplan e o script que sobe as sessões tmux. Tem CI rodando shellcheck nos scripts bash e um <code>.gitignore</code> que bloqueia chave, IP real e senha de entrar no versionamento.</p>
+<p>O que <strong>ainda não</strong> existe: eu não validei o caminho completo ponta a ponta. É esqueleto e decisão, não um sistema em produção — e prefiro dizer isso do que fingir o contrário.</p>
+<p>Próximos passos, na ordem: aplicar o script no MikroTik de verdade e conectar o primeiro peer; e depois voltar naquelas regras de <code>forward</code>, que hoje liberam a rede da VPN inteira pra LAN inteira. Funciona, mas é mais permissivo do que precisa ser — o certo é restringir ao IP e à porta do notebook.</p>
+<p>No capítulo 2 eu levo o script pro roteador e mostro a configuração acontecendo, incluindo o que quebrar no caminho.</p>
+    </div>
+    
+  </article>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../../blog/blog.js"></script>
+</body>
+</html>
