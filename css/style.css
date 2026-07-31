@@ -159,6 +159,7 @@ a:hover{ text-decoration: underline; }
 .sidebar__nav a:hover, .sidebar__nav a.is-active{ color: var(--fg); background: var(--bg-raised); text-decoration: none; }
 .sidebar__nav a.is-active .sidebar__dot{ box-shadow: 0 0 6px var(--dot-color); animation: pulse-glow 1.8s ease-in-out infinite; }
 .sidebar__dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--dot-color); flex-shrink: 0; }
+.sidebar__external-icon{ font-size: 10px; color: var(--fg-dim); margin-left: 3px; }
 .sidebar .theme-toggle{ align-self: center; }
 .sidebar__uptime{ text-align: center; font-size: 10px; color: var(--fg-dim); font-variant-numeric: tabular-nums; }
 
