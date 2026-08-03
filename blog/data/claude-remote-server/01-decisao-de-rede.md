@@ -40,8 +40,10 @@ Sobre a criptografia em si: WireGuard usa ChaCha20, é moderno e leve o suficien
   <text class="diagram-text--dim" x="95" y="141" text-anchor="middle">10.10.10.2/24</text>
 
   <path class="diagram-arrow" d="M180,130 L258,130" marker-end="url(#arrow-crs-topo)"/>
-  <text class="diagram-text--accent" x="219" y="112" text-anchor="middle">VPN WireGuard (UDP)</text>
-  <text class="diagram-text--dim" x="219" y="150" text-anchor="middle">sem porta exposta</text>
+  <text class="diagram-text--accent" x="219" y="100" text-anchor="middle">WireGuard</text>
+  <text class="diagram-text--accent" x="219" y="114" text-anchor="middle">VPN (UDP)</text>
+  <text class="diagram-text--dim" x="219" y="147" text-anchor="middle">sem porta</text>
+  <text class="diagram-text--dim" x="219" y="161" text-anchor="middle">exposta</text>
 
   <rect class="diagram-box diagram-box--accent" x="260" y="60" width="210" height="140" rx="6"/>
   <text class="diagram-text" x="365" y="80" text-anchor="middle" font-weight="700">MikroTik · RouterOS 7+</text>
@@ -53,7 +55,8 @@ Sobre a criptografia em si: WireGuard usa ChaCha20, é moderno e leve o suficien
 
   <path class="diagram-arrow" d="M470,130 L548,130" marker-end="url(#arrow-crs-topo)"/>
   <text class="diagram-text--accent" x="509" y="112" text-anchor="middle">LAN</text>
-  <text class="diagram-text--dim" x="509" y="150" text-anchor="middle">cabo, se possível</text>
+  <text class="diagram-text--dim" x="509" y="147" text-anchor="middle">cabo, se</text>
+  <text class="diagram-text--dim" x="509" y="161" text-anchor="middle">possível</text>
 
   <rect class="diagram-box" x="550" y="75" width="200" height="110" rx="6"/>
   <text class="diagram-text" x="650" y="95" text-anchor="middle" font-weight="700">Notebook · Ubuntu Server</text>
