@@ -30,7 +30,7 @@ O banco Ã© PostgreSQL 16 com Prisma 7.9.1, e tem exatamente seis tabelas. Esse Ã
   <line x1="20" y1="44" x2="210" y2="44" stroke="var(--border)"/>
   <text class="diagram-text--dim" x="30" y="60">id PK</text>
   <text class="diagram-text--dim" x="30" y="78">name, season</text>
-  <text class="diagram-text--dim" x="30" y="96">format (pontos corridos / mata-mata)</text>
+  <text class="diagram-text--dim" x="30" y="96">format (liga/mata-mata)</text>
 
   <!-- TEAM -->
   <rect class="diagram-box" x="250" y="20" width="190" height="90" rx="6"/>
