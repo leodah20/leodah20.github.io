@@ -119,6 +119,17 @@ const CONTENT = {
   // add a demo link unless it is a real, reachable URL.
   projects: [
     {
+      name: "whatsapp-report-assistant",
+      period: "nov. 2026 - atual",
+      statusLabel: "execução local",
+      desc: "Assistente local para registros de manutenção enviados pelo WhatsApp: arquiva fontes, pede contexto, vincula respostas ao chamado e retoma pendências depois que o computador liga. IA textual com Ollama e Qwen3, sem API paga.",
+      note: "Protótipo em evolução. Código operacional privado; documentação pública sanitizada. Geração final do relatório, análise visual e conversa livre ainda não estão implementadas.",
+      stack: ["Node.js", "SQLite", "Ollama", "Qwen3", "Python", "Windows"],
+      link: "/docs/whatsapp-report-assistant/",
+      linkLabel: "arquitetura",
+      blog: "/blog/whatsapp-report-assistant/"
+    },
+    {
       name: "pokemon-trainer-companion",
       period: "2026 - atual",
       featured: true,

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Um assistente no WhatsApp, uma fila no SQLite e nenhuma API de IA paga — Assistente local de relatórios pelo WhatsApp</title>
+<meta name="description" content="O primeiro problema não era escrever mais rápido. Era parar de reconstruir o mês inteiro a partir de uma exportação de conversa.">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <ul class="sidebar__nav sidebar__nav--secondary">
+    <li><a href="../../../blog/index.html" class="is-active" title="Você está no blog"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog<span class="sidebar__external-icon" aria-hidden="true">&#8599;</span></span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <article class="article">
+    <p class="article__breadcrumb">
+      <a href="../../">#blog</a> / <a href="../">Assistente local de relatórios pelo WhatsApp</a> / cap. 1
+    </p>
+    <h1 class="article__title">Um assistente no WhatsApp, uma fila no SQLite e nenhuma API de IA paga</h1>
+    <p class="article__subtitle">O primeiro problema não era escrever mais rápido. Era parar de reconstruir o mês inteiro a partir de uma exportação de conversa.</p>
+    <p class="article__meta">7 min de leitura</p>
+    <div class="article__body">
+<p>Todo mês eu tinha um trabalho que não aparecia no relatório: exportar a conversa do grupo, separar fotos de legendas, descobrir qual atualização pertencia a qual atendimento e perguntar de novo o que não tinha ficado claro. A informação já tinha passado pelo WhatsApp. Mesmo assim, na hora de fechar o documento, eu precisava reconstruir o caminho inteiro.</p>
+<p>A ideia foi colocar um assistente nesse fluxo. Não para sair escrevendo que tudo foi resolvido, mas para guardar as fontes enquanto o trabalho acontece e perguntar quando falta contexto.</p>
+<p>Essa diferença parece pequena. Na prática, definiu a arquitetura inteira.</p>
+<h2 id="o-que-eu-queria-automatizar-primeiro">O que eu queria automatizar primeiro</h2>
+<p>Uma foto de um equipamento não conta a ocorrência inteira. Uma tela mostrando que um dispositivo responde na rede também não prova que ele voltou a funcionar no sistema que depende dele. E uma troca registrada sem desfecho não me autoriza a escrever que o chamado terminou.</p>
+<p>Se eu entregasse tudo para um modelo e pedisse &quot;gere o relatório&quot;, o texto poderia ficar bonito e tecnicamente errado. Eu precisava de um caminho que mantivesse a dúvida visível.</p>
+<p>O fluxo que implementei ficou assim: receber a mensagem, guardar a fonte, reunir o contexto próximo, identificar o que está explícito e perguntar o que ainda muda a descrição. Só depois vem o trabalho de redigir o relatório.</p>
+<p>Hoje essa primeira parte já funciona. A geração automática do documento final ainda não está implementada. Não vou chamar um arquivo de mensagens de gerador mensal só porque ele tem uma IA no meio.</p>
+<h2 id="quem-chama-quem">Quem chama quem</h2>
+<p>O processo principal é Node.js. Ele usa <code>whatsapp-web.js</code> com uma sessão própria do Chrome, vinculada manualmente à conta existente. Os eventos chegam ao coletor, passam pelo filtro do grupo autorizado e vão para um arquivo SQLite.</p>
+<p>A análise textual fica em outro processo: Ollama com Qwen3 4B, rodando localmente. O coletor chama a API local, recebe uma proposta em JSON e valida se os trechos apontados realmente existem nas fontes. O modelo não tem ferramenta de terminal, acesso livre ao computador ou permissão para mandar mensagens por conta própria.</p>
+<div class="code-block"><span class="code-block__lang">text</span><pre><code>WhatsApp → sessão Chrome → coletor Node.js → arquivo SQLite
+                              ↓                   ↑
+                         fila durável → assistente textual
+                                            ↕
+                                       Ollama / Qwen3
+
+pergunta controlada ← aplicação ← campos que faltam
+resposta vinculada  → chamado   → confirmação persistida</code></pre></div>
+<p>O painel de operação é uma página local. Ele permite pausar, consultar e acompanhar a retomada; não precisa ficar aberto. Há também um servidor MCP somente de leitura para consultar o arquivo pelo Codex. Esse é outro caminho: quando uso essa consulta, o material lido entra no contexto do modelo do Codex. Não é correto dizer que esse uso também é processamento exclusivamente local.</p>
+<p>A <a href="/docs/whatsapp-report-assistant/">documentação interativa da arquitetura</a> mostra as chamadas e os três fluxos principais. O que está público foi sanitizado. Código operacional, mensagens, imagens, sessão e credenciais continuam fora da publicação.</p>
+<h2 id="a-decisao-importante-foi-guardar-antes-de-interpretar">A decisão importante foi guardar antes de interpretar</h2>
+<p>O modelo local leva tempo. Em dois testes curtos, a extração levou aproximadamente 40 e 60 segundos. Isso não é um benchmark geral, mas já foi suficiente para deixar claro que eu não podia depender da IA responder rápido para continuar recebendo registros.</p>
+<p>Separei arquivamento e análise com uma fila durável. A mensagem é guardada e recebe uma entrega pendente; a interpretação vem depois. Se o processo cair, a fonte continua lá.</p>
+<p>A fila tem estados simples: <code>pending</code>, <code>processing</code> e <code>done</code>. O ID original da mensagem é a chave para evitar que a mesma fonte entre duas vezes:</p>
+<div class="code-block"><span class="code-block__lang">sql</span><pre><code>INSERT OR IGNORE INTO recovery_jobs(id, ts, state)
+VALUES (?, ?, 'pending');</code></pre></div>
+<p>O ganho não está em ter uma tabela com nome de fila. Está em conseguir distinguir &quot;recebi e guardei&quot; de &quot;já interpretei&quot;. Isso evita transformar uma demora ou falha da IA em perda silenciosa do registro.</p>
+<p>Na criação de um chamado, a gravação dele e a marcação das fontes consumidas ficam na mesma transação. Sem isso, uma queda entre as duas operações poderia deixar um chamado salvo e as fontes ainda pendentes, prontas para virar outro chamado depois do reinício.</p>
+<h2 id="a-pergunta-precisa-voltar-ao-lugar-certo">A pergunta precisa voltar ao lugar certo</h2>
+<p>Quando falta informação, a aplicação monta uma pergunta identificada como assistente e com um código do chamado. A pessoa pode citar a mensagem ou usar o código na resposta.</p>
+<p>Não uso proximidade de horário como autorização para jogar uma resposta em qualquer atendimento parecido. Foto seguida de legenda pode ajudar a reunir contexto, mas responder a uma dúvida precisa ter um vínculo rastreável. Esse vínculo continua existindo mesmo quando o registro já tem informações completas e recebe uma nova atualização.</p>
+<p>O texto da pergunta é controlado pela aplicação. O modelo propõe agrupamentos e extrai trechos; não decide livremente para quem enviar uma mensagem. Também há pausa e limites de envio.</p>
+<p>E tem uma regra que eu não quero perder no caminho: <strong>atualizar as informações de um chamado não significa confirmar que o equipamento foi reparado</strong>. Se a resposta só permite registrar uma pendência, é isso que fica registrado.</p>
+<h2 id="o-bug-mais-util-nao-foi-da-ia">O bug mais útil não foi da IA</h2>
+<p>Na primeira implantação das confirmações, eu já tinha enviado duas respostas para dois chamados. As duas foram processadas, mas só uma recebeu o aviso de confirmação: o mecanismo tinha sido instalado depois que elas chegaram, e a validação inicial cobriu apenas uma.</p>
+<p>Do ponto de vista do banco, os registros estavam lá. Do meu lado, parecia que o assistente tinha prestado atenção em um chamado e ignorado o outro. E eu não deveria precisar abrir um arquivo técnico para saber a diferença.</p>
+<p>A correção foi adicionar uma conferência que percorre todos os chamados e suas respostas, não só os que ainda têm campos faltando. Cada confirmação tem um registro persistido por ID da resposta. Se já existe, não manda outra. Se faltou, entra no fluxo de envio.</p>
+<p>O aviso também depende do que realmente aconteceu: depois da análise e da gravação, pode dizer que as informações foram atualizadas. Se a análise falhou, confirma apenas que a resposta foi recebida e vinculada, deixando a atualização como pendente.</p>
+<p>Depois apareceu outro silêncio, de outra origem: a página interna do WhatsApp perdeu o frame, mas o processo continuou vivo e o painel ainda dizia &quot;conectado&quot;. Não era uma escolha do modelo de não fazer perguntas; a fonte nova nem tinha chegado ao arquivo. Acrescentei uma verificação periódica do estado real da sessão para reconhecer esse tipo de falha e acionar a reconexão. Também passei a confirmar o registro de todo novo chamado, mesmo sem dúvida de contexto. Um processo existir não basta para dizer que o serviço está funcionando.</p>
+<p>Tem um trade-off aqui: se a tentativa de envio tem resultado incerto, eu não repito automaticamente. A mensagem pode ter saído antes da falha no retorno. Preferi registrar a incerteza a duplicar perguntas e confirmações no grupo. Isso evita uma classe de erro, mas pode exigir conferência de entrega; não é uma promessa de entrega exatamente uma vez.</p>
+<h2 id="e-quando-eu-desligo-o-computador">E quando eu desligo o computador?</h2>
+<p>Essa pergunta apareceu assim que o coletor começou a funcionar. A resposta honesta é: com o PC desligado, não tem processo local recebendo e interpretando mensagens.</p>
+<p>Ao ligar e entrar no Windows, o lançador inicia os processos em segundo plano e reutiliza a sessão, se ela ainda estiver válida. A recuperação busca o histórico disponibilizado pelo WhatsApp desde o último ponto confirmado, com uma sobreposição de 120 segundos. O ID original evita duplicar o que já passou.</p>
+<p>O checkpoint só avança depois de conferir a busca e guardar as fontes e suas entregas na fila. A recuperação também atravessa meses: desligar em um mês e voltar no seguinte não pode significar consultar apenas o mês atual e esquecer o intervalo anterior.</p>
+<p>Isso não recupera por mágica uma mídia expirada ou uma mensagem que o WhatsApp não disponibilizar. Também não elimina a necessidade de um novo QR se a sessão for revogada. A retomada foi testada reiniciando o coletor pelo mesmo lançador usado no login; eu não reiniciei o Windows inteiro nesse teste.</p>
+<h2 id="local-nao-e-sinonimo-de-risco-zero">Local não é sinônimo de risco zero</h2>
+<p>O arquivo usa AES-256-GCM, com uma chave própria no cofre do Windows. Conteúdos e anexos são cifrados, mas IDs, datas e estados de fila continuam no índice. O perfil do Chrome não tem a mesma garantia de criptografia do arquivo, e processos com acesso à mesma conta do Windows seguem sendo uma fronteira de confiança.</p>
+<p>Outro limite importante: vincular o WhatsApp Web dá alcance técnico sobre a conta inteira. Arquivar só um grupo é uma restrição da aplicação, não uma permissão por grupo fornecida pelo WhatsApp. A biblioteca é não oficial e pode quebrar com mudanças do serviço; também existe risco de bloqueio.</p>
+<p>Por isso a documentação pública não leva mensagens de trabalho, nomes de clientes, IDs de grupo ou credenciais. O que está sendo mostrado aqui é o desenho e suas decisões, não uma cópia do ambiente operacional.</p>
+<h2 id="onde-esta-agora">Onde está agora</h2>
+<p>O coletor já arquiva fontes e mídias, a IA textual pede contexto, respostas são ligadas ao chamado, confirmações são persistidas e a retomada automática está ativa. Há 56 testes sintéticos aprovados cobrindo fila após queda, viradas de mês, pausas, duplicatas, confirmações e falhas de transporte. Envios reais, respostas e reinício do coletor também foram verificados. Teste sintético e uso real são evidências diferentes; um não substitui o outro.</p>
+<p>Ainda faltam o relatório final DOCX/PDF automático, interpretação visual das fotos e transcrição de áudio. Também não existe conversa livre pelo WhatsApp como em um chat geral de IA.</p>
+<p>O próximo passo não é colocar mais autonomia por colocar. É levar esse arquivo de fontes e esclarecimentos até um rascunho mensal que continue permitindo conferir de onde veio cada afirmação. Sem inventar teste, causa ou conclusão para completar um parágrafo.</p>
+    </div>
+    
+  </article>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../../blog/blog.js"></script>
+</body>
+</html>

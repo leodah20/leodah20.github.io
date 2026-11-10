@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assistente local de relatórios pelo WhatsApp — série</title>
+<meta name="description" content="Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.">
+<link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/blog.css">
+</head>
+<body class="blog-body">
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar__brand">$_</div>
+  <ul class="sidebar__nav">
+    <li><a href="../../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
+    <li><a href="../../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
+    <li><a href="../../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
+    <li><a href="../../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
+    <li><a href="../../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
+    <li><a href="../../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+  </ul>
+  <ul class="sidebar__nav sidebar__nav--secondary">
+    <li><a href="../../blog/index.html" class="is-active" title="Você está no blog"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog<span class="sidebar__external-icon" aria-hidden="true">&#8599;</span></span></a></li>
+  </ul>
+  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
+  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span data-theme-icon></span>
+  </button>
+</nav>
+<main class="blog-main">
+
+  <section class="series">
+    <p class="article__breadcrumb"><a href="../">#blog</a> / Assistente local de relatórios pelo WhatsApp</p>
+    <h1 class="series__title">Assistente local de relatórios pelo WhatsApp</h1>
+    <p class="series__summary">Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.</p>
+    <p class="series__repo-link"><a href="https://github.com/leodah20/leodah20.github.io/tree/main/docs/whatsapp-report-assistant" target="_blank" rel="noopener noreferrer">documentação pública &rarr;</a></p>
+    <ol class="series-toc">
+<li class="series-toc__item series-toc__item--published">
+          <a href="01-fonte-antes-do-relatorio/">
+            <span class="series-toc__number">01</span>
+            <span class="series-toc__title">Antes do relatório automático, a fonte precisa sobreviver</span>
+          </a>
+          <p class="series-toc__oneline">Como separei coleta de interpretação, por que um teste de ping ou uma foto não encerram um chamado, e o que aprendi quando o bot confirmou só uma de duas respostas.</p>
+        </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">02</span>
+        <span class="series-toc__title">Resposta recebida não é problema resolvido</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">O vínculo por mensagem citada ou código, confirmações persistidas e os cuidados para uma atualização não virar encerramento técnico por engano.</p>
+      </li>
+<li class="series-toc__item series-toc__item--planned">
+        <span class="series-toc__number">03</span>
+        <span class="series-toc__title">Retomada, entrega incerta e o caminho até o relatório final</span>
+        <span class="badge series-toc__badge">planejado</span>
+        <p class="series-toc__oneline">Checkpoints, filas após reinício e a diferença entre manter fontes organizadas e entregar um documento mensal revisado. Próximo capítulo, não promessa de funcionalidade pronta.</p>
+      </li>
+    </ol>
+  </section>
+</main>
+<footer class="footer">
+  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
+</footer>
+<script src="../../blog/blog.js"></script>
+</body>
+</html>

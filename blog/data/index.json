@@ -70,5 +70,24 @@
       "readingMinutes": 7,
       "file": "01-modelagem-do-vzbet.md"
     }
+  },
+  {
+    "slug": "whatsapp-report-assistant",
+    "projectTitle": "Assistente local de relatórios pelo WhatsApp",
+    "seriesSummary": "Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.",
+    "repoUrl": "https://github.com/leodah20/leodah20.github.io/tree/main/docs/whatsapp-report-assistant",
+    "repoLabel": "documentação pública",
+    "publishedChapters": 1,
+    "latestChapter": {
+      "number": 1,
+      "title": "Antes do relatório automático, a fonte precisa sobreviver",
+      "articleTitle": "Um assistente no WhatsApp, uma fila no SQLite e nenhuma API de IA paga",
+      "oneLine": "Como separei coleta de interpretação, por que um teste de ping ou uma foto não encerram um chamado, e o que aprendi quando o bot confirmou só uma de duas respostas.",
+      "status": "published",
+      "slug": "01-fonte-antes-do-relatorio",
+      "subtitle": "O primeiro problema não era escrever mais rápido. Era parar de reconstruir o mês inteiro a partir de uma exportação de conversa.",
+      "readingMinutes": 7,
+      "file": "01-fonte-antes-do-relatorio.md"
+    }
   }
 ]

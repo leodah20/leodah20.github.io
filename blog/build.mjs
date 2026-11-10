@@ -145,7 +145,7 @@ function buildSeriesPage(series) {
     <p class="article__breadcrumb"><a href="../">#blog</a> / ${escapeHtml(series.projectTitle)}</p>
     <h1 class="series__title">${escapeHtml(series.projectTitle)}</h1>
     <p class="series__summary">${escapeHtml(series.seriesSummary)}</p>
-    <p class="series__repo-link"><a href="${escapeHtml(series.repoUrl)}" target="_blank" rel="noopener noreferrer">source &rarr;</a></p>
+    <p class="series__repo-link"><a href="${escapeHtml(series.repoUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(series.repoLabel || "source")} &rarr;</a></p>
     <ol class="series-toc">
 ${items}
     </ol>
@@ -171,7 +171,7 @@ function buildBlogIndex(allSeries) {
         <p class="host-card__desc">${escapeHtml(series.seriesSummary)}</p>
         <div class="host-card__links">
           <a class="host-card__link" href="${series.slug}/">ler série</a>
-          <a class="host-card__link" href="${escapeHtml(series.repoUrl)}" target="_blank" rel="noopener noreferrer">source</a>
+          <a class="host-card__link" href="${escapeHtml(series.repoUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(series.repoLabel || "source")}</a>
         </div>
       </article>`;
     })
@@ -233,6 +233,7 @@ function main() {
         projectTitle: s.projectTitle,
         seriesSummary: s.seriesSummary,
         repoUrl: s.repoUrl,
+        ...(s.repoLabel ? { repoLabel: s.repoLabel } : {}),
         publishedChapters: s.chapters.filter((c) => c.status === "published").length,
         latestChapter: [...s.chapters].reverse().find((c) => c.status === "published") || null,
       })),

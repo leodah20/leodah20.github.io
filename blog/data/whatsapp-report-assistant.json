@@ -1,0 +1,32 @@
+{
+  "slug": "whatsapp-report-assistant",
+  "projectTitle": "Assistente local de relatórios pelo WhatsApp",
+  "seriesSummary": "Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.",
+  "repoUrl": "https://github.com/leodah20/leodah20.github.io/tree/main/docs/whatsapp-report-assistant",
+  "repoLabel": "documentação pública",
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Antes do relatório automático, a fonte precisa sobreviver",
+      "articleTitle": "Um assistente no WhatsApp, uma fila no SQLite e nenhuma API de IA paga",
+      "oneLine": "Como separei coleta de interpretação, por que um teste de ping ou uma foto não encerram um chamado, e o que aprendi quando o bot confirmou só uma de duas respostas.",
+      "status": "published",
+      "slug": "01-fonte-antes-do-relatorio",
+      "subtitle": "O primeiro problema não era escrever mais rápido. Era parar de reconstruir o mês inteiro a partir de uma exportação de conversa.",
+      "readingMinutes": 7,
+      "file": "01-fonte-antes-do-relatorio.md"
+    },
+    {
+      "number": 2,
+      "title": "Resposta recebida não é problema resolvido",
+      "oneLine": "O vínculo por mensagem citada ou código, confirmações persistidas e os cuidados para uma atualização não virar encerramento técnico por engano.",
+      "status": "planned"
+    },
+    {
+      "number": 3,
+      "title": "Retomada, entrega incerta e o caminho até o relatório final",
+      "oneLine": "Checkpoints, filas após reinício e a diferença entre manter fontes organizadas e entregar um documento mensal revisado. Próximo capítulo, não promessa de funcionalidade pronta.",
+      "status": "planned"
+    }
+  ]
+}

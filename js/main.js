@@ -714,7 +714,7 @@
       const statusDot = document.createElement("span");
       statusDot.className = "host-card__status-dot";
       status.appendChild(statusDot);
-      status.appendChild(document.createTextNode(isOnline ? "online" : "source only"));
+      status.appendChild(document.createTextNode(p.statusLabel || (isOnline ? "online" : "source only")));
       head.appendChild(status);
 
       card.appendChild(head);
@@ -788,8 +788,16 @@
         link.href = p.link;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
-        link.textContent = "source";
+        link.textContent = p.linkLabel || "source";
         links.appendChild(link);
+      }
+
+      if (p.blog) {
+        const blog = document.createElement("a");
+        blog.className = "host-card__link";
+        blog.href = p.blog;
+        blog.textContent = "bastidores no blog";
+        links.appendChild(blog);
       }
 
       card.appendChild(links);
