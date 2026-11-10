@@ -123,10 +123,10 @@ const CONTENT = {
       period: "nov. 2026 - atual",
       statusLabel: "execução local",
       desc: "Assistente local para registros de manutenção enviados pelo WhatsApp: arquiva fontes, pede contexto, vincula respostas ao chamado e retoma pendências depois que o computador liga. IA textual com Ollama e Qwen3, sem API paga.",
-      note: "Protótipo em evolução. Código operacional privado; documentação pública sanitizada. Geração final do relatório, análise visual e conversa livre ainda não estão implementadas.",
+      note: "Código completo público e sanitizado, com instalação local e continuidade opcional entre agentes. Dados, sessões e credenciais fora do Git. Geração final do relatório, análise visual e conversa livre ainda não estão implementadas.",
       stack: ["Node.js", "SQLite", "Ollama", "Qwen3", "Python", "Windows"],
-      link: "/docs/whatsapp-report-assistant/",
-      linkLabel: "arquitetura",
+      link: "https://github.com/leodah20/whatsapp-report-assistant",
+      linkLabel: "código completo",
       blog: "/blog/whatsapp-report-assistant/"
     },
     {
