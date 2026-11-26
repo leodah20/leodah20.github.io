@@ -1,0 +1,40 @@
+name: Atualizar blog Runavolt
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: atualizar-blog-runavolt
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Obter apenas a fonte pública do blog
+        run: git clone --depth 1 https://github.com/leodah20/runavolt-blog-publico.git "$RUNNER_TEMP/blog-fonte"
+      - name: Validar e gerar a prévia
+        run: |
+          node --test "$RUNNER_TEMP/blog-fonte/tests/site.test.mjs"
+          node "$RUNNER_TEMP/blog-fonte/scripts/build-site.mjs" --out "$GITHUB_WORKSPACE/blog-validacao-runavolt"
+      - name: Salvar apenas a pasta de validação
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- blog-validacao-runavolt
+          if ! git diff --cached --quiet; then
+            git commit -m 'Atualiza prévia isolada do blog'
+            git push
+          fi
+      - name: Solicitar atualização do GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${{ github.repository }}/pages/builds"
