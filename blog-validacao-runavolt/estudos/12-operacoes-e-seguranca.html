@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operações e segurança · Estudos Runavolt</title>
+<meta name="description" content="Leia o inspetor HTTP: IP observado, perfil, status, tempo e o que muda em relação a uma captura de pacotes.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/12-operacoes-e-seguranca.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Operações e segurança · Estudos Runavolt">
+<meta property="og:description" content="Leia o inspetor HTTP: IP observado, perfil, status, tempo e o que muda em relação a uma captura de pacotes.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/12-operacoes-e-seguranca.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 12</li></ul>
+<p class="eyebrow">Capítulo 12 · Série de estudos</p>
+<h1>Operações e segurança</h1>
+<p class="lead">Leia o inspetor HTTP: IP observado, perfil, status, tempo e o que muda em relação a uma captura de pacotes.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Redes e operação</li><li>4 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="leia-uma-linha-do-inspetor">Leia uma linha do inspetor</h2>
+<p>Use a linha fictícia a seguir. A rota não é a da Central e o IP vem de uma faixa reservada para documentação; não representa um aparelho da Runavolt.</p>
+<div class="table-wrap"><table><thead><tr><th>Campo</th><th>Exemplo</th><th>O que você consegue concluir</th></tr></thead><tbody><tr><td>Camada</td><td>Ponte HTTPS</td><td>A troca foi observada na entrada remota</td></tr><tr><td>Origem</td><td>198.51.100.24</td><td>É o IP externo observado pelo encaminhamento confiável, não o nome da pessoa</td></tr><tr><td>Par local</td><td>Loopback</td><td>É o vizinho TCP que falou com o serviço local</td></tr><tr><td>Método, rota e status</td><td>GET /api/exemplo/cases → 200</td><td>Uma leitura daquele recurso recebeu resposta</td></tr><tr><td>Perfil</td><td>Edição</td><td>A sessão tinha esse perfil quando a troca foi registrada</td></tr><tr><td>Entrada, saída e tempo</td><td>0 B, 2,4 KiB, 18 ms</td><td>São medidas da troca HTTP observada, não do tráfego total na rede</td></tr></tbody></table></div>
+<p>Um proxy pode repassar a origem, mas o aplicativo só deve usar esse dado se souber que veio do caminho configurado. Quando não for possível determinar a origem com confiança, marque como indisponível e mostre o par local separadamente. Classificação Android ou Web é um indício de cliente, não credencial.</p>
+<h2 id="por-que-isso-nao-e-wireshark">Por que isso não é Wireshark</h2>
+<p>Uma troca HTTP pode ocupar vários pacotes; um pacote com ACK não corresponde a uma página. A mesma troca pode ser vista na ponte e no coletor. O inspetor de aplicação não capta quadros Ethernet, tráfego do restante da rede ou conteúdo das mensagens, e não precisa disso para explicar a maioria dos problemas da Central. Filtros de camada, rota e status ajudam a comparar sinais sem misturar medições de pontos diferentes.</p>
+<h2 id="antes-de-bloquear-verifique-o-sinal">Antes de bloquear, verifique o sinal</h2>
+<p>Um 401 isolado pode ser sessão expirada; um 403 pode ser uma permissão aplicada corretamente; 429 indica limite alcançado, não necessariamente ataque. Observe a sequência, a rota, o perfil quando disponível e o funcionamento esperado. Falhas repetidas podem justificar revisão e intervenção, mas IP compartilhado e automações legítimas tornam bloqueio automático por ocorrência isolada um risco operacional.</p>
+<p>Separe inventário local de portas da exposição real: escutar em loopback não é escutar na LAN, e um túnel pode publicar um caminho sem publicar todas as portas. O console não substitui firewall, não deve ser acessível remotamente e não inclui senhas, parâmetros sensíveis ou corpos. Oriente a revisão de controles com o <a href="https://owasp.org/projects/top-ten">OWASP Top 10</a> e compare os conceitos com o <a href="./04-http-apis-e-redes.html">catálogo de rotas</a>.</p>
+<h2 id="investigue-conexoes-por-fluxo">Investigue conexões por fluxo</h2>
+<p>Na versão local com o console administrativo habilitado, é possível comparar <strong>última tentativa</strong>, <strong>última leitura bem-sucedida</strong> e <strong>próxima execução</strong>. Um fluxo sem conversa vinculada está inativo; um fluxo sem primeira leitura está sem confirmação. Nenhum dos dois deve aparecer como falha confirmada. Uma consulta bem-sucedida pode ler zero mensagens.</p>
+<p>Em um exemplo fictício de laboratório, o fluxo de tickets falha porque a credencial do conector está indisponível, mas o fluxo de conversas permanece operante. O resumo sinaliza atenção e o detalhe orienta conferir o cofre local. A linha do tempo registra resultado e categoria de erro, sem registrar a credencial, a mensagem ou a resposta bruta do provedor. O administrador pode solicitar outra leitura com limite de frequência, sem ampliar o escopo ou enviar mensagens.</p>
+<p>Esses recursos descrevem a versão local avaliada em laboratório. O código-fonte publicado no GitHub pode estar em uma versão anterior e não conter essa implementação.</p>
+<h2 id="exercicio-200-401-e-502-no-mesmo-minuto">Exercício: 200, 401 e 502 no mesmo minuto</h2>
+<p>Uma checagem recebe 200 na tela de login, 401 na lista sem sessão, e depois um acesso autorizado recebe 502 na ponte. O que olhar primeiro?</p>
+<p><strong>Resposta:</strong> os dois primeiros podem estar corretos. O 502 aponta para o caminho entre ponte e servidor local; verifique saúde, horário e camada antes de resetar senha ou bloquear IP.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./11-evidencias-multimidia.html"><small>Capítulo anterior</small><strong>Evidências multimídia</strong></a><a class="next" href="./13-backup-e-continuidade.html"><small>Próximo capítulo</small><strong>Backup e continuidade</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#leia-uma-linha-do-inspetor">Leia uma linha do inspetor</a></li><li><a href="#por-que-isso-nao-e-wireshark">Por que isso não é Wireshark</a></li><li><a href="#antes-de-bloquear-verifique-o-sinal">Antes de bloquear, verifique o sinal</a></li><li><a href="#investigue-conexoes-por-fluxo">Investigue conexões por fluxo</a></li><li><a href="#exercicio-200-401-e-502-no-mesmo-minuto">Exercício: 200, 401 e 502 no mesmo minuto</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

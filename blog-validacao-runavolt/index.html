@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arquitetura do assistente de chamados · Runavolt</title>
+<meta name="description" content="Mapa interativo da arquitetura, dos protocolos e dos limites de acesso do assistente de chamados. Documentação estática, sem dados operacionais.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Arquitetura do assistente de chamados · Runavolt">
+<meta property="og:description" content="Mapa interativo da arquitetura, dos protocolos e dos limites de acesso do assistente de chamados. Documentação estática, sem dados operacionais.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="./assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./assets/styles.css?v=20261124">
+<script defer src="./assets/site.js"></script>
+<script defer src="./assets/architecture.js"></script>
+</head>
+<body class="page-architecture">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="./" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="./assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="./" aria-current="page">Arquitetura</a>
+      <a href="./estudos/">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="hero galaxy">
+  <div class="container">
+    <div>
+      <p class="eyebrow">RUNAVOLT / ARQUITETURA PÚBLICA</p>
+      <h1>Por dentro <span>da Central.</span></h1>
+      <p class="lead">Da primeira mensagem à evidência revisada. Veja como WhatsApp, e-mail, SQLite, IA local e Android trabalham juntos e por que Operações fica fora do acesso remoto.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#mapa">Explorar os fluxos</a>
+        <a class="btn btn-ghost" href="./estudos/">Ler o blog de estudos</a>
+      </div>
+      <ul class="chip-row" aria-label="Características do site">
+        <li class="chip">Site estático</li>
+        <li class="chip">Web + Android</li>
+        <li class="chip">Exemplos fictícios</li>
+        <li class="chip">Apache-2.0</li>
+      </ul>
+    </div>
+    <aside class="hero-console" aria-label="Ambientes e escopo">
+      <div class="orbit-visual" role="presentation" aria-hidden="true">
+        <img src="./assets/brand/runavolt.svg" width="124" height="124" alt="">
+        <span class="orbit-label orbit-field">CAMPO</span>
+        <span class="orbit-label orbit-app">WEB + APK</span>
+        <span class="orbit-label orbit-data">DADOS LOCAIS</span>
+      </div>
+      <div class="hero-panel">
+      <p class="eyebrow">AMBIENTES / ESCOPO</p>
+      <h2>O que roda onde</h2>
+      <ol>
+        <li><span class="state state-local" aria-hidden="true"></span><span><strong>Local · coletor e dados</strong>O computador hospeda o banco e as evidências.</span></li>
+        <li><span class="state state-pilot" aria-hidden="true"></span><span><strong>Piloto · acesso HTTPS</strong>Web e APK acessam a mesma Central com login.</span></li>
+        <li><span class="state state-plan" aria-hidden="true"></span><span><strong>Planejado · operação em nuvem</strong>Publicar documentação não migra a aplicação.</span></li>
+      </ol>
+      <p class="hero-note">Mapa estático. Nenhuma seleção consulta a operação.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section map-section" id="mapa" aria-labelledby="map-title">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Mapa interativo</p>
+        <h2 id="map-title">Escolha um fluxo e inspecione as camadas</h2>
+      </div>
+      <p>Os botões trocam a trilha e abrem os detalhes de cada componente. Os caminhos mostrados são fictícios; a página não acessa dados operacionais.</p>
+    </div>
+    <div class="arch-map">
+      <h3 class="visually-hidden" id="arch-flow-title">Fluxos disponíveis</h3>
+      <div class="arch-tabs" id="arch-tabs" role="group" aria-labelledby="arch-flow-title"></div>
+      <p class="arch-flow-summary" id="arch-flow-summary"></p>
+      <div class="arch-workspace">
+        <ol class="arch-steps" id="arch-steps" aria-label="Percurso em ordem"></ol>
+        <section class="arch-inspect" id="arch-inspect" aria-labelledby="arch-node-title" aria-live="polite" aria-atomic="true">
+          <p class="eyebrow" id="arch-zone"></p>
+          <h3 id="arch-node-title"></h3>
+          <p id="arch-purpose"></p>
+          <dl>
+            <div><dt>Interface</dt><dd id="arch-interface"></dd></div>
+            <div><dt>Controle ou limite</dt><dd id="arch-control"></dd></div>
+            <div><dt>Onde inspecionar no código</dt><dd><code id="arch-code"></code></dd></div>
+          </dl>
+          <a class="arch-back" href="#arch-steps">Voltar às camadas</a>
+        </section>
+      </div>
+      <noscript><p class="muted small">Ative JavaScript para percorrer os fluxos interativos. As seções abaixo continuam disponíveis sem script.</p></noscript>
+      <ul class="arch-legend" aria-label="Legenda das fronteiras">
+        <li class="arch-external">Rede / serviços externos</li>
+        <li class="arch-local">Notebook / loopback</li>
+        <li class="arch-human">Operação / revisão humana</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="planes-title">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Fronteiras</p>
+        <h2 id="planes-title">Cada camada faz uma coisa</h2>
+      </div>
+      <p>O mapa documenta a instalação de referência. Ele não mostra topologia de cliente, credenciais ou dados operacionais.</p>
+    </div>
+    <div class="grid-2">
+      <article class="card plan-card">
+        <span class="tag-line">Captura</span>
+        <h3>WhatsApp Web até o coletor Node</h3>
+        <p>Chrome/Chromium controlado por Puppeteer e whatsapp-web.js entrega eventos ao coletor.</p>
+        <ul><li>Sem API Business e sem coleta de outros grupos.</li><li>Sem garantia de histórico integral.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Operação local</span>
+        <h3>Navegador, HTTP e SQLite</h3>
+        <p>O navegador fala com o servidor local; o servidor chama o domínio e o SQLite. Não há conexão direta do navegador com o banco.</p>
+        <ul><li>HTTP em loopback, sem framework de front-end.</li><li>Interface servida pelo próprio coletor.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Operação remota</span>
+        <h3>HTTPS com login, sem VPN</h3>
+        <p>No piloto, o ngrok encaminha HTTPS até uma ponte da Central. Tailscale Serve é uma alternativa separada, dentro da tailnet.</p>
+        <ul><li>O APK e o navegador usam os mesmos dados.</li><li>Operações, controle do coletor e Swagger local não são publicados pela ponte.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Inferência</span>
+        <h3>Ollama em loopback</h3>
+        <p>Extração literal e sugestões textuais usam o modelo configurado no coletor, sem depender dos créditos do agente que edita o código.</p>
+        <ul><li>Fala em áudio e vídeo pode virar contexto auxiliar quando o processamento local está disponível.</li><li>Não é leitura visual universal; saída do modelo não confirma um fato sozinha.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Consulta MCP</span>
+        <h3>Cliente autorizado por stdio</h3>
+        <p>Ferramentas de leitura abrem o SQLite em modo somente leitura, fora do caminho do painel web.</p>
+        <ul><li>Não publica porta HTTP.</li><li>Não envia mensagens.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Tickets de suporte</span>
+        <h3>IMAP/TLS somente leitura</h3>
+        <p>Notificações de suporte são arquivadas e vinculadas por identificadores do ticket.</p>
+        <ul><li>Conversas autorizadas podem complementar um chamado com anexos elegíveis.</li><li>Sem encaminhamento automático ao WhatsApp.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Desenvolvimento</span>
+        <h3>Git e agentes de programação</h3>
+        <p>O repositório público transporta código, testes e decisões sanitizadas.</p>
+        <ul><li>Sessão, dados, chave e configurações privadas ficam fora do Git.</li><li>O coletor não depende do agente estar aberto.</li></ul>
+      </article>
+      <article class="card plan-card">
+        <span class="tag-line">Supervisão</span>
+        <h3>Operações · console separado</h3>
+        <p>Em acesso administrativo local, o inspetor mostra método, rota, status, origem observada, perfil, tamanho e tempo. Uma linha é uma troca HTTP, não um pacote da rede.</p>
+        <ul><li>Catálogo do Ollama sem inferência; cópia e restauração com indicadores separados.</li><li>PC desligado ou suspenso não coleta. Sem acesso ao console pelo APK ou pelo túnel.</li></ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="https-title">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Requisição privada</p>
+        <h2 id="https-title">O caminho de uma consulta pelo celular</h2>
+      </div>
+      <p>Uma conexão HTTPS pode funcionar mesmo sem sessão, e uma sessão pode existir sem permissão para determinada ação.</p>
+    </div>
+    <ol class="steps-list">
+      <li><div><strong>Nome e transporte</strong><p>No piloto sem VPN, o celular resolve o endereço público e valida o certificado HTTPS. O computador mantém a outra ponta do túnel.</p></div></li>
+      <li><div><strong>Túnel e ponte</strong><p>O túnel transporta a requisição; a ponte decide quais páginas, métodos e ações da Central podem chegar à aplicação.</p></div></li>
+      <li><div><strong>Login e permissão</strong><p>O login individual cria uma sessão. O servidor confere a permissão para a ação; esconder o botão não é uma regra de segurança.</p></div></li>
+      <li><div><strong>API e resposta</strong><p>A API valida a entrada, chama o domínio e retorna o resultado. O APK não recebe o SQLite e não abre a área administrativa.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="tools-title">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Operação</p>
+        <h2 id="tools-title">Ferramentas do responsável</h2>
+      </div>
+      <p>O painel é organizado pelo fluxo de chamados. Infraestrutura e diagnóstico apoiam esse trabalho, não o substituem.</p>
+    </div>
+    <div class="grid-4">
+      <article class="card tool-card">
+        <span class="tool-label">Central</span>
+        <h3>Chamados</h3>
+        <p>Frentes CFTV, SDAI, SCA, PABX, Medição, BMS e Zabbix; histórico, etapa, contexto, pendências, evidências, união e arquivo reversível. As frentes classificam chamados: não são conexões diretas com os sistemas prediais.</p>
+      </article>
+      <article class="card tool-card">
+        <span class="tool-label">Triagem</span>
+        <h3>Histórico sem chamado</h3>
+        <p>Prévia de mídias arquivadas, vínculo a um chamado, criação explícita e ignorar/restaurar. Mensagem próxima sugere contexto, mas não comprova vínculo.</p>
+      </article>
+      <article class="card tool-card">
+        <span class="tool-label">Fechamento</span>
+        <h3>Revisão mensal</h3>
+        <p>Conferência de fontes, anexos e preventivas; TXT/ZIP para revisão ou redação externa; sugestão textual local; minuta imprimível em um fluxo separado.</p>
+      </article>
+      <article class="card tool-card">
+        <span class="tool-label">Diagnóstico</span>
+        <h3>Operações e Swagger</h3>
+        <p>A operação acompanha saúde, filas e requisições; o Swagger UI explica o contrato publicado pelo OpenAPI. São usos diferentes e ficam fora da Central remota.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="diag-title">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Diagnóstico</p>
+        <h2 id="diag-title">Sem misturar camadas</h2>
+      </div>
+      <p>Um sintoma visível pode nascer em uma camada diferente. Separe resolução de nome, transporte, sessão, fila e dados antes de repetir uma ação.</p>
+    </div>
+    <div class="grid-2">
+      <article class="card diag-card">
+        <h3>Abre no notebook, mas não no celular</h3>
+        <p>Verifique separadamente endereço, transporte (túnel HTTPS ou rede privada), sessão e autorização. Uma resposta 403 não é diagnóstico de queda do WhatsApp.</p>
+      </article>
+      <article class="card diag-card">
+        <h3>Abre a página, mas a consulta falha</h3>
+        <p>401 da API pede reabrir o painel para renovar a sessão; 502 da ponte aponta falha na comunicação com o coletor. A aba Rede mostra método, status e tempo.</p>
+      </article>
+      <article class="card diag-card">
+        <h3>Mensagem recebida, mas sem chamado</h3>
+        <p>Confira fila de análise, competência e Histórico sem chamado. Reconexão não garante que toda a conversa antiga foi disponibilizada nem que todos os registros já viraram chamados.</p>
+      </article>
+      <article class="card diag-card">
+        <h3>Conferência antiga ficou desatualizada</h3>
+        <p>Revise as fontes alteradas. O ZIP verifica a versão da extração: se o contexto mudar, é necessário preparar outra antes de baixar.</p>
+      </article>
+    </div>
+    <div class="callout callout-teal" style="margin-top:18px">
+      <div>
+        <h3>O que este site não é</h3>
+        <p>Esta página é documentação estática. Ela não é o painel operacional, não abre sessão do WhatsApp, não lê o banco local e não recebe dados de clientes. O Swagger UI real permanece na instalação local.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="example-title">
+  <div class="container">
+    <div class="section-head">
+      <div><p class="eyebrow">Laboratório / HTTP</p><h2 id="example-title">Leia uma troca como no inspetor</h2></div>
+      <p>Exemplo fictício. A coluna Origem mostra o endereço observado; o perfil vem da sessão. Nenhum dos dois é inferido a partir do outro.</p>
+    </div>
+    <div class="inspect-example">
+      <span class="inspect-label">EXEMPLO ESTÁTICO · DADOS FICTÍCIOS</span>
+      <div class="inspect-table">
+        <table>
+          <thead><tr><th scope="col">Origem</th><th scope="col">Cliente</th><th scope="col">Método e rota</th><th scope="col">Status</th><th scope="col">Tempo</th></tr></thead>
+          <tbody><tr><td>198.51.100.24</td><td>Android</td><td>GET /api/exemplo/chamados</td><td><span class="inspect-ok">200 OK</span></td><td>18 ms</td></tr></tbody>
+        </table>
+      </div>
+      <details>
+        <summary>O que essa resposta comprova?</summary>
+        <p>A lista recebeu uma resposta de sucesso nesse exemplo. A linha não mostra pacotes, senha ou conteúdo dos chamados. O significado de 200 depende da rota: na tela de login, também pode significar apenas que o formulário abriu.</p>
+      </details>
+      <a href="./estudos/12-operacoes-e-seguranca.html">Estudar o inspetor HTTP</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="study-title">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Estudos</p>
+        <h2 id="study-title">Use esta aplicação como material de estudo</h2>
+      </div>
+      <p>O blog transforma o código real em uma trilha didática: negócio, linguagens, dados, HTTP, interface, IA, testes e exercícios.</p>
+    </div>
+    <div class="grid-3">
+      <article class="card tool-card">
+        <span class="tool-label">Capítulo 01</span>
+        <h3><a href="./estudos/01-negocio-e-arquitetura.html">Negócio e arquitetura</a></h3>
+        <p>Entenda o problema, as camadas e o mapa do repositório antes de ler os símbolos.</p>
+      </article>
+      <article class="card tool-card">
+        <span class="tool-label">Capítulo 03</span>
+        <h3><a href="./estudos/03-fluxo-de-dados.html">Fluxo dos dados</a></h3>
+        <p>Siga uma mensagem até o chamado, passando por filas, transações e recuperação.</p>
+      </article>
+      <article class="card tool-card">
+        <span class="tool-label">Capítulo 04</span>
+        <h3><a href="./estudos/04-http-apis-e-redes.html">HTTP, APIs e redes</a></h3>
+        <p>Leia requests, respostas, catálogo de rotas e as proteções do painel local.</p>
+      </article>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-line" href="./estudos/">Ver todos os capítulos</a>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="./">Arquitetura</a>
+      <a href="./estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IA, MCP e custos · Estudos Runavolt</title>
+<meta name="description" content="Extração literal, sugestões, ferramentas de leitura e a diferença entre cobrança de API e modelo local.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/06-ia-mcp-e-custos.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="IA, MCP e custos · Estudos Runavolt">
+<meta property="og:description" content="Extração literal, sugestões, ferramentas de leitura e a diferença entre cobrança de API e modelo local.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/06-ia-mcp-e-custos.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 06</li></ul>
+<p class="eyebrow">Capítulo 06 · Série de estudos</p>
+<h1>IA, MCP e custos</h1>
+<p class="lead">Extração literal, sugestões, ferramentas de leitura e a diferença entre cobrança de API e modelo local.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Produto e dados</li><li>6 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="modelo-transcricao-e-monitoramento">Modelo, transcrição e monitoramento</h2>
+<p>Qwen é o modelo de linguagem, não o coletor e não o transcritor. Quando habilitada, uma etapa local de transcrição pode fornecer trechos falados; um resultado parcial não confirma o que aparece visualmente. Consultar o catálogo do Ollama verifica disponibilidade sem executar inferência. Veja <a href="./11-evidencias-multimidia.html">Evidências</a> e <a href="./13-backup-e-continuidade.html">Continuidade</a>.</p>
+<h2 id="6-1-dois-usos-independentes-de-ia">6.1 Dois usos independentes de IA</h2>
+<div class="table-wrap"><table><thead><tr><th>Uso</th><th>Quem executa</th><th>Contexto</th><th>Cobrança</th></tr></thead><tbody><tr><td>Programar e estudar código</td><td>Modelo selecionado no OpenCode/Codex/Claude</td><td>Conversa, arquivos e resultados enviados pelas ferramentas</td><td>Depende do provedor e forma de autenticação</td></tr><tr><td>Organizar fontes e sugerir narrativa</td><td>Modelo configurado no Ollama do coletor</td><td>Texto fornecido pelo aplicativo</td><td>Modelo realmente local não cobra tokens de API remota; usa hardware/energia</td></tr></tbody></table></div>
+<p>Ter uma API key da OpenAI no ambiente de programação não muda o modelo do coletor. O código de análise usa <code>CONFIG.ollamaURL</code> e <code>CONFIG.model</code>. Abrir o OpenCode também não hospeda nem inicia automaticamente o coletor.</p>
+<h2 id="6-2-request-de-extracao-literal">6.2 Request de extração literal</h2>
+<p>Em <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/assistant/assistant.mjs">assistant.mjs</a>, <code>analyzeSources</code> envia uma requisição de inferência ao Ollama. O corpo inclui modelo, mensagens, esquema de saída, opções e <code>stream: false</code>. Caminhos de exemplo não representam a API do Ollama nem da Central.</p>
+<ul><li><strong>Mensagem system:</strong> orienta a tarefa, delimita dados não confiáveis e proíbe deduções indevidas.</li><li><strong>Mensagem user:</strong> carrega JSON com índices, texto, tipo, data e indicação de esclarecimento.</li><li><strong><code>format</code>:</strong> pede estrutura JSON restrita por esquema.</li><li><strong><code>temperature: 0</code>:</strong> reduz variação; não garante verdade nem determinismo absoluto.</li><li><strong><code>num_ctx</code>:</strong> janela de contexto configurada.</li><li><strong><code>num_predict</code>:</strong> limite de geração solicitado.</li><li><strong>timeout:</strong> evita espera indefinida no cliente.</li></ul>
+<p>Pedir JSON não basta. <code>validateAnalysis</code> verifica número de casos, índices válidos, vínculo das fontes e citações que realmente aparecem no texto. Fatos inválidos são filtrados e campos ausentes permanecem como lacuna; certas violações de estrutura rejeitam a análise.</p>
+<p>Uma citação literal prova que o trecho foi escrito, não que o evento real foi tecnicamente verificado. Revisão humana continua importante.</p>
+<h2 id="6-3-sugestao-de-narrativa-e-outro-contrato">6.3 Sugestão de narrativa é outro contrato</h2>
+<p><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/cases/report-assist.mjs">report-assist.mjs</a> primeiro consulta os dados do modelo e exige identificação de modelo GGUF local, recusando aliases remotos. Depois prepara evidências textuais e solicita <code>narrative</code> e <code>questions</code>.</p>
+<p>O orçamento de contexto é aproximado. Se necessário, fontes/atualizações são recortadas e a saída indica <code>limited</code>. O modelo não recebe uma interpretação visual automática dos anexos. A sugestão retornada não salva nem aprova a revisão.</p>
+<p><strong>Diferença de implementação:</strong> a checagem explícita do GGUF está nesse caminho de narrativa. Não atribua automaticamente essa mesma verificação ao extrator <code>analyzeSources</code>, que tem seu próprio request e validação.</p>
+<h2 id="6-4-dados-nunca-viram-autoridade">6.4 Dados nunca viram autoridade</h2>
+<p>Uma mensagem pode conter “ignore instruções anteriores”. Para o produto, isso é conteúdo a ser tratado como dado. O modelo não recebe uma ferramenta genérica de shell, SQL, leitura de arquivos ou envio de WhatsApp.</p>
+<p>O envio real fica em <code>src/app.mjs</code>: exige grupo fixado, autorização, estado ativo, tipo de mensagem permitido e formato/estado compatíveis. A saída textual do modelo não escolhe livremente destino ou ação. Essa limitação de autoridade é mais forte do que depender apenas de um aviso no prompt.</p>
+<h2 id="6-5-o-que-e-mcp-aqui">6.5 O que é MCP aqui?</h2>
+<p>MCP padroniza como um cliente descobre e chama ferramentas. Neste repositório, <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/integrations/mcp/server.py">server.py</a> executa por <strong>stdio</strong>: o cliente inicia um processo Python e conversa pela entrada/saída padrão. Não há uma porta HTTP MCP do projeto.</p>
+<div class="table-wrap"><table><thead><tr><th>Ferramenta</th><th>Função</th><th>Limites relevantes</th></tr></thead><tbody><tr><td><code>whatsapp_status</code></td><td>Consulta o estado salvo pelo coletor</td><td>Não abre QR ou sessão; estado operacional ainda pode ser privado</td></tr><tr><td><code>whatsapp_month</code></td><td>Fontes de uma competência</td><td>Paginação, até 50 por chamada</td></tr><tr><td><code>whatsapp_cases</code></td><td>Itens propostos e dúvidas</td><td>Até 50; não são conclusões aprovadas</td></tr><tr><td><code>whatsapp_image</code></td><td>Imagem já arquivada</td><td>JPEG/PNG/WebP, até 4 MB</td></tr></tbody></table></div>
+<p>O SQLite é aberto em modo leitura no MCP. Somente leitura impede alterações por essas ferramentas; não significa ausência de divulgação: o retorno entra no contexto do modelo que chamou a ferramenta. Ativar MCP para um modelo remoto exige autorização específica sobre esses dados.</p>
+<h2 id="6-6-minha-api-key-da-openai-gasta-creditos-aqui">6.6 Minha API key da OpenAI gasta créditos aqui?</h2>
+<p><strong>Se o OpenCode estiver autenticado com uma API key da OpenAI e usando um modelo dessa API, o consumo normalmente é cobrado na conta/projeto da API associado à chave.</strong> Assinatura ChatGPT e faturamento da API são separados. Outras autenticações e provedores podem ter regras próprias; o modelo selecionado e a conta de faturamento precisam ser conferidos na interface correspondente.</p>
+<p>O código público do aplicativo não informa o saldo, a chave usada pelo OpenCode ou o preço efetivo da sessão. Nada neste estudo exige abrir sua chave.</p>
+<h3 id="o-que-costuma-gerar-consumo">O que costuma gerar consumo?</h3>
+<ul><li>Enviar uma pergunta ao modelo.</li><li>Pedir análise, geração ou alteração de código.</li><li>Enviar histórico, instruções, trechos de arquivos e resultados de ferramentas como contexto.</li><li>Continuar uma tarefa com novas chamadas, tentativas ou agentes.</li></ul>
+<p>Uma tarefa pode exigir várias chamadas. Ler um arquivo local é uma operação de ferramenta; o conteúdo lido pode gerar tokens de entrada quando usado numa chamada posterior. Deixar o aplicativo aberto e ocioso geralmente não gera inferência por si só, mas extensões ou automações em segundo plano podem fazer chamadas.</p>
+<h3 id="como-pensar-no-preco">Como pensar no preço</h3>
+<div class="code-block"><pre><code class="language-text">custo aproximado =
+  tokens de entrada sem cache × tarifa de entrada
+  + tokens de entrada em cache × tarifa de cache aplicável
+  + tokens de saída × tarifa de saída
+  + outros itens cobrados pelo serviço utilizado, quando houver</code></pre></div>
+<p>Tarifas geralmente são publicadas por milhão de tokens; converta a unidade antes de multiplicar. Regras sobre raciocínio, cache e ferramentas variam por modelo/serviço. Tokens são unidades do modelo, não uma contagem exata de palavras ou caracteres.</p>
+<p>Confira <a href="https://platform.openai.com/usage">Usage</a>, <a href="https://platform.openai.com/settings/organization/billing/overview">Billing</a> e <a href="https://openai.com/api/pricing/">preços oficiais</a>. Escolha a organização/projeto e o período corretos. Não trate um orçamento de alerta como bloqueio rígido de gastos sem conferir as condições atuais.</p>
+<h3 id="como-estudar-com-consumo-mais-previsivel">Como estudar com consumo mais previsível</h3>
+<ol><li>Use os capítulos locais para orientação inicial.</li><li>Peça explicações de uma função ou fluxo por vez e indique o arquivo.</li><li>Evite reenviar o repositório inteiro para perguntas pequenas.</li><li>Escolha conscientemente o modelo e acompanhe o consumo por período.</li><li>Confira o provedor efetivo: o script opcional <code>scripts/windows/opencode.ps1</code> seleciona um identificador específico, não a OpenAI automaticamente.</li></ol>
+<p>Documentação local é um recurso de consulta; lê-la no editor não exige uma chamada de IA. Pedir que um modelo explique ou amplie essa leitura pode gerar cobrança.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./05-interface-e-experiencia.html"><small>Capítulo anterior</small><strong>Interface e experiência</strong></a><a class="next" href="./07-scripts-ferramentas-e-testes.html"><small>Próximo capítulo</small><strong>Scripts, ferramentas e testes</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#modelo-transcricao-e-monitoramento">Modelo, transcrição e monitoramento</a></li><li><a href="#6-1-dois-usos-independentes-de-ia">6.1 Dois usos independentes de IA</a></li><li><a href="#6-2-request-de-extracao-literal">6.2 Request de extração literal</a></li><li><a href="#6-3-sugestao-de-narrativa-e-outro-contrato">6.3 Sugestão de narrativa é outro contrato</a></li><li><a href="#6-4-dados-nunca-viram-autoridade">6.4 Dados nunca viram autoridade</a></li><li><a href="#6-5-o-que-e-mcp-aqui">6.5 O que é MCP aqui?</a></li><li><a href="#6-6-minha-api-key-da-openai-gasta-creditos-aqui">6.6 Minha API key da OpenAI gasta créditos aqui?</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

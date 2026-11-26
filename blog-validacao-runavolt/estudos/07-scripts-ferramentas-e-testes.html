@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scripts, ferramentas e testes · Estudos Runavolt</title>
+<meta name="description" content="Inicialização no Windows, supervisão, dependências, Git e verificações automatizadas com dados sintéticos.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/07-scripts-ferramentas-e-testes.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Scripts, ferramentas e testes · Estudos Runavolt">
+<meta property="og:description" content="Inicialização no Windows, supervisão, dependências, Git e verificações automatizadas com dados sintéticos.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/07-scripts-ferramentas-e-testes.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 07</li></ul>
+<p class="eyebrow">Capítulo 07 · Série de estudos</p>
+<h1>Scripts, ferramentas e testes</h1>
+<p class="lead">Inicialização no Windows, supervisão, dependências, Git e verificações automatizadas com dados sintéticos.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Redes e operação</li><li>5 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="quando-uma-feature-aprovada-esta-fechada">Quando uma feature aprovada está fechada</h2>
+<p>Agrupe implementação, testes e documentação em um commit coerente. Mudanças de experiência devem ser conferidas na Central Web e no app; comportamento nativo alterado exige pacote novo. Registre diferença entre validado, piloto e planejado no mapa e no capítulo certo. Valide os links públicos e não misture dados de operação com a publicação. Veja <a href="./13-backup-e-continuidade.html">Continuidade</a>.</p>
+<h2 id="7-1-scripts-npm-atalhos-nao-linguagens-novas">7.1 Scripts npm: atalhos, não linguagens novas</h2>
+<p>O <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/package.json">package.json</a> contém comandos nomeados que o npm executa. Consulte <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/COMANDOS.md">COMANDOS.md</a> antes de usar os comandos operacionais.</p>
+<div class="table-wrap"><table><thead><tr><th>Script</th><th>Expansão atual</th><th>O que faz</th></tr></thead><tbody><tr><td><code>start</code></td><td><code>node src/app.mjs</code></td><td>Inicia aplicação; abre recursos da instalação</td></tr><tr><td><code>resume</code></td><td><code>node src/app.mjs --retry-authorized-link --enable-recovery</code></td><td>Retoma vínculo autorizado e habilita recuperação</td></tr><tr><td><code>doctor</code></td><td><code>node scripts/doctor.mjs</code></td><td>Confere runtime, dependências, navegador e modelo local</td></tr><tr><td><code>test</code></td><td><code>node --test tests/*.test.mjs</code></td><td>Executa a suíte automatizada</td></tr></tbody></table></div>
+<p>O início da aplicação tem efeitos: consulta chave, abre banco e escreve estado. Não use <code>npm start</code> como simples teste de sintaxe. <code>doctor</code> não abre fontes ou chave, mas importa a configuração local e faz uma consulta ao catálogo do Ollama.</p>
+<h2 id="7-2-dependencias-diretas-e-transitivas">7.2 Dependências diretas e transitivas</h2>
+<p>As dependências diretas declaradas incluem <code>whatsapp-web.js</code> e <code>qrcode</code>. Puppeteer entra pela árvore de dependências e tem versão controlada em <code>overrides</code>. Node fornece módulos nativos como HTTP, criptografia e SQLite.</p>
+<ul><li><code>package.json</code> descreve a intenção, scripts e restrições.</li><li><code>package-lock.json</code> registra a resolução de dependências para instalação reproduzível.</li><li><code>node_modules</code> é o material instalado, não o código-fonte autoral a estudar primeiro.</li><li><code>requirements.txt</code> descreve dependências Python.</li><li>Instalações podem executar scripts de pacotes; a etapa de instalar não é uma operação puramente declarativa.</li></ul>
+<p>Comece pelo código de <code>src/</code>. Só investigue uma dependência quando precisar entender o contrato usado pelo aplicativo.</p>
+<h2 id="7-3-inicializacao-windows">7.3 Inicialização Windows</h2>
+<div class="code-block"><pre><code class="language-text">start.ps1
+  → carrega runtime.ps1
+  → resolve esta instalação
+  → inicia watchdog.ps1
+      → mutex por instalação
+      → consulta processo, heartbeat e transporte
+      → aplica watchdog-policy.ps1
+      → inicia/recupera coletor quando cabível
+  → abre a Central, salvo opção Background</code></pre></div>
+<div class="table-wrap"><table><thead><tr><th>Arquivo</th><th>Papel</th><th>Conceito para estudar</th></tr></thead><tbody><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/windows/start.ps1">start.ps1</a></td><td>Aciona supervisão e opcionalmente navegador</td><td>Parâmetros e criação de processo</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/windows/runtime.ps1">runtime.ps1</a></td><td>Resolve configuração e identifica processos desta instalação</td><td>Caminhos, identidade e ciclo de vida</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/windows/watchdog.ps1">watchdog.ps1</a></td><td>Laço de supervisão e tentativas com intervalo crescente</td><td>Heartbeat, mutex e backoff</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/windows/watchdog-policy.ps1">watchdog-policy.ps1</a></td><td>Decide como reagir ao estado observado</td><td>Política separada da execução</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/windows/restart.ps1">restart.ps1</a></td><td>Reinicia o coletor identificado</td><td>Recuperação preservando sessão</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/windows/opencode.ps1">opencode.ps1</a></td><td>Abre o ambiente de programação com modelo específico</td><td>Validação de catálogo e execução de CLI</td></tr></tbody></table></div>
+<p><code>runtime.ps1</code> identifica o Node pelo executável/caminho e o navegador pelo perfil específico. Isso evita tratar todo Chrome ou Node do computador como se pertencesse ao coletor. O supervisor usa mutex para impedir dois supervisores equivalentes concorrendo.</p>
+<p>Heartbeat recente só indica que algum código escreveu estado. O projeto também observa a verificação real do transporte. Um processo pode estar vivo e desconectado.</p>
+<p>Pausa e necessidade de novo vínculo são estados respeitados, não falhas a resolver apagando perfil. A supervisão roda na sessão do usuário conectado ao Windows; não promete funcionamento com PC desligado, suspenso ou antes do login.</p>
+<h2 id="7-4-outras-ferramentas-do-projeto">7.4 Outras ferramentas do projeto</h2>
+<div class="table-wrap"><table><thead><tr><th>Arquivo</th><th>Uso</th><th>Particularidade</th></tr></thead><tbody><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/doctor.mjs">doctor.mjs</a></td><td>Pré-requisitos</td><td>Retorna falha se houver pendência</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/ui-smoke.mjs">ui-smoke.mjs</a></td><td>Exercita telas em navegador com fontes sintéticas</td><td>Requer navegador e cria ambiente de teste</td></tr><tr><td><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/scripts/probe.py">probe.py</a></td><td>Verifica contrato HTTP e protocolo MCP</td><td>Consulta servidor local; requer autorização operacional</td></tr></tbody></table></div>
+<p>O probe não vincula WhatsApp nem busca mensagens, mas consulta estado operacional e inicia o processo MCP de leitura. Não é a mesma coisa que uma suíte isolada sem consultar a instalação.</p>
+<p>Arquivos locais fora da lista versionada podem ser pontes de compatibilidade ou material privado. Eles não devem ser assumidos como pontos de entrada canônicos. Para instalações novas, siga os caminhos de <code>scripts/windows/</code> e <code>integrations/mcp/</code> documentados.</p>
+<h2 id="7-5-testes-como-documentacao-executavel">7.5 Testes como documentação executável</h2>
+<p>Um teste estabelece uma condição inicial, executa um comportamento e verifica uma propriedade. A suíte usa <code>node:test</code> e <code>node:assert/strict</code>.</p>
+<div class="table-wrap"><table><thead><tr><th>Arquivo(s) em <code>tests/</code></th><th>Tema</th></tr></thead><tbody><tr><td><code>core.test.mjs</code></td><td>Cifra, integridade, escopo e competência no fuso local</td></tr><tr><td><code>assistant.test.mjs</code></td><td>Extração validada, respostas, perguntas e confirmações</td></tr><tr><td><code>recovery.test.mjs</code></td><td>Recuperação persistente e retomada</td></tr><tr><td><code>transport.test.mjs</code>, <code>compat.test.mjs</code></td><td>Conexão e compatibilidade de IDs</td></tr><tr><td><code>cases.test.mjs</code>, <code>case-workflow.test.mjs</code></td><td>Painel, regras de domínio e operações HTTP</td></tr><tr><td><code>history-cases.test.mjs</code>, <code>media-context.test.mjs</code></td><td>Histórico, vínculo e contexto próximo de mídia</td></tr><tr><td><code>stage.test.mjs</code></td><td>Etapas e evidências operacionais</td></tr><tr><td><code>context-shortcut.test.mjs</code></td><td>Aceite de sugestão por teclado</td></tr></tbody></table></div>
+<p>Em <code>core.test.mjs</code>, veja três propriedades distintas: decifrar o que foi cifrado, rejeitar AAD diferente e rejeitar alteração da cifra. O primeiro teste sozinho não demonstraria proteção contra adulteração.</p>
+<p>Mocks/fakes permitem fornecer outra função de análise ou relógio. Assim, um teste do domínio não precisa chamar IA real nem WhatsApp. Testes automatizados dão evidência sobre os cenários exercitados; não comprovam cobertura completa do histórico externo nem substituem o fechamento real.</p>
+<h2 id="7-6-git-e-qualidade-da-mudanca">7.6 Git e qualidade da mudança</h2>
+<p>Git versiona código e documentação; não instala dependências, transfere créditos ou carrega a memória completa de uma conversa. A pasta de trabalho pode conter alterações ainda não commitadas. Verifique o estado antes de editar para preservar trabalho existente.</p>
+<p>Uma mudança bem delimitada tem objetivo claro, impacto conhecido, verificação proporcional e documentação correspondente. <code>git diff --check</code> detecta problemas de whitespace no diff; não é um teste funcional nem um detector completo de segredos.</p>
+<p><strong>Exercício:</strong> escolha um teste, descreva em português a propriedade protegida e identifique qual defeito faria o teste falhar. Evite apenas reescrever a mesma implementação dentro da expectativa.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./06-ia-mcp-e-custos.html"><small>Capítulo anterior</small><strong>IA, MCP e custos</strong></a><a class="next" href="./08-laboratorio-e-glossario.html"><small>Próximo capítulo</small><strong>Laboratório e glossário</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#quando-uma-feature-aprovada-esta-fechada">Quando uma feature aprovada está fechada</a></li><li><a href="#7-1-scripts-npm-atalhos-nao-linguagens-novas">7.1 Scripts npm: atalhos, não linguagens novas</a></li><li><a href="#7-2-dependencias-diretas-e-transitivas">7.2 Dependências diretas e transitivas</a></li><li><a href="#7-3-inicializacao-windows">7.3 Inicialização Windows</a></li><li><a href="#7-4-outras-ferramentas-do-projeto">7.4 Outras ferramentas do projeto</a></li><li><a href="#7-5-testes-como-documentacao-executavel">7.5 Testes como documentação executável</a></li><li><a href="#7-6-git-e-qualidade-da-mudanca">7.6 Git e qualidade da mudança</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

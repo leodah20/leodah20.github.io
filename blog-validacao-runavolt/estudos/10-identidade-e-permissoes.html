@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Identidade e permissões · Estudos Runavolt</title>
+<meta name="description" content="Entenda autenticação, sessão, autorização e atribuição sem confundir IP com identidade.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/10-identidade-e-permissoes.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Identidade e permissões · Estudos Runavolt">
+<meta property="og:description" content="Entenda autenticação, sessão, autorização e atribuição sem confundir IP com identidade.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/10-identidade-e-permissoes.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+<script defer src="../assets/vendor/mermaid/mermaid.min.js"></script>
+<script defer src="../assets/mermaid-init.js"></script>
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 10</li></ul>
+<p class="eyebrow">Capítulo 10 · Série de estudos</p>
+<h1>Identidade e permissões</h1>
+<p class="lead">Entenda autenticação, sessão, autorização e atribuição sem confundir IP com identidade.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Redes e operação</li><li>2 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="login-sessao-e-autorizacao">Login, sessão e autorização</h2>
+<p><strong>Autenticação</strong> responde “qual conta é esta?”. <strong>Sessão</strong> permite reconhecer a conta nas próximas requisições. <strong>Autorização</strong> responde “essa conta pode fazer isto, neste chamado?”. <strong>Atribuição</strong> registra quem fez a ação quando ela foi aceita. Cookie, IP e cargo são dados distintos: nenhum, isolado, responde às quatro perguntas.</p>
+<figure class="diagram"><figcaption>Diagrama Mermaid</figcaption><div class="diagram-canvas"><p class="diagram-loading">Carregando diagrama…</p><template class="diagram-source"><pre><code class="language-mermaid">flowchart LR
+  R[Requisição] --&gt; S{Sessão válida?}
+  S --&gt;|Não| N[Login ou 401]
+  S --&gt;|Sim| P{Permissão para a ação?}
+  P --&gt;|Não| D[403]
+  P --&gt;|Sim| A[Executar e atribuir à conta]</code></pre></template></div><p class="diagram-hint">Em telas estreitas, deslize para o lado para ver o diagrama completo.</p><noscript><p class="diagram-fallback">Ative o JavaScript para visualizar este diagrama.</p></noscript></figure>
+<h2 id="um-exemplo-de-menor-privilegio">Um exemplo de menor privilégio</h2>
+<p>Suponha que um colaborador possa ler chamados de CFTV e acrescentar uma nota, mas não administrar contas. Ele deve conseguir gravar a nota no chamado autorizado e receber uma recusa em operações administrativas. O servidor deve verificar também o chamado que está sendo modificado, não apenas o menu aberto. Esconder um botão melhora a interface, mas não é controle de acesso.</p>
+<p>O console de Operações tem fronteira própria: login administrativo na Central remota <strong>não</strong> o torna acessível pelo APK ou pelo túnel. Isso reduz o alcance de uma sessão remota e mantém inventário, tráfego e dados de diagnóstico fora da Central. Veja a <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/docs/PAINEL-PRIVADO.md">documentação pública do painel privado</a> para comparar com o caminho da rede privada.</p>
+<h2 id="quem-fez-o-que-sem-registrar-segredos">Quem fez o quê sem registrar segredos</h2>
+<p>O perfil vem da sessão autenticada; o endereço observado ajuda no diagnóstico da conexão, não confirma autoria. Duas contas podem compartilhar um IP de saída e a mesma conta pode alternar entre Wi-Fi e 5G. A trilha registra apenas o necessário para explicar a ação. Nunca registre senhas, cookies, tokens ou conteúdo de chamados num log HTTP de aprendizado.</p>
+<p>Quando permitido, descarte sessões inválidas e verifique permissões em cada ação. Cookies de sessão e validações de origem não se substituem; uma sessão legítima ainda precisa de autorização. Para aprofundar: <a href="https://owasp.org/projects/top-ten">OWASP Top 10</a>, em especial controle de acesso e autenticação.</p>
+<h2 id="exercicio-monte-a-matriz-de-teste">Exercício: monte a matriz de teste</h2>
+<p>Numa base fictícia, compare três tentativas: entrar sem sessão, salvar uma nota com conta de leitura, salvar uma nota com conta autorizada. Faça a comparação em Web e Android.</p>
+<p><strong>Resposta esperada:</strong> sem sessão, login ou 401; com sessão sem permissão, recusa sem mutação; com permissão, gravação com autoria. Teste também que a área administrativa não é encaminhada mesmo na última situação.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./09-acesso-remoto-e-android.html"><small>Capítulo anterior</small><strong>Acesso remoto e Android</strong></a><a class="next" href="./11-evidencias-multimidia.html"><small>Próximo capítulo</small><strong>Evidências multimídia</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#login-sessao-e-autorizacao">Login, sessão e autorização</a></li><li><a href="#um-exemplo-de-menor-privilegio">Um exemplo de menor privilégio</a></li><li><a href="#quem-fez-o-que-sem-registrar-segredos">Quem fez o quê sem registrar segredos</a></li><li><a href="#exercicio-monte-a-matriz-de-teste">Exercício: monte a matriz de teste</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

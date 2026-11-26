@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HTTP, APIs e redes · Estudos Runavolt</title>
+<meta name="description" content="Requests, responses, portas, cookies, catálogo de rotas e como ler o tráfego com o DevTools.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/04-http-apis-e-redes.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="HTTP, APIs e redes · Estudos Runavolt">
+<meta property="og:description" content="Requests, responses, portas, cookies, catálogo de rotas e como ler o tráfego com o DevTools.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/04-http-apis-e-redes.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+<script defer src="../assets/vendor/mermaid/mermaid.min.js"></script>
+<script defer src="../assets/mermaid-init.js"></script>
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 04</li></ul>
+<p class="eyebrow">Capítulo 04 · Série de estudos</p>
+<h1>HTTP, APIs e redes</h1>
+<p class="lead">Requests, responses, portas, cookies, catálogo de rotas e como ler o tráfego com o DevTools.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Fundamentos</li><li>7 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="como-estudar-o-contrato-atual">Como estudar o contrato atual</h2>
+<p>Todos os caminhos deste capítulo são fictícios e não devem ser usados como contrato da Central. O OpenAPI descreve métodos, entradas e respostas; Swagger UI é uma interface local para consultar esse contrato. As tabelas usam um ambiente fictício. Separe contrato, acesso remoto e medição HTTP com <a href="./09-acesso-remoto-e-android.html">Acesso remoto</a> e <a href="./12-operacoes-e-seguranca.html">Operações</a>.</p>
+<h2 id="4-1-quem-conversa-com-quem">4.1 Quem conversa com quem?</h2>
+<div class="table-wrap"><table><thead><tr><th>Origem → destino</th><th>Transporte</th><th>Finalidade</th></tr></thead><tbody><tr><td>Navegador → Node</td><td>HTTP em loopback no laboratório</td><td>Arquivos da interface e API do painel</td></tr><tr><td>Node → Ollama</td><td>HTTP local configurado pelo operador</td><td>Consulta de modelo e inferência textual</td></tr><tr><td>Node → Chrome automatizado</td><td>Canal de automação gerenciado por Puppeteer</td><td>Operar o cliente WhatsApp Web</td></tr><tr><td>Chrome automatizado → WhatsApp</td><td>Conexões externas administradas pelo cliente web</td><td>Sincronização e mensagens</td></tr><tr><td>Cliente de IA → processo MCP Python</td><td>stdio</td><td>Invocação de ferramentas de leitura</td></tr><tr><td>Node/Python → SQLite</td><td>Acesso local ao arquivo</td><td>Persistência, sem porta de banco</td></tr><tr><td>OpenCode → provedor selecionado</td><td>API remota quando o modelo é remoto</td><td>Programação e conversa; cobrança independente</td></tr></tbody></table></div>
+<p>Loopback é o caminho de rede da própria máquina. Não significa que todos os componentes do produto funcionem offline: WhatsApp e um modelo remoto de programação precisam de conectividade externa. O coletor é independente de manter o OpenCode aberto.</p>
+<h2 id="4-2-anatomia-de-uma-url-e-de-um-request">4.2 Anatomia de uma URL e de um request</h2>
+<div class="code-block"><pre><code class="language-text">http://localhost:8080/api/exemplo/cases?month=2026-11
+│      │         │    │          └─ query string
+│      │         │    └─ caminho (path)
+│      │         └─ porta do processo servidor
+│      └─ endereço de loopback
+└─ protocolo</code></pre></div>
+<p><code>GET</code> consulta uma representação. <code>POST</code> submete uma operação. A semântica exata está no handler: o projeto usa POST inclusive para consultar uma extração com uma seleção no corpo. O método sozinho não descreve toda a regra de negócio.</p>
+<p>Exemplo <strong>ilustrativo</strong>, em uma sessão já estabelecida, sem credencial real:</p>
+<div class="code-block"><pre><code class="language-http">GET /api/exemplo/cases?month=2026-11 HTTP/1.1
+Host: localhost:8080
+Cookie: case_session=&lt;cookie omitido&gt;</code></pre></div>
+<p>Resposta simplificada e fictícia:</p>
+<div class="code-block"><pre><code class="language-http">HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Cache-Control: no-store
+
+{&quot;untrusted&quot;:true,&quot;month&quot;:&quot;2026-11&quot;,&quot;items&quot;:[]}</code></pre></div>
+<p>O status é o resultado HTTP; <code>Content-Type</code> descreve a representação; o corpo contém os dados. Um JSON com <code>ok: true</code> pode indicar apenas que uma tarefa começou, não que uma conexão ou importação terminou.</p>
+<h2 id="4-3-caminho-completo-de-uma-consulta">4.3 Caminho completo de uma consulta</h2>
+<figure class="diagram"><figcaption>Diagrama Mermaid</figcaption><div class="diagram-canvas"><p class="diagram-loading">Carregando diagrama…</p><template class="diagram-source"><pre><code class="language-mermaid">sequenceDiagram
+  participant U as Usuário
+  participant B as web/cases.js
+  participant H as createCaseHandler
+  participant C as CaseBoard
+  participant D as SQLite
+  U-&gt;&gt;B: Escolhe competência
+  B-&gt;&gt;H: GET /api/exemplo/cases?month=...
+  H-&gt;&gt;H: Confere Host e sessão
+  H-&gt;&gt;C: list(month, carry, archived)
+  C-&gt;&gt;D: Consulta itens e perfis
+  D--&gt;&gt;C: Metadados e payloads cifrados
+  C-&gt;&gt;C: Decifra e monta resumos
+  C--&gt;&gt;H: Objeto da lista
+  H--&gt;&gt;B: JSON e status HTTP
+  B-&gt;&gt;B: Aplica filtros e renderiza DOM</code></pre></template></div><p class="diagram-hint">Em telas estreitas, deslize para o lado para ver o diagrama completo.</p><noscript><p class="diagram-fallback">Ative o JavaScript para visualizar este diagrama.</p></noscript></figure>
+<p>O navegador recebe resumos e fontes permitidas pela rota, não uma conexão SQL. Não há ORM nem Express no caminho descrito: <code>node:http</code> e handlers próprios fazem o roteamento.</p>
+<h2 id="4-4-catalogo-de-rotas">4.4 Catálogo de rotas</h2>
+<p>Exemplos de laboratório: os caminhos abaixo são fictícios. Consulte a documentação local da API para o contrato da instalação. <code>:code</code> significa código no formato <code>R-</code> seguido de oito caracteres hexadecimais maiúsculos; <code>:n</code>, índice numérico da fonte.</p>
+<h3 id="telas">Telas</h3>
+<div class="table-wrap"><table><thead><tr><th>GET</th><th>Tela</th></tr></thead><tbody><tr><td><code>/</code></td><td>Configuração e conexão</td></tr><tr><td><code>/exemplo/chamados</code></td><td>Central</td></tr><tr><td><code>/exemplo/historico</code></td><td>Fontes sem chamado</td></tr><tr><td><code>/exemplo/fechamento</code></td><td>Revisão mensal</td></tr><tr><td><code>/exemplo/minuta</code></td><td>Minuta imprimível</td></tr></tbody></table></div>
+<h3 id="configuracao-e-coleta-sessao-session">Configuração e coleta (sessão <code>session</code>)</h3>
+<div class="table-wrap"><table><thead><tr><th>Método e rota</th><th>Entrada principal</th><th>Efeito/retorno</th></tr></thead><tbody><tr><td><code>GET /api/exemplo/status</code></td><td>Sem parâmetros</td><td>Estado operacional; pode conter QR e grupos, portanto privado</td></tr><tr><td><code>GET /api/exemplo/month</code></td><td>query <code>month</code></td><td>Até 500 fontes da competência</td></tr><tr><td><code>GET /api/exemplo/assistant</code></td><td>Sem parâmetros</td><td>Estado do assistente e itens</td></tr><tr><td><code>POST /api/exemplo/connect</code></td><td><code>consent: true</code></td><td>Inicia vínculo assíncrono</td></tr><tr><td><code>POST /api/exemplo/select</code></td><td><code>id</code> de grupo disponível</td><td>Fixa o grupo e ativa captura</td></tr><tr><td><code>POST /api/exemplo/pause</code></td><td>Corpo JSON</td><td>Alterna pausa; não é um setter idempotente</td></tr><tr><td><code>POST /api/exemplo/questions</code></td><td><code>enabled</code> booleano</td><td>Permissão de mensagens automáticas</td></tr><tr><td><code>POST /api/exemplo/context</code></td><td><code>id</code> da fonte</td><td>Reavalia fonte sob condições de autorização</td></tr><tr><td><code>POST /api/exemplo/history</code></td><td><code>month</code></td><td>Inicia importação de período</td></tr></tbody></table></div>
+<h3 id="central-historico-e-fechamento-sessao-case-session">Central, histórico e fechamento (sessão <code>case_session</code>)</h3>
+<div class="table-wrap"><table><thead><tr><th>Método e rota</th><th>Entrada principal</th><th>Efeito/retorno</th></tr></thead><tbody><tr><td><code>GET /api/exemplo/cases</code></td><td><code>month</code>, <code>carry=1</code>, <code>archived=1</code></td><td>Lista e metadados</td></tr><tr><td><code>GET /api/exemplo/cases/runtime</code></td><td>Sem parâmetros</td><td>Conexão e sincronização resumidas</td></tr><tr><td><code>GET /api/exemplo/cases/:code</code></td><td>Código no path</td><td>Detalhe, contexto, fontes e eventos</td></tr><tr><td><code>POST /api/exemplo/cases/:code</code></td><td><code>kind</code>, <code>version</code> e campos da operação</td><td>Altera perfil, contexto, nota, tarefa, resolução, arquivo/restauração ou união</td></tr><tr><td><code>GET /api/exemplo/cases/:code/media/:n</code></td><td>Índice</td><td>Imagem validada para visualização</td></tr><tr><td><code>GET /api/exemplo/cases/:code/attachment/:n</code></td><td>Índice; <code>download=1</code> opcional</td><td>Anexo arquivado</td></tr><tr><td><code>POST /api/exemplo/cases/:code/photo</code></td><td>Bytes JPEG, PNG ou WebP</td><td>Foto local, limite de 5 MB</td></tr><tr><td><code>GET /api/exemplo/cases/history</code></td><td><code>month</code>, <code>offset</code>, <code>ignored=1</code> ou <code>targets=1</code></td><td>Fontes sem vínculo ou destinos disponíveis</td></tr><tr><td><code>POST /api/exemplo/cases/history</code></td><td><code>kind</code>: <code>prepare</code>, <code>assign</code>, <code>ignore</code>, <code>restore</code> ou <code>recheck</code></td><td>Operação local sobre o histórico</td></tr><tr><td><code>GET /api/exemplo/cases/history/media</code></td><td><code>month</code>, <code>id</code>, <code>ignored</code>, <code>download</code></td><td>Prévia/download elegível</td></tr><tr><td><code>GET /api/exemplo/cases/closing</code></td><td><code>month</code></td><td>Revisões, candidatos e verificações</td></tr><tr><td><code>POST /api/exemplo/cases/closing</code></td><td><code>version</code>, <code>kind</code> e campos específicos</td><td>Salva fontes, preventivas, ajustes ou decisão</td></tr><tr><td><code>POST /api/exemplo/cases/closing/context</code></td><td><code>codes</code></td><td>Texto de extração e fingerprint</td></tr><tr><td><code>POST /api/exemplo/cases/closing/package</code></td><td><code>codes</code>, <code>fingerprint</code></td><td>ZIP consistente com extração preparada</td></tr><tr><td><code>POST /api/exemplo/cases/closing/local</code></td><td><code>codes</code> com um código</td><td>Sugestão textual local, sem aprovação automática</td></tr><tr><td><code>GET /api/exemplo/cases/closing/draft</code></td><td><code>month</code></td><td>Dados da minuta, se liberada</td></tr><tr><td><code>GET /api/exemplo/cases/closing/cover</code></td><td><code>month</code></td><td>Capa privada, após condições da minuta</td></tr></tbody></table></div>
+<p>As rotas de fechamento usam <code>month</code> na query, inclusive nos POST. Para contratos completos de cada <code>kind</code>, leia <code>CaseBoard.change</code> e <code>MonthlyClosing.save</code>; a tabela não substitui as validações desses métodos.</p>
+<h2 id="4-5-um-post-de-atualizacao-por-dentro">4.5 Um POST de atualização, por dentro</h2>
+<p>Exemplo fictício de nota; não é instrução para executar na instalação:</p>
+<div class="code-block"><pre><code class="language-http">POST /api/exemplo/cases/R-1234ABCD HTTP/1.1
+Host: localhost:8080
+Origin: http://localhost:8080
+Content-Type: application/json
+Cookie: case_session=&lt;cookie omitido&gt;
+
+{&quot;kind&quot;:&quot;note&quot;,&quot;version&quot;:0,&quot;text&quot;:&quot;Aguardando componente para teste.&quot;,&quot;occurredOn&quot;:&quot;2026-11-10&quot;}</code></pre></div>
+<p>O handler valida sessão, origem, tipo e limite do corpo. O domínio verifica campos, versão e data. A transação registra o evento e incrementa a versão. A resposta devolve o detalhe atualizado. Um código fictício inexistente retorna erro; não execute este exemplo para experimentar gravação em produção.</p>
+<h2 id="4-6-status-e-diagnostico">4.6 Status e diagnóstico</h2>
+<div class="table-wrap"><table><thead><tr><th>Status</th><th>Leitura neste projeto</th></tr></thead><tbody><tr><td><code>200</code></td><td>Operação/consulta respondida</td></tr><tr><td><code>202</code></td><td>Trabalho aceito para processamento</td></tr><tr><td><code>400</code></td><td>Entrada inválida ou operação não concluída no handler de configuração</td></tr><tr><td><code>401</code></td><td>Sessão local ausente/expirada</td></tr><tr><td><code>403</code></td><td>Host, origem ou operação recusada</td></tr><tr><td><code>404</code></td><td>Rota, chamado ou recurso indisponível</td></tr><tr><td><code>409</code></td><td>Conflito de versão, fontes alteradas ou pré-condição de revisão</td></tr><tr><td><code>413</code></td><td>Corpo ou pacote acima do limite</td></tr><tr><td><code>422</code></td><td>Contexto/saída de sugestão não utilizável</td></tr><tr><td><code>500</code> / <code>503</code></td><td>Falha interna / serviço de sugestão indisponível</td></tr></tbody></table></div>
+<p>O frontend precisa verificar <code>response.ok</code>: <code>fetch</code> pode resolver normalmente mesmo recebendo um erro HTTP. Já falha de transporte costuma rejeitar a Promise.</p>
+<h2 id="4-7-o-papel-das-protecoes-do-navegador-e-servidor">4.7 O papel das proteções do navegador e servidor</h2>
+<ul><li><strong>Bind em loopback:</strong> o servidor escuta <code>127.0.0.1</code>, sem oferecer acesso direto à LAN.</li><li><strong>Host:</strong> valida o endereço esperado recebido no request.</li><li><strong>Origin:</strong> POST exige a origem exata e o tipo de conteúdo previsto.</li><li><strong>Cookies:</strong> a configuração usa <code>session</code>; a Central usa <code>case_session</code>. Abrir uma tela da Central cria sua sessão; não é o mesmo cookie do painel inicial.</li><li><strong>HttpOnly e SameSite=Strict:</strong> dificultam acesso ao cookie por JavaScript e seu envio em navegações entre sites.</li><li><strong>CSP:</strong> restringe scripts, conexões, inclusão em frames e outras fontes. É uma defesa adicional, não um substituto da validação.</li><li><strong>Lista de arquivos estáticos:</strong> o servidor entrega recursos conhecidos, em vez de uma API genérica de leitura de caminhos.</li></ul>
+<p>Esses controles são para um painel local. Não representam autenticação de usuários de uma aplicação pública nem isolamento contra processos executando na mesma conta Windows. <code>localhost</code> e <code>127.0.0.1</code> não são intercambiáveis para uma validação exata de origem; use a URL documentada.</p>
+<h2 id="4-8-devtools-para-aprender">4.8 DevTools para aprender</h2>
+<p>Comece lendo o wrapper <code>api</code> em <code>web/cases.js</code>. Quando houver autorização para observar uma tela local, abra <strong>Network</strong> nas ferramentas do navegador e identifique método, path, query, status, tipo e tempo. Em <strong>Initiator</strong>, procure qual função iniciou a requisição.</p>
+<p>Requests e respostas reais podem conter fontes, cookies, QR e outros dados privados. Para compartilhar uma explicação, reproduza somente a estrutura com dados fictícios; não exporte HAR de produção. O estudo dos handlers e testes sintéticos já permite entender o contrato sem consultar dados reais.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./03-fluxo-de-dados.html"><small>Capítulo anterior</small><strong>Fluxo dos dados e persistência</strong></a><a class="next" href="./05-interface-e-experiencia.html"><small>Próximo capítulo</small><strong>Interface e experiência</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#como-estudar-o-contrato-atual">Como estudar o contrato atual</a></li><li><a href="#4-1-quem-conversa-com-quem">4.1 Quem conversa com quem?</a></li><li><a href="#4-2-anatomia-de-uma-url-e-de-um-request">4.2 Anatomia de uma URL e de um request</a></li><li><a href="#4-3-caminho-completo-de-uma-consulta">4.3 Caminho completo de uma consulta</a></li><li><a href="#4-4-catalogo-de-rotas">4.4 Catálogo de rotas</a></li><li><a href="#4-5-um-post-de-atualizacao-por-dentro">4.5 Um POST de atualização, por dentro</a></li><li><a href="#4-6-status-e-diagnostico">4.6 Status e diagnóstico</a></li><li><a href="#4-7-o-papel-das-protecoes-do-navegador-e-servidor">4.7 O papel das proteções do navegador e servidor</a></li><li><a href="#4-8-devtools-para-aprender">4.8 DevTools para aprender</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

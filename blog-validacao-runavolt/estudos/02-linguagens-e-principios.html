@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linguagens e princípios · Estudos Runavolt</title>
+<meta name="description" content="JavaScript, Python, PowerShell, HTML, CSS e SQL na prática, com as decisões de construção que aparecem no código.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/02-linguagens-e-principios.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Linguagens e princípios · Estudos Runavolt">
+<meta property="og:description" content="JavaScript, Python, PowerShell, HTML, CSS e SQL na prática, com as decisões de construção que aparecem no código.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/02-linguagens-e-principios.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 02</li></ul>
+<p class="eyebrow">Capítulo 02 · Série de estudos</p>
+<h1>Linguagens e princípios</h1>
+<p class="lead">JavaScript, Python, PowerShell, HTML, CSS e SQL na prática, com as decisões de construção que aparecem no código.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Fundamentos</li><li>6 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="quando-aparece-outra-linguagem">Quando aparece outra linguagem</h2>
+<p>No Android, Java cuida da abertura do app e da ponte com o WebView; a página e as regras de negócio continuam no conjunto Web e Node. Não replique uma regra de autorização no código de tela e a trate como definitiva. Revise <a href="./05-interface-e-experiencia.html">Interface</a> antes de <a href="./09-acesso-remoto-e-android.html">Android</a>.</p>
+<h2 id="2-1-linguagem-runtime-biblioteca-e-protocolo">2.1 Linguagem, runtime, biblioteca e protocolo</h2>
+<div class="table-wrap"><table><thead><tr><th>Termo</th><th>Neste projeto</th></tr></thead><tbody><tr><td>Linguagem</td><td>JavaScript, Python, PowerShell e SQL</td></tr><tr><td>Runtime</td><td>Node.js executa JavaScript fora do navegador; Python executa integrações</td></tr><tr><td>Biblioteca</td><td><code>whatsapp-web.js</code>, <code>qrcode</code>, <code>cryptography</code></td></tr><tr><td>Protocolo</td><td>HTTP entre navegador e Node; MCP no canal stdio</td></tr><tr><td>Persistência</td><td>SQLite guarda tabelas num arquivo</td></tr><tr><td>Marcação e estilo</td><td>HTML descreve a estrutura; CSS define apresentação</td></tr></tbody></table></div>
+<p>JavaScript é a linguagem. Node não é outra linguagem. API não significa necessariamente internet: dois processos no mesmo computador também podem conversar por uma API.</p>
+<h2 id="2-2-javascript-moderno-lendo-o-codigo-real">2.2 JavaScript moderno lendo o código real</h2>
+<p>O <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/package.json">package.json</a> declara <code>type: &quot;module&quot;</code>; os módulos do servidor usam <code>.mjs</code>, <code>import</code> e <code>export</code>. Não há etapa de compilação TypeScript ou bundler declarada nos scripts npm atuais.</p>
+<h3 id="variaveis-objetos-e-funcoes">Variáveis, objetos e funções</h3>
+<div class="code-block"><pre><code class="language-js">// Exemplo didático independente, com dados fictícios.
+const fonte = { text: &#39;Equipamento em teste&#39;, hasMedia: false };
+const texto = String(fonte.text || &#39;&#39;).trim();
+const temTexto = valor =&gt; valor.length &gt; 0;
+console.log(temTexto(texto)); // true</code></pre></div>
+<ul><li><code>const</code> impede reatribuir a variável; não torna o objeto internamente imutável.</li><li><code>let</code> serve para uma referência que será reatribuída.</li><li>Um objeto reúne propriedades; uma função recebe valores e devolve um resultado ou produz efeitos.</li><li><code>Object.freeze</code> em <code>CONFIG</code> impede alterações diretas nas propriedades do objeto congelado; é um congelamento superficial.</li></ul>
+<h3 id="sintaxes-que-voce-vai-encontrar">Sintaxes que você vai encontrar</h3>
+<div class="table-wrap"><table><thead><tr><th>Sintaxe</th><th>Leitura</th><th>Local para observar</th></tr></thead><tbody><tr><td><code>const { Client } = pkg</code></td><td>Desestrutura uma propriedade</td><td><code>src/app.mjs</code></td></tr><tr><td><code>{ ...r, isClarification: true }</code></td><td>Cria objeto com cópia superficial e campo adicional</td><td><code>src/assistant/assistant.mjs</code></td></tr><tr><td><code>item.answerIds?.length</code></td><td>Acesso opcional: não falha se <code>answerIds</code> for nulo/ausente</td><td>Assistente e painel</td></tr><tr><td><code>valor ?? fallback</code></td><td>Usa fallback somente para <code>null</code> ou <code>undefined</code></td><td>Histórico e fechamento</td></tr><tr><td>`valor</td><td></td><td>fallback`</td></tr><tr><td><code>!!valor</code></td><td>Converte para booleano</td><td><code>inScope</code></td></tr><tr><td><code>a === b</code></td><td>Igualdade estrita sem coerção de tipos</td><td>Validações</td></tr><tr><td><code>array.map(fn)</code></td><td>Transforma cada elemento</td><td>Construção de respostas</td></tr><tr><td><code>array.filter(fn)</code></td><td>Mantém elementos aceitos pelo predicado</td><td>Filas e filtros</td></tr><tr><td><code>new Set(ids)</code></td><td>Coleção de valores únicos</td><td>Fontes e vínculos</td></tr><tr><td><code>new Map()</code></td><td>Associação chave → valor</td><td>Sessões da Central</td></tr></tbody></table></div>
+<h3 id="tipagem-dinamica-exige-validacao-em-execucao">Tipagem dinâmica exige validação em execução</h3>
+<p>Um JSON recebido pode ser um objeto, um array, <code>null</code> ou dados inesperados. O programa confere tipo, tamanho, formato e campos permitidos. Leia <code>CaseBoard.change</code> e <code>validateAnalysis</code>: a ausência de TypeScript não elimina a necessidade de contratos.</p>
+<p><code>JSON.parse</code> converte texto em valores. Isso não prova que esses valores obedecem ao contrato esperado. <code>JSON.stringify</code> faz a conversão inversa e não criptografa nada.</p>
+<h2 id="2-3-assincrono-promise-async-e-await">2.3 Assíncrono: Promise, async e await</h2>
+<p><code>fetch</code> devolve uma Promise: um resultado futuro. <code>await</code> suspende aquela função até o resultado chegar; não transforma toda a aplicação em execução paralela nem bloqueia necessariamente o event loop durante a espera de rede.</p>
+<div class="code-block"><pre><code class="language-js">// Esboço didático; não é uma chamada para executar em produção.
+async function consultar(fetcher, caminho) {
+  const resposta = await fetcher(caminho);
+  if (!resposta.ok) throw new Error(&#39;Consulta falhou&#39;);
+  return resposta.json();
+}</code></pre></div>
+<p>No projeto:</p>
+<ul><li><code>enqueue</code> encadeia Promises para serializar captura de mensagens.</li><li><code>schedule</code> usa temporizador para agrupar entradas próximas antes da análise.</li><li><code>busy</code> impede sobreposição de uma operação específica.</li><li><code>try/catch/finally</code> trata falha e libera estados mesmo quando ocorre exceção.</li><li><code>void connect()</code> descarta o valor da Promise naquele ponto; a operação continua. Por isso a resposta HTTP pode chegar antes de o vínculo terminar.</li><li><code>AbortSignal.timeout</code> limita uma espera. Não é garantia de que todo processamento no outro lado deixou de ocorrer.</li></ul>
+<p><strong>Distinção importante:</strong> uma fila de Promises em memória se perde ao encerrar o processo. A fila SQLite permite retomar trabalho após reinício.</p>
+<h2 id="2-4-classes-composicao-e-injecao-de-dependencias">2.4 Classes, composição e injeção de dependências</h2>
+<p><code>ReportAssistant</code>, <code>CaseBoard</code>, <code>MonthlyClosing</code> e <code>RecoveryQueue</code> são classes: agrupam estado e operações relacionadas. <code>src/app.mjs</code> cria instâncias e fornece dependências por objetos de configuração.</p>
+<p>Por exemplo, <code>RecoveryQueue</code> recebe <code>deliver</code> e <code>now</code>. A classe não precisa saber como uma entrega é implementada, e um teste pode fornecer um relógio controlado. <code>ReportAssistant</code> aceita outra função <code>analyze</code>; testes podem simular IA sem chamar o modelo real.</p>
+<p>Esse padrão se chama <strong>injeção de dependências</strong>. Ele torna comportamento testável e reduz dependência direta de rede, tempo e serviços externos.</p>
+<h2 id="2-5-python-e-interoperabilidade">2.5 Python e interoperabilidade</h2>
+<p>Em <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/integrations/mcp/server.py">server.py</a>, <code>def</code> declara funções, indentação define blocos e <code>@mcp.tool(...)</code> registra uma função como ferramenta. Anotações como <code>month: str</code> ajudam a descrever o contrato; as validações continuam necessárias.</p>
+<p><code>with connection() as db</code> organiza o contexto de uso da conexão. Consultas usam parâmetros. <code>bytes</code>, Base64 e JSON permitem trocar conteúdo entre Python e Node, mas representam coisas diferentes:</p>
+<ul><li><strong>bytes:</strong> sequência binária;</li><li><strong>Base64:</strong> codificação de bytes como texto;</li><li><strong>JSON:</strong> representação textual de estruturas;</li><li><strong>criptografia:</strong> proteção que depende de chave.</li></ul>
+<p>Node chama <code>vault.py</code> via <code>execFileSync</code> com argumentos separados. O processo Python consulta a credencial específica. Isso é interoperabilidade entre processos; não é uma chamada de função dentro do mesmo runtime. Nunca execute esse script manualmente para “ver o resultado”: sua saída contém a chave.</p>
+<h2 id="2-6-powershell-html-css-e-sql">2.6 PowerShell, HTML, CSS e SQL</h2>
+<ul><li><strong>PowerShell:</strong> <code>$variavel</code>, <code>param</code>, funções e pipelines de objetos automatizam o Windows. O dot sourcing (<code>. arquivo.ps1</code>) carrega funções no escopo atual. Leia <code>start.ps1</code> e <code>runtime.ps1</code>.</li><li><strong>HTML:</strong> define botões, campos, seções e a estrutura das cinco telas. Veja <code>web/cases.html</code>.</li><li><strong>CSS:</strong> controla layout, responsividade e impressão. <code>web/draft.css</code> separa apresentação da minuta, inclusive impressão.</li><li><strong>SQL:</strong> descreve consultas e alterações em tabelas. <code>SELECT</code> lê; <code>INSERT</code> cria; <code>UPDATE</code> modifica; uma transação agrupa mudanças.</li></ul>
+<h2 id="2-7-principios-observaveis">2.7 Princípios observáveis</h2>
+<div class="table-wrap"><table><thead><tr><th>Princípio</th><th>Exemplo concreto</th><th>Benefício</th></tr></thead><tbody><tr><td>Responsabilidade delimitada</td><td><code>core.mjs</code> concentra pequenas operações comuns</td><td>Leitura e testes mais simples</td></tr><tr><td>Validar na fronteira</td><td>API e saída da IA têm validações</td><td>Dados inválidos não viram estado aceito</td></tr><tr><td>Negar fora do escopo</td><td><code>inScope</code> exige grupo e ausência de pausa</td><td>Captura delimitada</td></tr><tr><td>Preservar antes de enriquecer</td><td>Texto salvo antes do download de mídia</td><td>Falha do anexo não perde o registro textual</td></tr><tr><td>Rastreabilidade</td><td>Fato guarda <code>sourceId</code>, perfil guarda eventos</td><td>Revisão explica a origem</td></tr><tr><td>Idempotência</td><td>Chaves primárias e <code>INSERT OR IGNORE</code></td><td>Repetição não duplica certas entradas</td></tr><tr><td>Concorrência otimista</td><td>Perfil exige <code>version</code> atual</td><td>Evita sobrescrever edição de outra janela</td></tr></tbody></table></div>
+<p>Esses princípios têm escopo: deduplicar um registro local não garante envio externo exatamente uma vez.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./01-negocio-e-arquitetura.html"><small>Capítulo anterior</small><strong>Negócio e arquitetura</strong></a><a class="next" href="./03-fluxo-de-dados.html"><small>Próximo capítulo</small><strong>Fluxo dos dados e persistência</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#quando-aparece-outra-linguagem">Quando aparece outra linguagem</a></li><li><a href="#2-1-linguagem-runtime-biblioteca-e-protocolo">2.1 Linguagem, runtime, biblioteca e protocolo</a></li><li><a href="#2-2-javascript-moderno-lendo-o-codigo-real">2.2 JavaScript moderno lendo o código real</a></li><li><a href="#2-3-assincrono-promise-async-e-await">2.3 Assíncrono: Promise, async e await</a></li><li><a href="#2-4-classes-composicao-e-injecao-de-dependencias">2.4 Classes, composição e injeção de dependências</a></li><li><a href="#2-5-python-e-interoperabilidade">2.5 Python e interoperabilidade</a></li><li><a href="#2-6-powershell-html-css-e-sql">2.6 PowerShell, HTML, CSS e SQL</a></li><li><a href="#2-7-principios-observaveis">2.7 Princípios observáveis</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
