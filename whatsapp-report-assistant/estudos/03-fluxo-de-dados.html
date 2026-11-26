@@ -30,7 +30,7 @@
     <nav class="site-nav" aria-label="Navegação principal">
       <a href="../">Arquitetura</a>
       <a href="../estudos/" aria-current="page">Blog de estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico" rel="noopener">GitHub do blog</a>
     </nav>
   </div>
 </header>
@@ -49,7 +49,7 @@
 <h2 id="tres-identidades-que-nao-devem-virar-uma">Três identidades que não devem virar uma</h2>
 <p>Mensagem, mídia e chamado têm identidades diferentes. Uma resposta repetida pode aparecer uma vez no histórico sem apagar as fontes; duas fotos com a mesma legenda devem continuar distintas. Um vínculo com o chamado não substitui o registro original. Veja <a href="./11-evidencias-multimidia.html">Evidências multimídia</a>.</p>
 <h2 id="3-1-da-mensagem-ao-chamado">3.1 Da mensagem ao chamado</h2>
-<p>Siga os símbolos em <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/app.mjs">app.mjs</a>, <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/core.mjs">core.mjs</a> e <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/assistant/assistant.mjs">assistant.mjs</a>:</p>
+<p>Siga os símbolos em <span title="Referência a material não publicado">app.mjs</span>, <span title="Referência a material não publicado">core.mjs</span> e <span title="Referência a material não publicado">assistant.mjs</span>:</p>
 <ol><li><code>message_create</code> informa uma mensagem ao cliente.</li><li><code>inScope</code> confere grupo fixado, pausa e tipo de origem. Mensagem própria usa o destino (<code>to</code>); recebida usa a origem (<code>from</code>).</li><li><code>enqueue</code> ordena a captura; <code>capture</code> aplica também condições de recuperação e tempo.</li><li><code>recordOf</code> cria um registro normalizado com ID, timestamp, competência, texto limitado e estado de revisão.</li><li>O ID é consultado no SQLite. Se já existir, só certos enriquecimentos pendentes justificam nova captura.</li><li>O texto é criptografado e salvo antes de tentar baixar a mídia.</li><li>Mídia e resposta citada são buscadas quando cabíveis. O registro recebe estados como <code>saved</code>, <code>failed</code>, <code>unavailable</code> ou <code>too-large</code>.</li><li>No fluxo normal, o registro vai à recuperação persistente quando habilitada, ou diretamente a <code>assistant.accept</code>.</li><li>O assistente distingue texto próprio, resposta vinculada, conversa sem relevância e candidato a novo chamado.</li><li>Entradas pendentes são agrupadas; a análise local propõe fatos literais e vínculos.</li><li>A validação confere fontes e citações. O chamado e os vínculos são gravados numa transação.</li><li>Sob autorização e limites, segue uma confirmação de cadastro <strong>ou</strong> uma pergunta. Respostas têm confirmação própria.</li></ol>
 <p><strong>Importação histórica tem caminho diferente:</strong> <code>importMonth</code> usa captura com <code>override=true</code>, preservando fontes sem disparar automaticamente o mesmo fluxo de entrada nova. O Histórico permite revisar e organizar essas fontes depois.</p>
 <h2 id="3-2-forma-de-um-registro">3.2 Forma de um registro</h2>
@@ -114,8 +114,7 @@ Janela B leu versão 3 ─ tenta salvar ─&gt; HTTP 409; precisa recarregar</co
     <nav class="footer-links" aria-label="Links do projeto">
       <a href="../">Arquitetura</a>
       <a href="../estudos/">Estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico">Código do blog</a>
     </nav>
     <div class="footer-note">
       <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>

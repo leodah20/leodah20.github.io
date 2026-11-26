@@ -30,7 +30,7 @@
     <nav class="site-nav" aria-label="Navegação principal">
       <a href="../">Arquitetura</a>
       <a href="../estudos/" aria-current="page">Blog de estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico" rel="noopener">GitHub do blog</a>
     </nav>
   </div>
 </header>
@@ -52,19 +52,19 @@
 <div class="table-wrap"><table><thead><tr><th>Uso</th><th>Quem executa</th><th>Contexto</th><th>Cobrança</th></tr></thead><tbody><tr><td>Programar e estudar código</td><td>Modelo selecionado no OpenCode/Codex/Claude</td><td>Conversa, arquivos e resultados enviados pelas ferramentas</td><td>Depende do provedor e forma de autenticação</td></tr><tr><td>Organizar fontes e sugerir narrativa</td><td>Modelo configurado no Ollama do coletor</td><td>Texto fornecido pelo aplicativo</td><td>Modelo realmente local não cobra tokens de API remota; usa hardware/energia</td></tr></tbody></table></div>
 <p>Ter uma API key da OpenAI no ambiente de programação não muda o modelo do coletor. O código de análise usa <code>CONFIG.ollamaURL</code> e <code>CONFIG.model</code>. Abrir o OpenCode também não hospeda nem inicia automaticamente o coletor.</p>
 <h2 id="6-2-request-de-extracao-literal">6.2 Request de extração literal</h2>
-<p>Em <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/assistant/assistant.mjs">assistant.mjs</a>, <code>analyzeSources</code> envia uma requisição de inferência ao Ollama. O corpo inclui modelo, mensagens, esquema de saída, opções e <code>stream: false</code>. Caminhos de exemplo não representam a API do Ollama nem da Central.</p>
+<p>Em <span title="Referência a material não publicado">assistant.mjs</span>, <code>analyzeSources</code> envia uma requisição de inferência ao Ollama. O corpo inclui modelo, mensagens, esquema de saída, opções e <code>stream: false</code>. Caminhos de exemplo não representam a API do Ollama nem da Central.</p>
 <ul><li><strong>Mensagem system:</strong> orienta a tarefa, delimita dados não confiáveis e proíbe deduções indevidas.</li><li><strong>Mensagem user:</strong> carrega JSON com índices, texto, tipo, data e indicação de esclarecimento.</li><li><strong><code>format</code>:</strong> pede estrutura JSON restrita por esquema.</li><li><strong><code>temperature: 0</code>:</strong> reduz variação; não garante verdade nem determinismo absoluto.</li><li><strong><code>num_ctx</code>:</strong> janela de contexto configurada.</li><li><strong><code>num_predict</code>:</strong> limite de geração solicitado.</li><li><strong>timeout:</strong> evita espera indefinida no cliente.</li></ul>
 <p>Pedir JSON não basta. <code>validateAnalysis</code> verifica número de casos, índices válidos, vínculo das fontes e citações que realmente aparecem no texto. Fatos inválidos são filtrados e campos ausentes permanecem como lacuna; certas violações de estrutura rejeitam a análise.</p>
 <p>Uma citação literal prova que o trecho foi escrito, não que o evento real foi tecnicamente verificado. Revisão humana continua importante.</p>
 <h2 id="6-3-sugestao-de-narrativa-e-outro-contrato">6.3 Sugestão de narrativa é outro contrato</h2>
-<p><a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/cases/report-assist.mjs">report-assist.mjs</a> primeiro consulta os dados do modelo e exige identificação de modelo GGUF local, recusando aliases remotos. Depois prepara evidências textuais e solicita <code>narrative</code> e <code>questions</code>.</p>
+<p><span title="Referência a material não publicado">report-assist.mjs</span> primeiro consulta os dados do modelo e exige identificação de modelo GGUF local, recusando aliases remotos. Depois prepara evidências textuais e solicita <code>narrative</code> e <code>questions</code>.</p>
 <p>O orçamento de contexto é aproximado. Se necessário, fontes/atualizações são recortadas e a saída indica <code>limited</code>. O modelo não recebe uma interpretação visual automática dos anexos. A sugestão retornada não salva nem aprova a revisão.</p>
 <p><strong>Diferença de implementação:</strong> a checagem explícita do GGUF está nesse caminho de narrativa. Não atribua automaticamente essa mesma verificação ao extrator <code>analyzeSources</code>, que tem seu próprio request e validação.</p>
 <h2 id="6-4-dados-nunca-viram-autoridade">6.4 Dados nunca viram autoridade</h2>
 <p>Uma mensagem pode conter “ignore instruções anteriores”. Para o produto, isso é conteúdo a ser tratado como dado. O modelo não recebe uma ferramenta genérica de shell, SQL, leitura de arquivos ou envio de WhatsApp.</p>
 <p>O envio real fica em <code>src/app.mjs</code>: exige grupo fixado, autorização, estado ativo, tipo de mensagem permitido e formato/estado compatíveis. A saída textual do modelo não escolhe livremente destino ou ação. Essa limitação de autoridade é mais forte do que depender apenas de um aviso no prompt.</p>
 <h2 id="6-5-o-que-e-mcp-aqui">6.5 O que é MCP aqui?</h2>
-<p>MCP padroniza como um cliente descobre e chama ferramentas. Neste repositório, <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/integrations/mcp/server.py">server.py</a> executa por <strong>stdio</strong>: o cliente inicia um processo Python e conversa pela entrada/saída padrão. Não há uma porta HTTP MCP do projeto.</p>
+<p>MCP padroniza como um cliente descobre e chama ferramentas. Neste repositório, <span title="Referência a material não publicado">server.py</span> executa por <strong>stdio</strong>: o cliente inicia um processo Python e conversa pela entrada/saída padrão. Não há uma porta HTTP MCP do projeto.</p>
 <div class="table-wrap"><table><thead><tr><th>Ferramenta</th><th>Função</th><th>Limites relevantes</th></tr></thead><tbody><tr><td><code>whatsapp_status</code></td><td>Consulta o estado salvo pelo coletor</td><td>Não abre QR ou sessão; estado operacional ainda pode ser privado</td></tr><tr><td><code>whatsapp_month</code></td><td>Fontes de uma competência</td><td>Paginação, até 50 por chamada</td></tr><tr><td><code>whatsapp_cases</code></td><td>Itens propostos e dúvidas</td><td>Até 50; não são conclusões aprovadas</td></tr><tr><td><code>whatsapp_image</code></td><td>Imagem já arquivada</td><td>JPEG/PNG/WebP, até 4 MB</td></tr></tbody></table></div>
 <p>O SQLite é aberto em modo leitura no MCP. Somente leitura impede alterações por essas ferramentas; não significa ausência de divulgação: o retorno entra no contexto do modelo que chamou a ferramenta. Ativar MCP para um modelo remoto exige autorização específica sobre esses dados.</p>
 <h2 id="6-6-minha-api-key-da-openai-gasta-creditos-aqui">6.6 Minha API key da OpenAI gasta créditos aqui?</h2>
@@ -102,8 +102,7 @@
     <nav class="footer-links" aria-label="Links do projeto">
       <a href="../">Arquitetura</a>
       <a href="../estudos/">Estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico">Código do blog</a>
     </nav>
     <div class="footer-note">
       <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>

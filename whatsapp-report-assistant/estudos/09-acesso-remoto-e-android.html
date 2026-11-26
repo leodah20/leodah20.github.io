@@ -31,7 +31,7 @@
     <nav class="site-nav" aria-label="Navegação principal">
       <a href="../">Arquitetura</a>
       <a href="../estudos/" aria-current="page">Blog de estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico" rel="noopener">GitHub do blog</a>
     </nav>
   </div>
 </header>
@@ -60,7 +60,7 @@
 <div class="table-wrap"><table><thead><tr><th>Acesso</th><th>Primeiro controle</th><th>O que continua necessário</th></tr></thead><tbody><tr><td>Particular, por Tailscale Serve</td><td>Dispositivo e conta dentro da tailnet</td><td>Permissão do painel; servidor disponível</td></tr><tr><td>Piloto sem VPN, por túnel HTTPS</td><td>Endereço público e certificado válido</td><td>Login individual, sessão, permissão e servidor disponível</td></tr><tr><td>GitHub Pages</td><td>Nenhum login da Central</td><td>É documentação estática; não há conexão com a API real</td></tr></tbody></table></div>
 <p>Uma VPN inclui o dispositivo numa rede privada. Um túnel para a Central entrega apenas o serviço explicitamente encaminhado. Um acesso local continua sendo útil para diagnóstico, mesmo se a borda ou a rede do celular estiverem fora.</p>
 <h2 id="o-que-muda-quando-o-apk-atualiza">O que muda quando o APK atualiza</h2>
-<p>Uma correção no HTML/CSS servido pela Central pode aparecer no app e no navegador sem reinstalar. Mudar a tela de abertura, o endereço compilado, o comportamento do WebView ou os recursos incluídos no pacote pode exigir novo APK. Para testar uma atualização, confira um fluxo autenticado nas duas interfaces e confira separadamente o comportamento de uma instalação nova e de uma atualização sobre a anterior. O <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/docs/PAINEL-PRIVADO.md">painel privado documentado no código</a> explica a alternativa de rede privada.</p>
+<p>Uma correção no HTML/CSS servido pela Central pode aparecer no app e no navegador sem reinstalar. Mudar a tela de abertura, o endereço compilado, o comportamento do WebView ou os recursos incluídos no pacote pode exigir novo APK. Para testar uma atualização, confira um fluxo autenticado nas duas interfaces e confira separadamente o comportamento de uma instalação nova e de uma atualização sobre a anterior. O <span title="Referência a material não publicado">painel privado documentado no código</span> explica a alternativa de rede privada.</p>
 <h2 id="exercicio-funciona-no-pc-falha-no-5g">Exercício: funciona no PC, falha no 5G</h2>
 <p>A Central abre no computador. No 5G, a página de login carrega, mas Chamados devolve 401. Qual parte você já sabe que respondeu?</p>
 <p><strong>Resposta:</strong> houve resolução de nome, conexão HTTPS e uma resposta que chegou à tela. O 401 em Chamados não prova queda do coletor e aponta para autenticação ausente ou inválida. Verifique a sessão e a requisição específica antes de reiniciar os processos. Se o transporte nem abre, o problema é outro.</p>
@@ -82,8 +82,7 @@
     <nav class="footer-links" aria-label="Links do projeto">
       <a href="../">Arquitetura</a>
       <a href="../estudos/">Estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico">Código do blog</a>
     </nav>
     <div class="footer-note">
       <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>

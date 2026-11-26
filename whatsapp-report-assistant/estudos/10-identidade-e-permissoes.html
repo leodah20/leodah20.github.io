@@ -31,7 +31,7 @@
     <nav class="site-nav" aria-label="Navegação principal">
       <a href="../">Arquitetura</a>
       <a href="../estudos/" aria-current="page">Blog de estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico" rel="noopener">GitHub do blog</a>
     </nav>
   </div>
 </header>
@@ -57,7 +57,7 @@
   P --&gt;|Sim| A[Executar e atribuir à conta]</code></pre></template></div><p class="diagram-hint">Em telas estreitas, deslize para o lado para ver o diagrama completo.</p><noscript><p class="diagram-fallback">Ative o JavaScript para visualizar este diagrama.</p></noscript></figure>
 <h2 id="um-exemplo-de-menor-privilegio">Um exemplo de menor privilégio</h2>
 <p>Suponha que um colaborador possa ler chamados de CFTV e acrescentar uma nota, mas não administrar contas. Ele deve conseguir gravar a nota no chamado autorizado e receber uma recusa em operações administrativas. O servidor deve verificar também o chamado que está sendo modificado, não apenas o menu aberto. Esconder um botão melhora a interface, mas não é controle de acesso.</p>
-<p>O console de Operações tem fronteira própria: login administrativo na Central remota <strong>não</strong> o torna acessível pelo APK ou pelo túnel. Isso reduz o alcance de uma sessão remota e mantém inventário, tráfego e dados de diagnóstico fora da Central. Veja a <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/docs/PAINEL-PRIVADO.md">documentação pública do painel privado</a> para comparar com o caminho da rede privada.</p>
+<p>O console de Operações tem fronteira própria: login administrativo na Central remota <strong>não</strong> o torna acessível pelo APK ou pelo túnel. Isso reduz o alcance de uma sessão remota e mantém inventário, tráfego e dados de diagnóstico fora da Central. Veja a <span title="Referência a material não publicado">documentação pública do painel privado</span> para comparar com o caminho da rede privada.</p>
 <h2 id="quem-fez-o-que-sem-registrar-segredos">Quem fez o quê sem registrar segredos</h2>
 <p>O perfil vem da sessão autenticada; o endereço observado ajuda no diagnóstico da conexão, não confirma autoria. Duas contas podem compartilhar um IP de saída e a mesma conta pode alternar entre Wi-Fi e 5G. A trilha registra apenas o necessário para explicar a ação. Nunca registre senhas, cookies, tokens ou conteúdo de chamados num log HTTP de aprendizado.</p>
 <p>Quando permitido, descarte sessões inválidas e verifique permissões em cada ação. Cookies de sessão e validações de origem não se substituem; uma sessão legítima ainda precisa de autorização. Para aprofundar: <a href="https://owasp.org/projects/top-ten">OWASP Top 10</a>, em especial controle de acesso e autenticação.</p>
@@ -82,8 +82,7 @@
     <nav class="footer-links" aria-label="Links do projeto">
       <a href="../">Arquitetura</a>
       <a href="../estudos/">Estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico">Código do blog</a>
     </nav>
     <div class="footer-note">
       <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>

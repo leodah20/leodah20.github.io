@@ -30,7 +30,7 @@
     <nav class="site-nav" aria-label="Navegação principal">
       <a href="../">Arquitetura</a>
       <a href="../estudos/" aria-current="page">Blog de estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico" rel="noopener">GitHub do blog</a>
     </nav>
   </div>
 </header>
@@ -52,7 +52,7 @@
 <div class="table-wrap"><table><thead><tr><th>Tela</th><th>Estrutura</th><th>Comportamento</th><th>Estilo</th></tr></thead><tbody><tr><td>Configuração</td><td><code>web/setup.html</code></td><td><code>web/setup.js</code></td><td><code>web/setup.css</code></td></tr><tr><td>Central</td><td><code>web/cases.html</code></td><td><code>web/cases.js</code></td><td><code>web/cases.css</code></td></tr><tr><td>Histórico</td><td><code>web/history.html</code></td><td><code>web/history.js</code></td><td>Veja folhas vinculadas no HTML</td></tr><tr><td>Fechamento</td><td><code>web/closing.html</code></td><td><code>web/closing.js</code></td><td><code>web/closing.css</code></td></tr><tr><td>Minuta</td><td><code>web/draft.html</code></td><td><code>web/draft.js</code></td><td><code>web/draft.css</code></td></tr></tbody></table></div>
 <p>São arquivos entregues diretamente pelo servidor. O JavaScript manipula o DOM, sem React/Vue no código atual. DOM é a representação em memória dos elementos HTML; mudar um nó altera a tela.</p>
 <h2 id="5-2-leia-a-central-em-cinco-etapas">5.2 Leia a Central em cinco etapas</h2>
-<p>Abra <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/web/cases.js">cases.js</a> e siga:</p>
+<p>Abra <span title="Referência a material não publicado">cases.js</span> e siga:</p>
 <ol><li><strong>Helpers:</strong> <code>$</code> encontra elementos por ID; <code>node</code> cria elementos; <code>button</code> associa ações.</li><li><strong>Estado:</strong> <code>model</code>, <code>selected</code>, <code>detail</code>, <code>tab</code> e <code>contextDirty</code> guardam a situação atual da interface.</li><li><strong>Rede:</strong> o wrapper adiciona o caminho da API, impõe timeout e converte erros HTTP em exceções. Em exemplos públicos, usamos somente caminhos fictícios.</li><li><strong>Renderização:</strong> <code>renderList</code> e <code>renderDetail</code> representam o estado atual em elementos.</li><li><strong>Interação:</strong> eventos alteram filtros, abrem chamados ou submetem operações; a resposta atualiza o estado exibido.</li></ol>
 <h3 id="estado-local-nao-e-banco">Estado local não é banco</h3>
 <p>Digitar num formulário muda a interface. Só a operação de salvar persiste a alteração aceita pelo servidor. Fechar a tela antes disso pode perder o preenchimento.</p>
@@ -101,8 +101,7 @@
     <nav class="footer-links" aria-label="Links do projeto">
       <a href="../">Arquitetura</a>
       <a href="../estudos/">Estudos</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
-      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+      <a href="https://github.com/leodah20/runavolt-blog-publico">Código do blog</a>
     </nav>
     <div class="footer-note">
       <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
