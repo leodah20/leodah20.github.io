@@ -2,6 +2,8 @@ name: Atualizar blog Runavolt
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
 
 permissions:
   contents: write
@@ -21,20 +23,23 @@ jobs:
           node-version: 24
       - name: Obter apenas a fonte pública do blog
         run: git clone --depth 1 https://github.com/leodah20/runavolt-blog-publico.git "$RUNNER_TEMP/blog-fonte"
-      - name: Validar e gerar a prévia
+      - name: Validar e gerar o blog
         run: |
           node --test "$RUNNER_TEMP/blog-fonte/tests/site.test.mjs"
-          node "$RUNNER_TEMP/blog-fonte/scripts/build-site.mjs" --out "$GITHUB_WORKSPACE/blog-validacao-runavolt"
-      - name: Salvar apenas a pasta de validação
+          node "$RUNNER_TEMP/blog-fonte/scripts/build-site.mjs" --out "$GITHUB_WORKSPACE/whatsapp-report-assistant"
+      - name: Salvar apenas a pasta do blog
+        id: salvar
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- blog-validacao-runavolt
+          git add -- whatsapp-report-assistant
           if ! git diff --cached --quiet; then
-            git commit -m 'Atualiza prévia isolada do blog'
+            git commit -m 'Atualiza blog Runavolt'
             git push
+            echo 'alterado=true' >> "$GITHUB_OUTPUT"
           fi
       - name: Solicitar atualização do GitHub Pages
+        if: steps.salvar.outputs.alterado == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api --method POST "repos/${{ github.repository }}/pages/builds"
