@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratório e glossário · Estudos Runavolt</title>
+<meta name="description" content="Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/08-laboratorio-e-glossario.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Laboratório e glossário · Estudos Runavolt">
+<meta property="og:description" content="Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/08-laboratorio-e-glossario.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 08</li></ul>
+<p class="eyebrow">Capítulo 08 · Série de estudos</p>
+<h1>Laboratório e glossário</h1>
+<p class="lead">Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Fundamentos</li><li>6 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="antes-de-ir-para-a-operacao">Antes de ir para a operação</h2>
+<p>Depois dos exercícios básicos, tente explicar três pares: túnel e ponte; IP observado e identidade da sessão; cópia feita e restauração comprovada. As respostas estão nos capítulos <a href="./09-acesso-remoto-e-android.html">9</a>, <a href="./10-identidade-e-permissoes.html">10</a> e <a href="./13-backup-e-continuidade.html">13</a>. Não é preciso usar a Central de produção para fazer o exercício.</p>
+<h2 id="8-1-metodo-para-explorar-qualquer-funcao">8.1 Método para explorar qualquer função</h2>
+<p>Preencha uma ficha:</p>
+<div class="code-block"><pre><code class="language-text">Arquivo e símbolo:
+Objetivo no negócio:
+Entradas e tipos esperados:
+Quem chama:
+Validações e limites:
+Dados consultados:
+Transformações:
+Efeitos (banco, rede, arquivo, envio):
+Saída:
+Como falha:
+Teste que cobre o comportamento:</code></pre></div>
+<p>Essa ficha é mais útil que tentar decorar todas as linhas. Depois conecte a saída de uma função à entrada da seguinte.</p>
+<h2 id="8-2-exercicios-progressivos">8.2 Exercícios progressivos</h2>
+<h3 id="a-escopo-primeiro-contato">A. Escopo · primeiro contato</h3>
+<p>Leia <code>groupOf</code> e <code>inScope</code> em <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/core.mjs">core.mjs</a>. Use apenas estes valores sintéticos:</p>
+<div class="table-wrap"><table><thead><tr><th>Mensagem</th><th>Grupo fixado</th><th>Pausado</th><th>Deve capturar?</th></tr></thead><tbody><tr><td><code>from: estudo@g.us</code></td><td><code>estudo@g.us</code></td><td>Não</td><td>?</td></tr><tr><td><code>from: outro@g.us</code></td><td><code>estudo@g.us</code></td><td>Não</td><td>?</td></tr><tr><td><code>fromMe: true, to: estudo@g.us</code></td><td><code>estudo@g.us</code></td><td>Não</td><td>?</td></tr><tr><td><code>from: estudo@g.us</code></td><td><code>estudo@g.us</code></td><td>Sim</td><td>?</td></tr><tr><td><code>from: estudo@g.us</code></td><td>Nenhum</td><td>Não</td><td>?</td></tr></tbody></table></div>
+<p><strong>Resposta:</strong> sim, não, sim, não, não, considerando os demais campos válidos e ausência de status. Explique por que mensagens próprias usam <code>to</code>.</p>
+<h3 id="b-datas-diferenca-entre-instante-e-calendario">B. Datas · diferença entre instante e calendário</h3>
+<p>Leia <code>monthOf</code> e seu teste. Às <code>2026-11-01T01:00:00Z</code>, qual competência corresponde ao fuso de São Paulo usado no código?</p>
+<p><strong>Resposta:</strong> outubro. UTC e calendário local atravessam a fronteira do mês em horários diferentes. Isso ainda não determina a data real de um atendimento mencionado no texto.</p>
+<h3 id="c-request-rastreio-vertical">C. Request · rastreio vertical</h3>
+<p>Desenhe a consulta de uma competência com estas caixas: <code>web/cases.js</code>, <code>createCaseHandler</code>, <code>CaseBoard.list</code>, SQLite e renderização. Marque em que ponto cada responsabilidade acontece:</p>
+<ul><li>conferir cookie;</li><li>validar o mês;</li><li>calcular resumos;</li><li>filtrar visualmente por frente;</li><li>serializar JSON.</li></ul>
+<p><strong>Orientação:</strong> cookie e resposta JSON ficam no handler; mês e resumo no domínio; filtro visual em <code>renderList</code>. O banco devolve dados, não elementos HTML.</p>
+<h3 id="d-conflito-duas-janelas">D. Conflito · duas janelas</h3>
+<p>Ambas leem <code>version: 2</code>. A primeira salva uma nota. A segunda tenta salvar sem recarregar. Preveja o status e a ação esperada.</p>
+<p><strong>Resposta:</strong> conflito <code>409</code>; recarregar, conferir a alteração e decidir a nova edição. Não basta aumentar manualmente o número e reenviar sem revisar.</p>
+<h3 id="e-ia-estrutura-e-evidencia">E. IA · estrutura e evidência</h3>
+<p>Fonte fictícia: “Detector da bancada aguardando troca.” O modelo devolve <code>quote: &quot;Detector substituído e normalizado&quot;</code>. Siga <code>validateAnalysis</code>.</p>
+<p><strong>Resposta:</strong> o trecho não está na fonte e não deve virar fato aceito. Os campos correspondentes continuam faltando. Um JSON bem formado pode conter conteúdo sem sustentação.</p>
+<h3 id="f-recuperacao-falha-no-meio">F. Recuperação · falha no meio</h3>
+<p>Um trabalho foi marcado <code>processing</code> quando o processo terminou. O que acontece na próxima inicialização de <code>RecoveryQueue</code>? Por que um ID único importa?</p>
+<p><strong>Resposta:</strong> volta a <code>pending</code>. A mesma fonte pode ser reencontrada pela sobreposição da janela; a chave primária impede duplicar a entrada da fila. Isso não resolve sozinho uma entrega externa incerta.</p>
+<h3 id="g-fechamento-revisao-invalidada">G. Fechamento · revisão invalidada</h3>
+<p>O usuário confirmou fontes; depois uma nova resposta foi vinculada ao chamado. Compare o cálculo de <code>stamp</code> com <code>sourceReviewState</code> em <code>MonthlyClosing</code>.</p>
+<p><strong>Resposta:</strong> a mudança relevante altera o resumo criptográfico e a revisão fica <code>stale</code>. É preciso conferir novamente; a aprovação anterior se referia a outro conjunto de informações.</p>
+<h3 id="h-arquitetura-pequena-melhoria-no-papel">H. Arquitetura · pequena melhoria no papel</h3>
+<p>Proponha um rótulo mais claro para uma lacuna de contexto, usando uma fonte fictícia. Liste:</p>
+<ol><li>Critério de aceite visível ao usuário.</li><li>Arquivos que provavelmente mudariam.</li><li>Se muda só apresentação ou também contrato de API.</li><li>Qual verificação existente seria pertinente.</li></ol>
+<p>Não é preciso implementar para aprender. Se for implementar depois, mantenha a mudança isolada e use ambiente sintético; não inicie coleta real como experimento.</p>
+<h2 id="8-3-roteiros-de-leitura-por-interesse">8.3 Roteiros de leitura por interesse</h2>
+<ul><li><strong>Quero entender JavaScript:</strong> <code>core.mjs</code> → testes do core → <code>stage.mjs</code> → helper <code>api</code> e <code>renderList</code> da Central.</li><li><strong>Quero entender backend/API:</strong> servidor em <code>app.mjs</code> → <code>createCaseHandler</code> → <code>CaseBoard.change</code> → testes de chamados.</li><li><strong>Quero entender banco:</strong> instruções <code>CREATE TABLE</code> → <code>save</code> do assistente → transação de <code>change</code> → fechamento.</li><li><strong>Quero entender redes:</strong> mapa de processos → request da interface → <code>verifyTransport</code> → diferença entre stdio e HTTP.</li><li><strong>Quero entender automação Windows:</strong> <code>start.ps1</code> → política do watchdog → laço do watchdog → funções do runtime.</li><li><strong>Quero entender IA:</strong> <code>analyzeSources</code> → <code>validateAnalysis</code> → <code>suggestNarrative</code> → pacote de contexto → ferramentas MCP.</li></ul>
+<h2 id="8-4-glossario-essencial">8.4 Glossário essencial</h2>
+<div class="table-wrap"><table><thead><tr><th>Termo</th><th>Explicação</th></tr></thead><tbody><tr><td>API</td><td>Contrato para um componente pedir operações ou dados a outro</td></tr><tr><td>Endpoint</td><td>Um ponto de acesso, frequentemente método + caminho HTTP</td></tr><tr><td>Request / response</td><td>Pedido e resposta numa interação</td></tr><tr><td>Header</td><td>Metadado de uma mensagem HTTP</td></tr><tr><td>Payload / body</td><td>Conteúdo transportado ou armazenado</td></tr><tr><td>JSON</td><td>Formato textual de objetos, listas e valores</td></tr><tr><td>Cookie</td><td>Dado que o navegador guarda e envia conforme regras de escopo</td></tr><tr><td>Origin</td><td>Combinação de protocolo, host e porta</td></tr><tr><td>Loopback</td><td>Rede da própria máquina</td></tr><tr><td>Porta</td><td>Identificador de serviço num endereço de rede</td></tr><tr><td>DNS</td><td>Resolução de nomes para endereços; um IP literal não precisa dessa resolução</td></tr><tr><td>TCP</td><td>Transporte com conexão e fluxo ordenado de bytes</td></tr><tr><td>TLS</td><td>Proteção criptográfica de transporte usada em HTTPS</td></tr><tr><td>DOM</td><td>Estrutura de elementos manipulada pelo navegador</td></tr><tr><td>Event loop</td><td>Mecanismo que agenda callbacks e trabalho assíncrono do runtime</td></tr><tr><td>Promise</td><td>Representação de resultado futuro ou falha</td></tr><tr><td>Debounce</td><td>Espera/agrupamento para evitar processar cada evento imediatamente</td></tr><tr><td>Timeout</td><td>Limite de tempo de espera</td></tr><tr><td>Retry / backoff</td><td>Nova tentativa / intervalo entre tentativas, frequentemente crescente</td></tr><tr><td>Heartbeat</td><td>Sinal periódico de atividade</td></tr><tr><td>Mutex</td><td>Mecanismo de exclusão mútua entre execuções</td></tr><tr><td>Idempotência</td><td>Repetir uma operação tem o mesmo efeito relevante que executá-la uma vez</td></tr><tr><td>Transação</td><td>Conjunto de alterações confirmado ou revertido em bloco</td></tr><tr><td>Índice</td><td>Estrutura que acelera certos padrões de consulta</td></tr><tr><td>WAL</td><td>Registro de alterações do SQLite separado do arquivo principal durante operação</td></tr><tr><td>Hash / fingerprint</td><td>Resumo usado para comparar conteúdo; não é criptografia reversível</td></tr><tr><td>AAD</td><td>Dado associado autenticado junto da cifra, sem precisar estar cifrado</td></tr><tr><td>Token de sessão</td><td>Valor aleatório usado para reconhecer uma sessão</td></tr><tr><td>Token de modelo</td><td>Unidade de representação textual usada pelo modelo e no cálculo de consumo</td></tr><tr><td>MCP</td><td>Protocolo de descoberta e chamada de ferramentas por clientes de IA</td></tr><tr><td>stdio</td><td>Entrada e saída padrão de um processo</td></tr><tr><td>Mock / fake</td><td>Substituto controlado de uma dependência durante teste</td></tr><tr><td>Regressão</td><td>Comportamento que deixa de funcionar após uma mudança</td></tr><tr><td>Worktree</td><td>Pasta de trabalho associada a um repositório Git</td></tr></tbody></table></div>
+<h2 id="8-5-referencias-para-aprofundar">8.5 Referências para aprofundar</h2>
+<ul><li><a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide">JavaScript · MDN</a></li><li><a href="https://developer.mozilla.org/pt-BR/docs/Web/HTTP">HTTP · MDN</a></li><li><a href="https://nodejs.org/api/">Node.js · documentação</a></li><li><a href="https://docs.python.org/pt-br/3/tutorial/">Python · tutorial</a></li><li><a href="https://learn.microsoft.com/pt-br/powershell/">PowerShell · documentação</a></li><li><a href="https://www.sqlite.org/lang_transaction.html">SQLite · transações</a></li><li><a href="https://www.sqlite.org/wal.html">SQLite · WAL</a></li><li><a href="https://git-scm.com/book/pt-br/v2">Git · livro</a></li><li><a href="https://docs.ollama.com/api">Ollama · API</a></li><li><a href="https://modelcontextprotocol.io/docs/getting-started/intro">MCP · documentação</a></li><li><a href="https://owasp.org/www-project-top-ten/">OWASP · segurança de aplicações</a></li></ul>
+<p>Leia referências externas junto do contrato efetivamente usado no repositório: versões e capacidades das bibliotecas podem diferir de exemplos mais recentes.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./07-scripts-ferramentas-e-testes.html"><small>Capítulo anterior</small><strong>Scripts, ferramentas e testes</strong></a><a class="next" href="./09-acesso-remoto-e-android.html"><small>Próximo capítulo</small><strong>Acesso remoto e Android</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#antes-de-ir-para-a-operacao">Antes de ir para a operação</a></li><li><a href="#8-1-metodo-para-explorar-qualquer-funcao">8.1 Método para explorar qualquer função</a></li><li><a href="#8-2-exercicios-progressivos">8.2 Exercícios progressivos</a></li><li><a href="#8-3-roteiros-de-leitura-por-interesse">8.3 Roteiros de leitura por interesse</a></li><li><a href="#8-4-glossario-essencial">8.4 Glossário essencial</a></li><li><a href="#8-5-referencias-para-aprofundar">8.5 Referências para aprofundar</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

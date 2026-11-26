@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fluxo dos dados e persistência · Estudos Runavolt</title>
+<meta name="description" content="Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/03-fluxo-de-dados.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Fluxo dos dados e persistência · Estudos Runavolt">
+<meta property="og:description" content="Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/03-fluxo-de-dados.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 03</li></ul>
+<p class="eyebrow">Capítulo 03 · Série de estudos</p>
+<h1>Fluxo dos dados e persistência</h1>
+<p class="lead">Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Produto e dados</li><li>6 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="tres-identidades-que-nao-devem-virar-uma">Três identidades que não devem virar uma</h2>
+<p>Mensagem, mídia e chamado têm identidades diferentes. Uma resposta repetida pode aparecer uma vez no histórico sem apagar as fontes; duas fotos com a mesma legenda devem continuar distintas. Um vínculo com o chamado não substitui o registro original. Veja <a href="./11-evidencias-multimidia.html">Evidências multimídia</a>.</p>
+<h2 id="3-1-da-mensagem-ao-chamado">3.1 Da mensagem ao chamado</h2>
+<p>Siga os símbolos em <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/app.mjs">app.mjs</a>, <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/core.mjs">core.mjs</a> e <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/assistant/assistant.mjs">assistant.mjs</a>:</p>
+<ol><li><code>message_create</code> informa uma mensagem ao cliente.</li><li><code>inScope</code> confere grupo fixado, pausa e tipo de origem. Mensagem própria usa o destino (<code>to</code>); recebida usa a origem (<code>from</code>).</li><li><code>enqueue</code> ordena a captura; <code>capture</code> aplica também condições de recuperação e tempo.</li><li><code>recordOf</code> cria um registro normalizado com ID, timestamp, competência, texto limitado e estado de revisão.</li><li>O ID é consultado no SQLite. Se já existir, só certos enriquecimentos pendentes justificam nova captura.</li><li>O texto é criptografado e salvo antes de tentar baixar a mídia.</li><li>Mídia e resposta citada são buscadas quando cabíveis. O registro recebe estados como <code>saved</code>, <code>failed</code>, <code>unavailable</code> ou <code>too-large</code>.</li><li>No fluxo normal, o registro vai à recuperação persistente quando habilitada, ou diretamente a <code>assistant.accept</code>.</li><li>O assistente distingue texto próprio, resposta vinculada, conversa sem relevância e candidato a novo chamado.</li><li>Entradas pendentes são agrupadas; a análise local propõe fatos literais e vínculos.</li><li>A validação confere fontes e citações. O chamado e os vínculos são gravados numa transação.</li><li>Sob autorização e limites, segue uma confirmação de cadastro <strong>ou</strong> uma pergunta. Respostas têm confirmação própria.</li></ol>
+<p><strong>Importação histórica tem caminho diferente:</strong> <code>importMonth</code> usa captura com <code>override=true</code>, preservando fontes sem disparar automaticamente o mesmo fluxo de entrada nova. O Histórico permite revisar e organizar essas fontes depois.</p>
+<h2 id="3-2-forma-de-um-registro">3.2 Forma de um registro</h2>
+<p>Exemplo simplificado, fictício e apenas didático:</p>
+<div class="code-block"><pre><code class="language-json">{
+  &quot;id&quot;: &quot;fonte-sintetica-1&quot;,
+  &quot;timestamp&quot;: 1793451600,
+  &quot;month&quot;: &quot;2026-10&quot;,
+  &quot;text&quot;: &quot;Câmera de bancada aguardando fonte de alimentação.&quot;,
+  &quot;type&quot;: &quot;chat&quot;,
+  &quot;fromMe&quot;: false,
+  &quot;hasMedia&quot;: false,
+  &quot;mediaState&quot;: &quot;none&quot;,
+  &quot;review&quot;: &quot;unreviewed&quot;
+}</code></pre></div>
+<p>O timestamp acima representa um instante que ainda pertence a outubro em São Paulo, embora já seja novembro em UTC. O código calcula <code>month</code>; ele não deve ser preenchido por suposição. O registro normalizado pode receber campos adicionais ao longo da captura, como <code>quotedId</code>, <code>mime</code> e estado de mídia.</p>
+<h2 id="3-3-entidades-e-tabelas">3.3 Entidades e tabelas</h2>
+<p>O esquema está nas instruções <code>CREATE TABLE</code> dos próprios módulos. Não é necessário abrir o banco privado para estudá-lo.</p>
+<div class="table-wrap"><table><thead><tr><th>Tabela</th><th>Papel</th><th>Onde é criada</th></tr></thead><tbody><tr><td><code>messages</code></td><td>Metadados indexáveis, payload e mídia das fontes</td><td><code>app.mjs</code></td></tr><tr><td><code>assistant_items</code></td><td>Chamados propostos e seus fatos/estados</td><td><code>assistant.mjs</code></td></tr><tr><td><code>assistant_inbox</code></td><td>Entradas pendentes, processadas, respostas ou ignoradas</td><td><code>assistant.mjs</code></td></tr><tr><td><code>assistant_links</code></td><td>Identificador de mensagem → chamado</td><td><code>assistant.mjs</code></td></tr><tr><td><code>assistant_receipts</code></td><td>Diário das confirmações de respostas</td><td><code>receipts.mjs</code></td></tr><tr><td><code>recovery_meta</code></td><td>Configuração, checkpoint e dados da recuperação</td><td><code>recovery.mjs</code></td></tr><tr><td><code>recovery_jobs</code></td><td>Fila persistente com estado e próxima tentativa</td><td><code>recovery.mjs</code></td></tr><tr><td><code>case_profiles</code></td><td>Contexto humano, versão, eventos e tarefas</td><td><code>board.mjs</code></td></tr><tr><td><code>monthly_closings</code></td><td>Revisões e ajustes por competência</td><td><code>closing.mjs</code></td></tr></tbody></table></div>
+<p>A fonte é preservada separadamente das correções humanas do perfil. <code>CaseBoard.detail</code> combina os dois para exibir o contexto. Um campo confirmado no perfil pode prevalecer na apresentação sem apagar a fonte original.</p>
+<p>Alguma documentação anterior cita <code>collection_notices</code>; o código atual consultado não cria essa tabela. Para aprender o esquema vigente, priorize as declarações dos módulos acima, sem presumir que um banco existente esteja livre de estruturas históricas.</p>
+<h2 id="3-4-consultas-parametrizadas-indices-e-transacoes">3.4 Consultas parametrizadas, índices e transações</h2>
+<div class="code-block"><pre><code class="language-sql">-- Exemplo de consulta presente no desenho do sistema.
+SELECT id, payload FROM messages WHERE month = ? ORDER BY ts LIMIT 500;</code></pre></div>
+<p>O <code>?</code> recebe o parâmetro via driver; o valor não é concatenado ao SQL. O índice <code>month_ts</code> ajuda consultas por competência e ordem temporal.</p>
+<p>Uma transação usa <code>BEGIN IMMEDIATE</code>, <code>COMMIT</code> e <code>ROLLBACK</code> para manter um conjunto de alterações coerente. Ao criar um chamado, não queremos salvar o item e esquecer de marcar suas fontes como processadas. Se uma etapa do bloco falhar, o rollback evita a aplicação parcial daquele bloco.</p>
+<p>SQLite roda em modo WAL. Isso melhora a convivência entre operações de leitura e escrita, mas não cria vários escritores simultâneos sem contenção. Também significa que copiar apenas o arquivo principal durante uso não deve ser considerado um backup completo e consistente.</p>
+<h2 id="3-5-criptografia-de-payloads">3.5 Criptografia de payloads</h2>
+<p><code>seal</code> e <code>open</code>, em <code>core.mjs</code>, usam AES-256-GCM:</p>
+<div class="code-block"><pre><code class="language-text">armazenado = IV de 12 bytes + conteúdo cifrado + tag de autenticação de 16 bytes</code></pre></div>
+<p>AAD é um dado associado autenticado, como o ID da fonte. Ele vincula o conteúdo ao contexto esperado: uma cifra de uma fonte não deve ser aceita sob outro ID. Node e Python precisam concordar em algoritmo, formato binário e AAD.</p>
+<p>A chave fica numa credencial Windows específica, acessada por <code>vault.py</code>. Metadados de índice, como IDs, competência, timestamps e alguns estados, continuam em claro. Isso é criptografia de determinados conteúdos, não de cada byte do arquivo SQLite nem do perfil do navegador.</p>
+<h2 id="3-6-duas-filas-e-dois-tipos-de-falha">3.6 Duas filas e dois tipos de falha</h2>
+<div class="table-wrap"><table><thead><tr><th>Mecanismo</th><th>Para que serve</th><th>Sobrevive ao reinício?</th></tr></thead><tbody><tr><td>Promise de <code>enqueue</code></td><td>Ordenar trabalho de captura no processo</td><td>Não</td></tr><tr><td><code>recovery_jobs</code></td><td>Retomar entrega de fontes arquivadas ao assistente</td><td>Sim</td></tr><tr><td><code>assistant_inbox</code></td><td>Guardar o trabalho de análise pendente</td><td>Sim</td></tr></tbody></table></div>
+<p>Em <code>RecoveryQueue</code>, trabalhos percorrem <code>pending → processing → done</code>. Na inicialização, <code>processing</code> volta a <code>pending</code>: o processo anterior pode ter terminado antes de concluir. Falhas recebem nova tentativa futura. IDs únicos evitam inserir o mesmo trabalho repetidamente.</p>
+<p>A janela de recuperação inclui sobreposição no checkpoint para reencontrar eventos próximos da fronteira. Isso exige deduplicação. A disponibilidade do histórico externo continua limitada pelo WhatsApp.</p>
+<p>Já um envio pode ter sido entregue antes de uma queda impedir a confirmação. O estado <code>delivery-uncertain</code> representa essa incerteza; repetir cegamente pode duplicar mensagens. Persistência local não elimina esse problema distribuído.</p>
+<h2 id="3-7-edicao-humana-e-conflito-de-versoes">3.7 Edição humana e conflito de versões</h2>
+<p><code>CaseBoard.change</code> exige a versão lida pelo formulário. Suponha:</p>
+<div class="code-block"><pre><code class="language-text">Janela A lê versão 3 ── salva ──&gt; versão 4
+Janela B leu versão 3 ─ tenta salvar ─&gt; HTTP 409; precisa recarregar</code></pre></div>
+<p>Esse mecanismo é concorrência otimista. O evento guarda quando a alteração foi registrada; <code>occurredOn</code>, quando fornecido, identifica o dia do fato. A atualização do perfil não dispara mensagem de WhatsApp.</p>
+<h2 id="3-8-do-acompanhamento-ao-fechamento">3.8 Do acompanhamento ao fechamento</h2>
+<p><code>MonthlyClosing</code> reúne candidatos, revisão de fontes, anexos escolhidos, decisões de inclusão, narrativa e preventivas. Um hash (<code>stamp</code>) resume elementos relevantes. Se as fontes/perfil mudam, a revisão anterior fica desatualizada.</p>
+<ul><li>Confirmar fontes não equivale a aprovar a narrativa.</li><li>O pacote de contexto seleciona fontes e anexos revisados para TXT/ZIP.</li><li>Um fingerprint confere se o conteúdo continua igual entre preparar e baixar o pacote.</li><li>A minuta imprimível só é liberada quando as verificações exigidas passam.</li><li>Nada disso autoriza inventar datas de serviço nem substituir um arquivo final entregue.</li></ul>
+<p><strong>Exercício:</strong> desenhe uma coluna para a fonte, outra para a sugestão automática e outra para a confirmação humana. Distribua os campos retornados por <code>CaseBoard.detail</code>.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./02-linguagens-e-principios.html"><small>Capítulo anterior</small><strong>Linguagens e princípios</strong></a><a class="next" href="./04-http-apis-e-redes.html"><small>Próximo capítulo</small><strong>HTTP, APIs e redes</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#tres-identidades-que-nao-devem-virar-uma">Três identidades que não devem virar uma</a></li><li><a href="#3-1-da-mensagem-ao-chamado">3.1 Da mensagem ao chamado</a></li><li><a href="#3-2-forma-de-um-registro">3.2 Forma de um registro</a></li><li><a href="#3-3-entidades-e-tabelas">3.3 Entidades e tabelas</a></li><li><a href="#3-4-consultas-parametrizadas-indices-e-transacoes">3.4 Consultas parametrizadas, índices e transações</a></li><li><a href="#3-5-criptografia-de-payloads">3.5 Criptografia de payloads</a></li><li><a href="#3-6-duas-filas-e-dois-tipos-de-falha">3.6 Duas filas e dois tipos de falha</a></li><li><a href="#3-7-edicao-humana-e-conflito-de-versoes">3.7 Edição humana e conflito de versões</a></li><li><a href="#3-8-do-acompanhamento-ao-fechamento">3.8 Do acompanhamento ao fechamento</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

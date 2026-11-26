@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acesso remoto e Android · Estudos Runavolt</title>
+<meta name="description" content="Do 5G ao computador: diferencie HTTPS, túnel, ponte, VPN e o pacote instalável.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/09-acesso-remoto-e-android.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Acesso remoto e Android · Estudos Runavolt">
+<meta property="og:description" content="Do 5G ao computador: diferencie HTTPS, túnel, ponte, VPN e o pacote instalável.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/09-acesso-remoto-e-android.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+<script defer src="../assets/vendor/mermaid/mermaid.min.js"></script>
+<script defer src="../assets/mermaid-init.js"></script>
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 09</li></ul>
+<p class="eyebrow">Capítulo 09 · Série de estudos</p>
+<h1>Acesso remoto e Android</h1>
+<p class="lead">Do 5G ao computador: diferencie HTTPS, túnel, ponte, VPN e o pacote instalável.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Redes e operação</li><li>3 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="do-5g-a-mesma-central">Do 5G à mesma Central</h2>
+<p>Imagine a portaria de um prédio. O endereço te leva ao lugar certo, a porta protege o caminho e a credencial decide onde você pode entrar. No piloto, o APK abre o endereço HTTPS da Central. Não carrega um segundo banco nem faz o papel de servidor.</p>
+<figure class="diagram"><figcaption>Diagrama Mermaid</figcaption><div class="diagram-canvas"><p class="diagram-loading">Carregando diagrama…</p><template class="diagram-source"><pre><code class="language-mermaid">flowchart LR
+  A[Android ou navegador] --&gt;|HTTPS| B[Gateway do túnel]
+  B --&gt; C[Agente no computador]
+  C --&gt; D[Ponte da Central]
+  D --&gt;|Sessão e rota permitidas| E[API local]
+  E --&gt; F[(SQLite e evidências)]</code></pre></template></div><p class="diagram-hint">Em telas estreitas, deslize para o lado para ver o diagrama completo.</p><noscript><p class="diagram-fallback">Ative o JavaScript para visualizar este diagrama.</p></noscript></figure>
+<p>O <strong>túnel</strong> entrega o tráfego ao computador sem tornar a porta do coletor o endereço público. A <strong>ponte</strong> aceita um conjunto explícito de rotas e aplica login e verificações antes de repassar. O <strong>coletor</strong> arquiva fontes e mantém a aplicação. Desligar o computador remove a origem, ainda que o endereço continue resolvendo. O ngrok não hospeda SQLite ou Ollama. Leia a <a href="https://ngrok.com/docs/gateway/endpoints/http">documentação de endpoints HTTPS do ngrok</a>.</p>
+<h2 id="dois-acessos-duas-fronteiras">Dois acessos, duas fronteiras</h2>
+<div class="table-wrap"><table><thead><tr><th>Acesso</th><th>Primeiro controle</th><th>O que continua necessário</th></tr></thead><tbody><tr><td>Particular, por Tailscale Serve</td><td>Dispositivo e conta dentro da tailnet</td><td>Permissão do painel; servidor disponível</td></tr><tr><td>Piloto sem VPN, por túnel HTTPS</td><td>Endereço público e certificado válido</td><td>Login individual, sessão, permissão e servidor disponível</td></tr><tr><td>GitHub Pages</td><td>Nenhum login da Central</td><td>É documentação estática; não há conexão com a API real</td></tr></tbody></table></div>
+<p>Uma VPN inclui o dispositivo numa rede privada. Um túnel para a Central entrega apenas o serviço explicitamente encaminhado. Um acesso local continua sendo útil para diagnóstico, mesmo se a borda ou a rede do celular estiverem fora.</p>
+<h2 id="o-que-muda-quando-o-apk-atualiza">O que muda quando o APK atualiza</h2>
+<p>Uma correção no HTML/CSS servido pela Central pode aparecer no app e no navegador sem reinstalar. Mudar a tela de abertura, o endereço compilado, o comportamento do WebView ou os recursos incluídos no pacote pode exigir novo APK. Para testar uma atualização, confira um fluxo autenticado nas duas interfaces e confira separadamente o comportamento de uma instalação nova e de uma atualização sobre a anterior. O <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/docs/PAINEL-PRIVADO.md">painel privado documentado no código</a> explica a alternativa de rede privada.</p>
+<h2 id="exercicio-funciona-no-pc-falha-no-5g">Exercício: funciona no PC, falha no 5G</h2>
+<p>A Central abre no computador. No 5G, a página de login carrega, mas Chamados devolve 401. Qual parte você já sabe que respondeu?</p>
+<p><strong>Resposta:</strong> houve resolução de nome, conexão HTTPS e uma resposta que chegou à tela. O 401 em Chamados não prova queda do coletor e aponta para autenticação ausente ou inválida. Verifique a sessão e a requisição específica antes de reiniciar os processos. Se o transporte nem abre, o problema é outro.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./08-laboratorio-e-glossario.html"><small>Capítulo anterior</small><strong>Laboratório e glossário</strong></a><a class="next" href="./10-identidade-e-permissoes.html"><small>Próximo capítulo</small><strong>Identidade e permissões</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#do-5g-a-mesma-central">Do 5G à mesma Central</a></li><li><a href="#dois-acessos-duas-fronteiras">Dois acessos, duas fronteiras</a></li><li><a href="#o-que-muda-quando-o-apk-atualiza">O que muda quando o APK atualiza</a></li><li><a href="#exercicio-funciona-no-pc-falha-no-5g">Exercício: funciona no PC, falha no 5G</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

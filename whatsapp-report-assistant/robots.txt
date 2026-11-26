@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://leodah20.github.io/whatsapp-report-assistant/sitemap.xml

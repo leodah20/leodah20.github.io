@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evidências multimídia · Estudos Runavolt</title>
+<meta name="description" content="Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original.">
+<meta name="theme-color" content="#110919">
+<link rel="canonical" href="https://leodah20.github.io/whatsapp-report-assistant/estudos/11-evidencias-multimidia.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Evidências multimídia · Estudos Runavolt">
+<meta property="og:description" content="Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original.">
+<meta property="og:url" content="https://leodah20.github.io/whatsapp-report-assistant/estudos/11-evidencias-multimidia.html">
+<meta property="og:image" content="https://leodah20.github.io/whatsapp-report-assistant/assets/brand/app-512.png">
+<link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/styles.css?v=20261124">
+<script defer src="../assets/site.js"></script>
+<script defer src="../assets/vendor/mermaid/mermaid.min.js"></script>
+<script defer src="../assets/mermaid-init.js"></script>
+</head>
+<body class="page-article">
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Runavolt: arquitetura pública">
+      <img class="brand-mark" src="../assets/brand/runavolt.svg" width="34" height="34" alt="">
+      <span class="brand-text"><strong>RUNAVOLT</strong><small>documentação pública</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Navegação principal">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/" aria-current="page">Blog de estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant" rel="noopener">GitHub</a>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">
+<section class="article-header">
+<div class="container">
+<ul class="breadcrumb"><li><a href="../">Arquitetura</a></li><li><a href="./">Blog de estudos</a></li><li>Capítulo 11</li></ul>
+<p class="eyebrow">Capítulo 11 · Série de estudos</p>
+<h1>Evidências multimídia</h1>
+<p class="lead">Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original.</p>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Produto e dados</li><li>3 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+</div>
+</section>
+<div class="container article-layout">
+<article class="prose">
+<h2 id="quatro-registros-podem-descrever-a-mesma-visita">Quatro registros podem descrever a mesma visita</h2>
+<p>Uma foto sem legenda mostra um conector; um vídeo narra o teste; outra mensagem confirma o resultado; um PDF de e-mail traz o orçamento. Todos podem pertencer ao mesmo caso, mas cada um comprova algo diferente. Mandar tudo rapidamente é válido: mais tarde, a aba <strong>Evidências</strong> permite explicar o que uma imagem específica mostra. Essa nota não substitui a informação original.</p>
+<figure class="diagram"><figcaption>Diagrama Mermaid</figcaption><div class="diagram-canvas"><p class="diagram-loading">Carregando diagrama…</p><template class="diagram-source"><pre><code class="language-mermaid">flowchart LR
+  A[Mensagem e mídia disponível] --&gt; B[Origem preservada]
+  B --&gt; C[Texto ou fala transcrita]
+  C --&gt; D{Chamado identificado?}
+  D --&gt;|Evidência suficiente| E[Vincular ao chamado]
+  D --&gt;|Ambíguo| F[Triagem]
+  E --&gt; G[Contexto manual do anexo]</code></pre></template></div><p class="diagram-hint">Em telas estreitas, deslize para o lado para ver o diagrama completo.</p><noscript><p class="diagram-fallback">Ative o JavaScript para visualizar este diagrama.</p></noscript></figure>
+<h2 id="vinculo-forte-candidato-e-duplicata">Vínculo forte, candidato e duplicata</h2>
+<p>Comece por código do chamado, resposta citada ou thread já acompanhada. Sem isso, um par de sinais como <strong>equipamento + local</strong> pode distinguir duas câmeras parecidas. Se uma atualização menciona dois equipamentos existentes e confirma o mesmo teste para ambos, ela não é automaticamente um terceiro chamado. Se só diz “voltou”, e há dois candidatos, não use a hora como prova. A triagem existe para essa dúvida.</p>
+<p>Evite repetir a mesma resposta no histórico ou a mesma evidência para um mesmo chamado. Mas duas fotos distintas com a mesma legenda são duas fontes visuais. Identidade da mensagem e identidade do conteúdo têm funções diferentes. Veja <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/cases/history-media.mjs">o tratamento de mídias do histórico</a> e <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/src/cases/support-mail.mjs">a integração por e-mail</a>. A versão pública desses arquivos pode ser anterior ao piloto descrito aqui.</p>
+<h2 id="transcricao-nao-e-leitura-do-video-inteiro">Transcrição não é leitura do vídeo inteiro</h2>
+<p>A transcrição local, quando disponível, extrai <strong>fala</strong> dentro dos limites de processamento. Não permite afirmar a leitura do visor se ninguém leu os caracteres em voz alta. Pode perder uma negação, confundir o nome de um equipamento ou encontrar uma fala sem relação técnica. Use o original ou uma nota verificada para completar o contexto. Não reinstale o app só porque uma mídia ainda está em fila; confirme o estado da captura e da análise.</p>
+<h2 id="e-mail-pendencia-nao-e-conclusao">E-mail: pendência não é conclusão</h2>
+<p>As respostas de uma conversa autorizada complementam o histórico, e anexos aceitos podem virar evidência. “Enviarei o orçamento revisado” pode mudar a pendência para aguardar proposta, mas não prova compra, instalação ou restabelecimento. Distinguir esses estados evita relatórios falsamente concluídos.</p>
+<h2 id="exercicio-tres-mensagens-dois-destinos">Exercício: três mensagens, dois destinos</h2>
+<p>Entraram duas fotos diferentes com a mesma legenda e um vídeo que explica o teste das câmeras A e B. Como guardar?</p>
+<p><strong>Resposta esperada:</strong> preserve as fotos diferentes, vincule cada uma ao destino sustentado pela fonte, avalie a transcrição como texto auxiliar e atualize os dois chamados se a mensagem sustentar o resultado de ambos. Se uma imagem não puder ser atribuída, deixe-a na triagem e peça contexto no painel, não no grupo por padrão.</p>
+<nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./10-identidade-e-permissoes.html"><small>Capítulo anterior</small><strong>Identidade e permissões</strong></a><a class="next" href="./12-operacoes-e-seguranca.html"><small>Próximo capítulo</small><strong>Operações e segurança</strong></a></div></nav>
+<div class="article-cta">
+<div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
+<a class="btn btn-ghost" href="../">Ver arquitetura</a>
+</div>
+</article>
+<aside class="article-toc" aria-labelledby="toc-title"><h2 id="toc-title">Nesta página</h2><nav aria-label="Seções do capítulo"><ol><li><a href="#quatro-registros-podem-descrever-a-mesma-visita">Quatro registros podem descrever a mesma visita</a></li><li><a href="#vinculo-forte-candidato-e-duplicata">Vínculo forte, candidato e duplicata</a></li><li><a href="#transcricao-nao-e-leitura-do-video-inteiro">Transcrição não é leitura do vídeo inteiro</a></li><li><a href="#e-mail-pendencia-nao-e-conclusao">E-mail: pendência não é conclusão</a></li><li><a href="#exercicio-tres-mensagens-dois-destinos">Exercício: três mensagens, dois destinos</a></li></ol></nav><a class="toc-back" href="./">Voltar ao blog</a></aside>
+</div>
+</main>
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <p class="footer-brand">RUNAVOLT <span>· assistente de chamados</span></p>
+      <p>Documentação pública de arquitetura e trilha de estudos construída a partir de um projeto real de acompanhamento de chamados.</p>
+    </div>
+    <nav class="footer-links" aria-label="Links do projeto">
+      <a href="../">Arquitetura</a>
+      <a href="../estudos/">Estudos</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant">Código-fonte</a>
+      <a href="https://github.com/leodah20/whatsapp-report-assistant/blob/main/LICENSE">Licença</a>
+    </nav>
+    <div class="footer-note">
+      <p>Site estático. Não acessa WhatsApp, banco local, chaves, sessão ou dados operacionais.</p>
+      <p>Conteúdo sanitizado, com exemplos fictícios. Apache-2.0.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
