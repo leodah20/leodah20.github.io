@@ -33,10 +33,13 @@ function enhancePostSearch() {
   const count = document.querySelector('[data-post-count]');
   const empty = document.querySelector('[data-post-empty]');
   const buttons = [...document.querySelectorAll('[data-study-track]')];
+  const groups = [...document.querySelectorAll('[data-track-section]')];
+  const tracks = new Set(buttons.map(button => button.dataset.studyTrack));
   let track = '';
 
   const filter = () => {
     const terms = normalize(input.value.trim()).split(/\s+/).filter(Boolean);
+    const totals = new Map();
     let visible = 0;
     for (const card of cards) {
       const haystack = normalize([
@@ -45,21 +48,39 @@ function enhancePostSearch() {
       ].join(' '));
       const match = (!track || card.dataset.track === track) && terms.every(term => haystack.includes(term));
       card.hidden = !match;
-      if (match) visible += 1;
+      if (match) {
+        visible += 1;
+        totals.set(card.dataset.track, (totals.get(card.dataset.track) || 0) + 1);
+      }
+    }
+    for (const group of groups) {
+      const n = totals.get(group.dataset.trackSection) || 0;
+      group.hidden = n === 0;
+      group.querySelector('[data-track-count]').textContent = n + (n === 1 ? ' capítulo' : ' capítulos');
     }
     if (count) {
       count.textContent = visible === cards.length ? `${visible} capítulos` : `${visible} de ${cards.length} capítulos`;
     }
     if (empty) empty.classList.toggle('visible', visible === 0);
   };
+  const selectTrack = value => {
+    track = tracks.has(value) ? value : '';
+    for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.studyTrack === track));
+    filter();
+  };
+  const readTrack = () => selectTrack(new URL(location.href).searchParams.get('assunto'));
 
   input.addEventListener('input', filter);
   for (const button of buttons) button.addEventListener('click', () => {
-    track = button.dataset.studyTrack;
-    for (const item of buttons) item.setAttribute('aria-pressed', String(item === button));
-    filter();
+    if (button.dataset.studyTrack === track) return;
+    const url = new URL(location.href);
+    if (button.dataset.studyTrack) url.searchParams.set('assunto', button.dataset.studyTrack);
+    else url.searchParams.delete('assunto');
+    history.pushState(null, '', url);
+    selectTrack(button.dataset.studyTrack);
   });
-  filter();
+  window.addEventListener('popstate', readTrack);
+  readTrack();
 }
 
 function enhanceToc() {

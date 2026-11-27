@@ -1,0 +1,83 @@
+/* Campo Orbital: três campos de luz de CSS, sem imagem, vídeo ou canvas. */
+[data-light-field] {
+  position: relative;
+  isolation: isolate;
+  --field-violet: 131, 62, 234;
+  --field-blue: 73, 130, 246;
+  --field-mint: 101, 222, 195;
+  --field-rose: 214, 119, 216;
+}
+.rv-light-field {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: clip;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent 1%, #0003 37%, #000 74%);
+  background: radial-gradient(ellipse 63% 120% at 85% 9%, rgba(var(--field-violet),.19), transparent 76%);
+}
+.rv-light-layer { display: block; position: absolute; inset: -46% -18% -48% 18%; }
+.rv-light-layer--depth {
+  background:
+    radial-gradient(ellipse 52% 58% at 61% 34%, rgba(var(--field-violet),.48) 0%, rgba(var(--field-violet),.19) 43%, transparent 73%),
+    radial-gradient(ellipse 29% 40% at 90% 67%, rgba(var(--field-blue),.43), transparent 72%),
+    radial-gradient(ellipse 32% 43% at 68% 71%, rgba(var(--field-rose),.18), transparent 73%);
+  transform: translate(-6%,-1%) rotate(-11deg);
+}
+.rv-light-layer--fold {
+  background:
+    radial-gradient(ellipse 61% 58% at 84% 83%, transparent 50%, rgba(var(--field-violet),.14) 60%, rgba(169,101,246,.5) 66%, rgba(var(--field-violet),.21) 70%, transparent 77%),
+    radial-gradient(ellipse 61% 50% at 87% 81%, transparent 57%, rgba(111,74,238,.36) 65%, transparent 76%);
+  transform: translate(-2%,8%) rotate(-13deg);
+}
+.rv-light-layer--rim {
+  background:
+    radial-gradient(ellipse 65% 52% at 83% 86%, transparent 58%, rgba(var(--field-mint),.06) 65%, rgba(142,188,251,.42) 67%, rgba(var(--field-blue),.16) 70%, transparent 73%),
+    radial-gradient(ellipse 21% 36% at 90% 61%, rgba(var(--field-mint),.13), transparent 69%);
+  transform: translate(3%,-4%) rotate(-10deg);
+}
+.rv-field-toggle {
+  position: fixed; z-index: 3; inset: auto max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) auto;
+  padding: 5px 8px; min-height: 36px; min-width: 36px; width: auto; border-radius: 0;
+  border: 1px solid #8266a378; background: #151023e8; color: #eadcff;
+  font: 600 .69rem/1.15 system-ui,sans-serif; cursor: pointer;
+}
+.rv-field-toggle:is(:hover,:focus-visible) { border-color: #c4a0ff; }
+.rv-field-toggle:focus-visible { outline: 2px solid #a3ffe8; outline-offset: 2px; }
+.rv-field-toggle[hidden] { display: none; }
+.rv-field-residue {
+  position: fixed; inset: 0 0 0 auto; z-index: 1;
+  display: block; width: clamp(16px,4vw,62px); pointer-events: none;
+  background: radial-gradient(ellipse 94% 39% at 108% 50%,#8f43ed39,transparent 85%);
+  opacity: .35;
+}
+@media (prefers-reduced-motion:no-preference) {
+  .rv-light-layer--depth { animation: rv-field-depth 18s ease-in-out infinite alternate; }
+  .rv-light-layer--fold { animation: rv-field-fold 12s ease-in-out infinite alternate; }
+  .rv-light-layer--rim { animation: rv-field-rim 16s ease-in-out infinite alternate; }
+  [data-light-field]:not([data-field-state="running"]) .rv-light-layer { animation-play-state: paused; }
+  .rv-field-residue { animation: rv-field-residue 17s ease-in-out infinite alternate; }
+  html:not([data-residue-state="running"]) .rv-field-residue { animation-play-state: paused; }
+}
+@keyframes rv-field-depth {
+  from { transform: translate(-6%,-1%) rotate(-11deg); opacity: .78; }
+  to   { transform: translate(6%,3%) rotate(-7deg) scale(1.14); opacity: 1; }
+}
+@keyframes rv-field-fold {
+  from { transform: translate(-2%,8%) rotate(-13deg); opacity: .76; }
+  to   { transform: translate(-10%,-7%) rotate(-17deg) scale(1.07); opacity: 1; }
+}
+@keyframes rv-field-rim {
+  from { transform: translate(3%,-4%) rotate(-10deg); opacity: .48; }
+  to   { transform: translate(-3%,6%) rotate(-15deg); opacity: .93; }
+}
+@keyframes rv-field-residue {
+  from { transform: translateY(-22%); opacity: .15; }
+  to { transform: translateY(21%); opacity: .45; }
+}
+@media (max-width:640px) {
+  .rv-light-field { opacity: .76; mask-image: linear-gradient(90deg,#0002,#000 78%); }
+  .rv-field-toggle { min-height: 44px; }
+}
+@media (forced-colors:active) { .rv-light-field,.rv-field-toggle,.rv-field-residue { display: none; } }

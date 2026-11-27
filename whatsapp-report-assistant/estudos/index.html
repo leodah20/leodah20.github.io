@@ -15,8 +15,10 @@
 <meta property="og:url" content="https://leodah20.github.io/runavolt-blog-publico/estudos/">
 <meta property="og:image" content="https://leodah20.github.io/runavolt-blog-publico/assets/brand/app-512.png">
 <link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/styles.css?v=20261126-orbital">
-<script defer src="../assets/site.js"></script>
+<link rel="stylesheet" href="../assets/styles.css?v=20261127-campo-vivo">
+<script defer src="../assets/site.js?v=20261127-orbital-b"></script>
+<link rel="stylesheet" href="../assets/field.css">
+<script defer src="../assets/field.js"></script>
 
 </head>
 <body class="page-studies">
@@ -35,18 +37,18 @@
   </div>
 </header>
 <main id="conteudo">
-<section class="page-hero galaxy">
-  <div class="container">
+<section class="page-hero galaxy" data-light-field>
+  <div class="container study-hero-layout">
+    <div>
     <ul class="breadcrumb">
       <li><a href="../">Arquitetura</a></li>
       <li>Blog de estudos</li>
     </ul>
-    <p class="eyebrow">RUNAVOLT / GUIA DE ESTUDOS</p>
-    <h1>Da primeira mensagem <span>ao sistema inteiro.</span></h1>
-    <p class="lead">Aprenda o que acontece entre uma mensagem recebida e um chamado revisado. Comece pelo vocabulário e pelo código, siga as evidências e só depois passe para acesso remoto, segurança e continuidade.</p>
+    <h1>Blog de estudos do Runavolt</h1>
+    <p class="lead">Siga o caminho de uma mensagem até virar um chamado revisado. Depois, explore as redes, o acesso remoto e a segurança da Central.</p>
     <div class="hero-actions">
       <a class="btn btn-primary" href="../estudos/01-negocio-e-arquitetura.html">Começar pelo capítulo 1</a>
-      <a class="btn btn-line" href="../">Voltar à arquitetura</a>
+      <a class="btn btn-line" href="#chapters-title">Ver matérias</a>
     </div>
     <ul class="article-meta" aria-label="Sobre o material">
       <li>Revisão editorial: 24/11/2026</li>
@@ -54,6 +56,12 @@
       <li>Leitura independente do coletor</li>
       <li>Apache-2.0</li>
     </ul>
+    </div>
+    <aside class="study-reading" aria-labelledby="reading-title">
+      <p>Leitura em destaque</p>
+      <h2 id="reading-title"><a href="../estudos/03-fluxo-de-dados.html">Fluxo dos dados e persistência</a></h2>
+      <p>Entenda como SQLite, filas e criptografia preservam a mensagem até a revisão.</p>
+    </aside>
   </div>
 </section>
 
@@ -79,13 +87,16 @@
       </div>
       <p class="post-count" data-post-count role="status" aria-live="polite">13 capítulos</p>
     </div>
-    <ol class="post-grid">
+    <div class="study-tracks">
+<section class="study-track" data-track-section="base" aria-labelledby="study-track-base">
+<header class="study-track-head"><h3 id="study-track-base">Fundamentos</h3><span data-track-count>4 capítulos</span></header>
+<ol class="post-grid chapter-index">
 <li class="post-card" data-post data-track="base" data-search="Negócio e arquitetura O problema, as camadas e o mapa do repositório para entender o sistema antes de abrir os símbolos. Negócio Arquitetura 01-negocio-e-arquitetura">
 <div class="post-topline">
 <span class="post-number">01</span>
 <span class="post-time">Fundamentos · 4 min</span>
 </div>
-<h2><a href="./01-negocio-e-arquitetura.html">Negócio e arquitetura</a></h2>
+<h4><a href="./01-negocio-e-arquitetura.html">Negócio e arquitetura</a></h4>
 <p>O problema, as camadas e o mapa do repositório para entender o sistema antes de abrir os símbolos.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Negócio</li><li class="tag">Arquitetura</li></ul>
 </li>
@@ -94,34 +105,47 @@
 <span class="post-number">02</span>
 <span class="post-time">Fundamentos · 6 min</span>
 </div>
-<h2><a href="./02-linguagens-e-principios.html">Linguagens e princípios</a></h2>
+<h4><a href="./02-linguagens-e-principios.html">Linguagens e princípios</a></h4>
 <p>JavaScript, Python, PowerShell, HTML, CSS e SQL na prática, com as decisões de construção que aparecem no código.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">JavaScript</li><li class="tag">Python</li><li class="tag">Fundamentos</li></ul>
-</li>
-<li class="post-card" data-post data-track="produto" data-search="Fluxo dos dados e persistência Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente. Dados SQLite Filas 03-fluxo-de-dados">
-<div class="post-topline">
-<span class="post-number">03</span>
-<span class="post-time">Produto e dados · 6 min</span>
-</div>
-<h2><a href="./03-fluxo-de-dados.html">Fluxo dos dados e persistência</a></h2>
-<p>Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente.</p>
-<ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Dados</li><li class="tag">SQLite</li><li class="tag">Filas</li></ul>
 </li>
 <li class="post-card" data-post data-track="base" data-search="HTTP, APIs e redes Requests, responses, portas, cookies, catálogo de rotas e como ler o tráfego com o DevTools. HTTP API Redes 04-http-apis-e-redes">
 <div class="post-topline">
 <span class="post-number">04</span>
 <span class="post-time">Fundamentos · 7 min</span>
 </div>
-<h2><a href="./04-http-apis-e-redes.html">HTTP, APIs e redes</a></h2>
+<h4><a href="./04-http-apis-e-redes.html">HTTP, APIs e redes</a></h4>
 <p>Requests, responses, portas, cookies, catálogo de rotas e como ler o tráfego com o DevTools.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">HTTP</li><li class="tag">API</li><li class="tag">Redes</li></ul>
+</li>
+<li class="post-card" data-post data-track="base" data-search="Laboratório e glossário Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado. Exercícios Glossário 08-laboratorio-e-glossario">
+<div class="post-topline">
+<span class="post-number">08</span>
+<span class="post-time">Fundamentos · 6 min</span>
+</div>
+<h4><a href="./08-laboratorio-e-glossario.html">Laboratório e glossário</a></h4>
+<p>Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado.</p>
+<ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Exercícios</li><li class="tag">Glossário</li></ul>
+</li>
+</ol></section>
+<section class="study-track" data-track-section="produto" aria-labelledby="study-track-produto">
+<header class="study-track-head"><h3 id="study-track-produto">Produto e dados</h3><span data-track-count>4 capítulos</span></header>
+<ol class="post-grid chapter-index">
+<li class="post-card" data-post data-track="produto" data-search="Fluxo dos dados e persistência Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente. Dados SQLite Filas 03-fluxo-de-dados">
+<div class="post-topline">
+<span class="post-number">03</span>
+<span class="post-time">Produto e dados · 6 min</span>
+</div>
+<h4><a href="./03-fluxo-de-dados.html">Fluxo dos dados e persistência</a></h4>
+<p>Da mensagem ao chamado: tabelas, transações, filas, criptografia e recuperação de trabalho pendente.</p>
+<ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Dados</li><li class="tag">SQLite</li><li class="tag">Filas</li></ul>
 </li>
 <li class="post-card" data-post data-track="produto" data-search="Interface e experiência DOM, eventos, estado, chamadas assíncronas e a revisão mensal do clique até a persistência. Interface DOM UX 05-interface-e-experiencia">
 <div class="post-topline">
 <span class="post-number">05</span>
-<span class="post-time">Produto e dados · 4 min</span>
+<span class="post-time">Produto e dados · 5 min</span>
 </div>
-<h2><a href="./05-interface-e-experiencia.html">Interface e experiência</a></h2>
+<h4><a href="./05-interface-e-experiencia.html">Interface e experiência</a></h4>
 <p>DOM, eventos, estado, chamadas assíncronas e a revisão mensal do clique até a persistência.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Interface</li><li class="tag">DOM</li><li class="tag">UX</li></ul>
 </li>
@@ -130,34 +154,38 @@
 <span class="post-number">06</span>
 <span class="post-time">Produto e dados · 6 min</span>
 </div>
-<h2><a href="./06-ia-mcp-e-custos.html">IA, MCP e custos</a></h2>
+<h4><a href="./06-ia-mcp-e-custos.html">IA, MCP e custos</a></h4>
 <p>Extração literal, sugestões, ferramentas de leitura e a diferença entre cobrança de API e modelo local.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">IA</li><li class="tag">MCP</li><li class="tag">Custos</li></ul>
 </li>
+<li class="post-card" data-post data-track="produto" data-search="Evidências multimídia Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original. WhatsApp E-mail Transcrição Evidências 11-evidencias-multimidia">
+<div class="post-topline">
+<span class="post-number">11</span>
+<span class="post-time">Produto e dados · 3 min</span>
+</div>
+<h4><a href="./11-evidencias-multimidia.html">Evidências multimídia</a></h4>
+<p>Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original.</p>
+<ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">WhatsApp</li><li class="tag">E-mail</li><li class="tag">Transcrição</li><li class="tag">Evidências</li></ul>
+</li>
+</ol></section>
+<section class="study-track" data-track-section="operacao" aria-labelledby="study-track-operacao">
+<header class="study-track-head"><h3 id="study-track-operacao">Redes e operação</h3><span data-track-count>5 capítulos</span></header>
+<ol class="post-grid chapter-index">
 <li class="post-card" data-post data-track="operacao" data-search="Scripts, ferramentas e testes Inicialização no Windows, supervisão, dependências, Git e verificações automatizadas com dados sintéticos. PowerShell Testes Git 07-scripts-ferramentas-e-testes">
 <div class="post-topline">
 <span class="post-number">07</span>
 <span class="post-time">Redes e operação · 5 min</span>
 </div>
-<h2><a href="./07-scripts-ferramentas-e-testes.html">Scripts, ferramentas e testes</a></h2>
+<h4><a href="./07-scripts-ferramentas-e-testes.html">Scripts, ferramentas e testes</a></h4>
 <p>Inicialização no Windows, supervisão, dependências, Git e verificações automatizadas com dados sintéticos.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">PowerShell</li><li class="tag">Testes</li><li class="tag">Git</li></ul>
-</li>
-<li class="post-card" data-post data-track="base" data-search="Laboratório e glossário Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado. Exercícios Glossário 08-laboratorio-e-glossario">
-<div class="post-topline">
-<span class="post-number">08</span>
-<span class="post-time">Fundamentos · 6 min</span>
-</div>
-<h2><a href="./08-laboratorio-e-glossario.html">Laboratório e glossário</a></h2>
-<p>Exercícios progressivos, respostas orientativas e vocabulário essencial para consolidar o aprendizado.</p>
-<ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Exercícios</li><li class="tag">Glossário</li></ul>
 </li>
 <li class="post-card" data-post data-track="operacao" data-search="Acesso remoto e Android Do 5G ao computador: diferencie HTTPS, túnel, ponte, VPN e o pacote instalável. Android HTTPS Redes 09-acesso-remoto-e-android">
 <div class="post-topline">
 <span class="post-number">09</span>
 <span class="post-time">Redes e operação · 3 min</span>
 </div>
-<h2><a href="./09-acesso-remoto-e-android.html">Acesso remoto e Android</a></h2>
+<h4><a href="./09-acesso-remoto-e-android.html">Acesso remoto e Android</a></h4>
 <p>Do 5G ao computador: diferencie HTTPS, túnel, ponte, VPN e o pacote instalável.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Android</li><li class="tag">HTTPS</li><li class="tag">Redes</li></ul>
 </li>
@@ -166,25 +194,16 @@
 <span class="post-number">10</span>
 <span class="post-time">Redes e operação · 2 min</span>
 </div>
-<h2><a href="./10-identidade-e-permissoes.html">Identidade e permissões</a></h2>
+<h4><a href="./10-identidade-e-permissoes.html">Identidade e permissões</a></h4>
 <p>Entenda autenticação, sessão, autorização e atribuição sem confundir IP com identidade.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">Segurança</li><li class="tag">Login</li><li class="tag">Sessão</li></ul>
-</li>
-<li class="post-card" data-post data-track="produto" data-search="Evidências multimídia Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original. WhatsApp E-mail Transcrição Evidências 11-evidencias-multimidia">
-<div class="post-topline">
-<span class="post-number">11</span>
-<span class="post-time">Produto e dados · 3 min</span>
-</div>
-<h2><a href="./11-evidencias-multimidia.html">Evidências multimídia</a></h2>
-<p>Ligue fotos, vídeos, áudios e anexos de e-mail ao chamado certo sem perder o original.</p>
-<ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">WhatsApp</li><li class="tag">E-mail</li><li class="tag">Transcrição</li><li class="tag">Evidências</li></ul>
 </li>
 <li class="post-card" data-post data-track="operacao" data-search="Operações e segurança Leia o inspetor HTTP: IP observado, perfil, status, tempo e o que muda em relação a uma captura de pacotes. HTTP Segurança Observabilidade 12-operacoes-e-seguranca">
 <div class="post-topline">
 <span class="post-number">12</span>
 <span class="post-time">Redes e operação · 4 min</span>
 </div>
-<h2><a href="./12-operacoes-e-seguranca.html">Operações e segurança</a></h2>
+<h4><a href="./12-operacoes-e-seguranca.html">Operações e segurança</a></h4>
 <p>Leia o inspetor HTTP: IP observado, perfil, status, tempo e o que muda em relação a uma captura de pacotes.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">HTTP</li><li class="tag">Segurança</li><li class="tag">Observabilidade</li></ul>
 </li>
@@ -193,11 +212,12 @@
 <span class="post-number">13</span>
 <span class="post-time">Redes e operação · 2 min</span>
 </div>
-<h2><a href="./13-backup-e-continuidade.html">Backup e continuidade</a></h2>
+<h4><a href="./13-backup-e-continuidade.html">Backup e continuidade</a></h4>
 <p>Diferencie sinal de vida, cópia e restauração testada. Use essa distinção para planejar a nuvem sem pular etapas.</p>
 <ul class="post-tags" aria-label="Temas do capítulo"><li class="tag">SQLite</li><li class="tag">Backup</li><li class="tag">Ollama</li><li class="tag">Nuvem</li></ul>
 </li>
-    </ol>
+</ol></section>
+    </div>
     <p class="post-empty" data-post-empty>Nenhum capítulo corresponde à busca. Tente outro termo, como “API”, “SQLite” ou “testes”.</p>
   </div>
 </section>

@@ -15,8 +15,10 @@
 <meta property="og:url" content="https://leodah20.github.io/runavolt-blog-publico/estudos/05-interface-e-experiencia.html">
 <meta property="og:image" content="https://leodah20.github.io/runavolt-blog-publico/assets/brand/app-512.png">
 <link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/styles.css?v=20261126-orbital">
-<script defer src="../assets/site.js"></script>
+<link rel="stylesheet" href="../assets/styles.css?v=20261127-campo-vivo">
+<script defer src="../assets/site.js?v=20261127-orbital-b"></script>
+<link rel="stylesheet" href="../assets/field.css">
+<script defer src="../assets/field.js"></script>
 
 </head>
 <body class="page-article">
@@ -41,7 +43,7 @@
 <p class="eyebrow">Capítulo 05 · Série de estudos</p>
 <h1>Interface e experiência</h1>
 <p class="lead">DOM, eventos, estado, chamadas assíncronas e a revisão mensal do clique até a persistência.</p>
-<ul class="article-meta" aria-label="Sobre o capítulo"><li>Produto e dados</li><li>4 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
+<ul class="article-meta" aria-label="Sobre o capítulo"><li>Produto e dados</li><li>5 min de leitura</li><li>Revisão editorial: 24/11/2026</li><li>Exemplos fictícios</li></ul>
 </div>
 </section>
 <div class="container article-layout">
@@ -83,6 +85,9 @@
 <h2 id="5-7-acessibilidade-e-responsividade-como-leitura-de-codigo">5.7 Acessibilidade e responsividade como leitura de código</h2>
 <p>Observe <code>button</code> nativo, foco após ações, atributos como <code>aria-pressed</code>, avisos e CSS para larguras menores. Navegação por teclado e indicação de estado tornam a ferramenta compreensível além da aparência.</p>
 <p><strong>Exercício:</strong> explique quais informações precisam ser persistidas para sobreviver ao recarregamento e quais podem existir só durante a interação, como aba aberta ou filtro de busca. Depois compare com as estratégias usadas nos arquivos da interface.</p>
+<h3 id="uma-identidade-superficies-diferentes">Uma identidade, superfícies diferentes</h3>
+<p>No Campo Orbital, a cor de destaque indica foco, seleção ou ação; não precisa colorir toda caixa. A fila da Central privilegia comparação de chamados. No índice do blog, os números, os títulos e as descrições ajudam a percorrer a trilha sem abrir cada capítulo. No Android, a interface de trabalho vem da mesma Central Web; apenas a abertura e a mensagem de conexão são nativas.</p>
+<p>Animação curta é um reforço visual, não a única forma de indicar estado. No blog, <code>prefers-reduced-motion</code> deixa a entrada estática sem mudar o que aparece. Para testar, use Tab no índice, filtre uma matéria, confira se o foco continua visível e repita em largura de celular.</p>
 <nav class="article-nav" aria-label="Navegação entre capítulos"><div class="pager"><a class="previous" href="./04-http-apis-e-redes.html"><small>Capítulo anterior</small><strong>HTTP, APIs e redes</strong></a><a class="next" href="./06-ia-mcp-e-custos.html"><small>Próximo capítulo</small><strong>IA, MCP e custos</strong></a></div></nav>
 <div class="article-cta">
 <div><strong>Continue a trilha</strong><p>O próximo capítulo aprofunda um aspecto diferente da mesma aplicação. Você também pode voltar ao mapa de arquitetura.</p></div>
