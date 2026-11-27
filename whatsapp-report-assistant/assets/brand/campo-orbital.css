@@ -1,0 +1,27 @@
+/* Runavolt / Campo Orbital — tokens; nada neste arquivo muda rotas ou componentes. */
+:root {
+  --orbital-space: #0b0a14;
+  --orbital-night: #10101c;
+  --orbital-pane: #171629;
+  --orbital-detail: #141321;
+  --orbital-elevated: #211e37;
+  --orbital-field: #100e1c;
+  --orbital-border: #37324b;
+  --orbital-control: #817298;
+  --orbital-text: #f4efff;
+  --orbital-muted: #bdb3cf;
+  --orbital-accent: #c5a6ff;
+  --orbital-focus: #a3ffe8;
+  --orbital-signal: #92f5dd;
+  --orbital-violet: #9465f5;
+  --orbital-selected: #29203b;
+  --orbital-info: #bfd8ff;
+  --orbital-wait: #ffd490;
+  --orbital-done: #a0efd5;
+  --orbital-danger: #ffb6cb;
+  --orbital-cut: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  --orbital-beam: linear-gradient(90deg, var(--orbital-signal), var(--orbital-violet) 62%, transparent);
+  --orbital-command: linear-gradient(110deg, #d6beff, #b496f8 78%);
+  --orbital-command-hover: linear-gradient(110deg, #eee0ff, #c7adff);
+  --orbital-command-ink: #170d25;
+}

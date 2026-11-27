@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 450" fill="none">
 <defs>
   <radialGradient id="cloud">
-    <stop stop-color="#9c3df7" stop-opacity=".64"/>
-    <stop offset=".34" stop-color="#671bbd" stop-opacity=".34"/>
-    <stop offset="1" stop-color="#38106c" stop-opacity="0"/>
+    <stop stop-color="#9465f5" stop-opacity=".64"/>
+    <stop offset=".40" stop-color="#4a3185" stop-opacity=".34"/>
+    <stop offset="1" stop-color="#302160" stop-opacity="0"/>
   </radialGradient>
   <radialGradient id="glow">
     <stop stop-color="#d695ff" stop-opacity=".55"/>
@@ -13,8 +13,8 @@
   <linearGradient id="ring" x1="110" y1="280" x2="560" y2="120" gradientUnits="userSpaceOnUse">
     <stop stop-color="#8444d9" stop-opacity=".04"/>
     <stop offset=".2" stop-color="#a457ff" stop-opacity=".72"/>
-    <stop offset=".54" stop-color="#f2caff" stop-opacity=".98"/>
-    <stop offset="1" stop-color="#bc71ff" stop-opacity=".14"/>
+    <stop offset=".54" stop-color="#d9c1ff" stop-opacity=".98"/>
+    <stop offset="1" stop-color="#92f5dd" stop-opacity=".58"/>
   </linearGradient>
 </defs>
 <ellipse cx="325" cy="225" rx="320" ry="205" fill="url(#cloud)" transform="rotate(-24 325 225)"/>
