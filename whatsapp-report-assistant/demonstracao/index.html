@@ -17,9 +17,9 @@
 <link rel="icon" href="../assets/brand/runavolt.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/styles.css?v=20261127-quartzo">
 <script defer src="../assets/site.js?v=20261127-orbital-b"></script>
-<link rel="stylesheet" href="../assets/field.css?v=20261127-quartzo">
-<script defer src="../assets/field.js?v=20261127-quartzo"></script>
-<link rel="stylesheet" href="../assets/demo.css">
+<link rel="stylesheet" href="../assets/field.css?v=20261128-tema-topo">
+<script defer src="../assets/field.js?v=20261128-tema-topo"></script>
+<link rel="stylesheet" href="../assets/demo.css?v=capturas-desktop"><script defer src="../assets/demo-ops.js?v=capturas-desktop"></script>
 </head>
 <body class="page-demo">
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
@@ -127,13 +127,63 @@
         <a href="../assets/demo/pc-minuta.png"><img src="../assets/demo/pc-minuta.png" width="1366" height="530" loading="lazy" alt="Ampliar minuta do relatório: relato do teste técnico e evidência fictícia associados ao mesmo item"></a>
       </article>
     </div>
+    <p class="demo-ops-jump">Do outro lado da Central está a Operação. <a href="#diagnostico-local">Veja as telas do painel de desktop.</a></p>
   </div>
 </section>
+
+<section class="section demo-section demo-ops" id="diagnostico-local" aria-labelledby="diagnostico-title">
+  <div class="container">
+    <div class="section-head demo-ops-heading">
+      <div><p class="eyebrow">03 / OPERAÇÃO</p><h2 id="diagnostico-title">Operação local, do jeito que ela é no PC.</h2></div>
+      <p>São capturas da própria interface desktop, preenchida com dados fictícios. A Operação fica no PC, só para administração. Nenhum botão das capturas controla a Central.</p>
+    </div>
+    <div class="demo-ops-gallery" data-ops-gallery>
+      <nav class="demo-ops-views" aria-label="Escolher captura da Operação" hidden>
+        <button type="button" aria-pressed="true" aria-controls="ops-frame-monitoramento" data-ops-view>Monitoramento</button>
+        <button type="button" aria-pressed="false" aria-controls="ops-frame-diagnostico" data-ops-view>Diagnóstico</button>
+        <button type="button" aria-pressed="false" aria-controls="ops-frame-armazenamento" data-ops-view>Armazenamento e fila</button>
+        <button type="button" aria-pressed="false" aria-controls="ops-frame-http" data-ops-view>Inspetor HTTP</button>
+        <button type="button" aria-pressed="false" aria-controls="ops-frame-historico-http" data-ops-view>Gráfico e rotas</button>
+        <button type="button" aria-pressed="false" aria-controls="ops-frame-seguranca" data-ops-view>Segurança</button>
+        <button type="button" aria-pressed="false" aria-controls="ops-frame-administracao" data-ops-view>Usuários e permissões</button>
+      </nav>
+      <article class="demo-ops-frame" id="ops-frame-monitoramento" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Monitoramento</h3><a href="../assets/demo/ops-pc-monitoramento.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Monitoramento">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-monitoramento.webp" width="1440" height="1109" loading="lazy" decoding="async" alt="Painel Operação local no PC: banner Runavolt, leitura atual, prioridade de atendimento e cinco cartões de integridade dos serviços">
+      </article>
+      <article class="demo-ops-frame" id="ops-frame-diagnostico" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Diagnóstico</h3><a href="../assets/demo/ops-pc-diagnostico.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Diagnóstico">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-diagnostico.webp" width="1440" height="530" loading="lazy" decoding="async" alt="Sincronização de e-mail: dois fluxos independentes, horários de leitura e próxima tentativa, gráfico de tentativas e próximo passo para uma falha">
+      </article>
+      <article class="demo-ops-frame" id="ops-frame-armazenamento" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Armazenamento e fila</h3><a href="../assets/demo/ops-pc-armazenamento.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Armazenamento e fila">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-armazenamento.webp" width="1440" height="587" loading="lazy" decoding="async" alt="Cartões de backup e restauração, fila e tarefas em execução, memória e armazenamento: banco SQLite, diário WAL e mídias arquivadas">
+      </article>
+      <article class="demo-ops-frame" id="ops-frame-http" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Inspetor HTTP</h3><a href="../assets/demo/ops-pc-http.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Inspetor HTTP">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-http.webp" width="1440" height="1186" loading="lazy" decoding="async" alt="Inspetor de tráfego HTTP: filtros, lista colorida de requisições, linha 403 selecionada, origem, destino, protocolo, resposta e barras de bytes">
+      </article>
+      <article class="demo-ops-frame" id="ops-frame-historico-http" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Gráfico e rotas</h3><a href="../assets/demo/ops-pc-historico-http.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Gráfico e rotas">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-historico-http.webp" width="1440" height="602" loading="lazy" decoding="async" alt="Gráfico de requisições ao longo do tempo, cursor por intervalo, volume, recusas, erros, latência média e catálogo com rotas fictícias">
+      </article>
+      <article class="demo-ops-frame" id="ops-frame-seguranca" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Segurança</h3><a href="../assets/demo/ops-pc-seguranca.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Segurança">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-seguranca.webp" width="1440" height="743" loading="lazy" decoding="async" alt="Indicadores de segurança, eventos recentes e tabela de portas com números e endereços fictícios">
+      </article>
+      <article class="demo-ops-frame" id="ops-frame-administracao" data-ops-frame>
+        <div class="demo-ops-frame-bar"><h3>Usuários e permissões</h3><a href="../assets/demo/ops-pc-administracao.webp" target="_blank" rel="noopener" aria-label="Ampliar captura: Usuários e permissões">Ampliar captura</a></div>
+        <img src="../assets/demo/ops-pc-administracao.webp" width="1440" height="1172" loading="lazy" decoding="async" alt="Painel Usuários e permissões: formulário de novo usuário, seletor de conta fictícia, permissões de telas e permissões de ações por caixas de seleção">
+      </article>
+    </div>
+  </div>
+</section>
+
 
 <section class="section demo-section demo-platforms" id="plataformas" aria-labelledby="plataformas-title">
   <div class="container demo-platform-grid">
     <div>
-      <p class="eyebrow">03 / PLATAFORMAS</p>
+      <p class="eyebrow">04 / PLATAFORMAS</p>
       <h2 id="plataformas-title">A mesma Central, outra largura.</h2>
       <dl>
         <div><dt>PC</dt><dd>Central web, com visão ampla da fila e do atendimento.</dd></div>

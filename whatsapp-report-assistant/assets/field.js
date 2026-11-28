@@ -20,12 +20,20 @@
   dock.setAttribute('role','group');dock.setAttribute('aria-label','Aparência');
   const button=make('button','rv-appearance-switch t-toggle');
   button.type='button';button.setAttribute('role','switch');button.setAttribute('aria-label','Modo claro');
-  for(const [name,value] of [['night','Escuro'],['track',''],['day','Claro']]){
-    const part=make('span','rv-appearance-'+name,value);
-    part.setAttribute('aria-hidden','true');
-    if(name==='track')part.append(make('span','t-toggle-thumb'));
-    button.append(part);
-  }
+  const symbol=(mode,shape)=>{
+    const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg'),path=document.createElementNS(ns,'path');
+    svg.setAttribute('class','rv-appearance-icon');
+    svg.dataset.mode=mode;
+    svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('aria-hidden','true');svg.setAttribute('focusable','false');
+    path.setAttribute('d',shape);svg.append(path);return svg;
+  };
+  const moon=symbol('dark','M20.6 15.1A8.7 8.7 0 0 1 8.9 3.4 9 9 0 1 0 20.6 15.1Z');
+  const sun=symbol('light','M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4m0-14.2-1.4 1.4M6.3 17.7l-1.4 1.4');
+  const caption=make('span','rv-appearance-caption'),mode=make('strong','rv-appearance-mode');
+  caption.setAttribute('aria-hidden','true');caption.append(make('span','','Tema'),mode);
+  const track=make('span','rv-appearance-track');
+  track.setAttribute('aria-hidden','true');track.append(make('span','t-toggle-thumb'));
+  button.append(moon,sun,caption,track);
   const options=make('details','rv-appearance-options'),summary=make('summary','rv-appearance-more','⋯');
   summary.setAttribute('aria-label','Preferências de animação');
   const label=make('label','rv-appearance-motion');
@@ -41,6 +49,7 @@
     host.dataset.fieldState=stop||!inView?'paused':'running';
     button.dataset.on=String(light);
     button.setAttribute('aria-checked',String(light));
+    mode.textContent=light?'Claro':'Escuro';
     checkbox.disabled=less.matches;checkbox.checked=reduce;
     label.title=less.matches?'Seu dispositivo já está configurado para reduzir movimento.':'';
   }
@@ -57,7 +66,12 @@
   residue.className='rv-field-residue';
   residue.setAttribute('aria-hidden','true');
   host.prepend(decor);
-  document.body.append(residue,dock);
+  const header=document.querySelector('.workspace-bar,.rv-draft .toolbar,body>header.top,.site-header .header-inner');
+  if(header){
+    header.classList.add('rv-appearance-host');
+    header.insertBefore(dock,header.querySelector(':scope>nav,:scope>form'));
+  }else host.before(dock);
+  document.body.append(residue);
   if('IntersectionObserver' in window){
     new IntersectionObserver(([entry])=>{
       inView=entry.isIntersecting;render();
