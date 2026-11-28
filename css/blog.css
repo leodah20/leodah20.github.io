@@ -20,11 +20,11 @@
 .article__breadcrumb a{ color: var(--fg-dim); }
 .article__breadcrumb a:hover{ color: var(--accent); }
 
-.article__title{ font-size: 26px; margin: 4px 0 8px; color: var(--fg); line-height: 1.25; }
+.article__title,.series__title{ font:650 clamp(2rem,5.8vw,3.65rem)/1.05 var(--display); letter-spacing:-.045em; margin:6px 0 13px; color:var(--fg); }
 .article__subtitle{ font-size: 15px; color: var(--fg-dim); margin: 0 0 6px; }
 .article__meta{ font-size: 12px; color: var(--fg-dim); margin: 0 0 26px; }
 
-.article__body{ font-size: 15.5px; line-height: 1.75; color: var(--fg); }
+.article__body{ font-size: 1rem; line-height: 1.75; color: var(--fg); }
 .article__body h2{ font-size: 20px; margin: 34px 0 12px; color: var(--fg); }
 .article__body h3{ font-size: 16.5px; margin: 26px 0 10px; color: var(--accent-2); }
 .article__body p{ margin: 0 0 16px; }
@@ -90,7 +90,6 @@
 /* ---------------------------------------------------------------------------
    Series overview page
 --------------------------------------------------------------------------- */
-.series__title{ font-size: 26px; margin: 4px 0 10px; color: var(--fg); }
 .series__summary{ font-size: 15px; color: var(--fg); max-width: 62ch; margin: 0 0 8px; }
 .series__repo-link{ margin: 0 0 28px; font-size: 13px; }
 
@@ -99,7 +98,6 @@
   position: relative; border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--bg-raised); padding: 14px 16px 16px 54px;
 }
-.series-toc__item--planned{ opacity: .65; }
 .series-toc__item a{ display: block; }
 .series-toc__item a:hover .series-toc__title{ color: var(--accent); }
 .series-toc__number{
@@ -115,8 +113,11 @@
    only the extra bits specific to a series card go here.
 --------------------------------------------------------------------------- */
 .series-card .host-card__status{ white-space: nowrap; }
-.series-card .host-card__name::before{ content: "série: "; }
+.blog-index__intro{margin-bottom:25px}
+.blog-main :is(.article,.series){padding:clamp(16px,4vw,35px);border:1px solid var(--border);border-top-color:var(--accent);background:var(--bg-alt)}
+.blog-main .article-nav__link{min-height:44px}
+.series__repo-link a{display:inline-flex;align-items:center;min-height:44px}
 
 @media (max-width: 720px){
-  .article__title{ font-size: 22px; }
+  .series-card .host-card__status{white-space:normal}
 }

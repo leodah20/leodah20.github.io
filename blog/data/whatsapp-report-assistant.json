@@ -1,32 +1,31 @@
 {
   "slug": "whatsapp-report-assistant",
-  "projectTitle": "Assistente local de relatórios pelo WhatsApp",
-  "seriesSummary": "Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.",
-  "repoUrl": "https://github.com/leodah20/whatsapp-report-assistant",
-  "repoLabel": "código completo",
+  "projectTitle": "Runavolt: Central de Chamados",
+  "seriesSummary": "Como saí de registros espalhados para uma Central que liga chamados, evidências e revisão mensal.",
+  "repoUrl": "https://leodah20.github.io/runavolt-blog-publico/estudos/",
+  "repoLabel": "Ver documentação do projeto",
   "chapters": [
     {
       "number": 1,
-      "title": "Antes do relatório automático, a fonte precisa sobreviver",
-      "articleTitle": "Um assistente no WhatsApp, uma fila no SQLite e nenhuma API de IA paga",
-      "oneLine": "Como separei coleta de interpretação, por que um teste de ping ou uma foto não encerram um chamado, e o que aprendi quando o bot confirmou só uma de duas respostas.",
+      "title": "Antes do relatório, guardar a fonte",
+      "articleTitle": "Antes do relatório, guardar a fonte",
+      "oneLine": "Por que conservar o registro original e não deixar que uma inferência vire uma baixa.",
       "status": "published",
       "slug": "01-fonte-antes-do-relatorio",
-      "subtitle": "O primeiro problema não era escrever mais rápido. Era parar de reconstruir o mês inteiro a partir de uma exportação de conversa.",
-      "readingMinutes": 7,
+      "subtitle": "Como separei a coleta do WhatsApp, a análise de contexto e a decisão sobre o andamento.",
+      "readingMinutes": 2,
       "file": "01-fonte-antes-do-relatorio.md"
     },
     {
       "number": 2,
-      "title": "Resposta recebida não é problema resolvido",
-      "oneLine": "O vínculo por mensagem citada ou código, confirmações persistidas e os cuidados para uma atualização não virar encerramento técnico por engano.",
-      "status": "planned"
-    },
-    {
-      "number": 3,
-      "title": "Retomada, entrega incerta e o caminho até o relatório final",
-      "oneLine": "Checkpoints, filas após reinício e a diferença entre manter fontes organizadas e entregar um documento mensal revisado. Próximo capítulo, não promessa de funcionalidade pronta.",
-      "status": "planned"
+      "slug": "02-evidencias-e-operacao",
+      "title": "Evidências, permissões e operação",
+      "subtitle": "Como a Central ganhou um painel operacional sem virar uma porta de administração remota.",
+      "oneLine": "Histórico, mídia, papéis de acesso e o que o inspetor HTTP mostra de verdade.",
+      "status": "published",
+      "readingMinutes": 2,
+      "file": "02-evidencias-e-operacao.md"
     }
-  ]
+  ],
+  "featured": true
 }

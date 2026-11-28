@@ -9,16 +9,6 @@ const CONTENT = {
 
   githubUsername: "leodah20",
 
-  // Lines typed out in the hero terminal, in order.
-  heroTyped: "whoami",
-  heroOutput: [
-    "Leonardo Cordeiro Sutil",
-    "Analista de Redes Jr. -> Build Engenharia",
-    "",
-    "Infraestrutura, servidores e redes corporativas em ambiente",
-    "produtivo real: Windows Server, Linux, VMware, Zabbix, FortiGate,",
-    "MikroTik. Bacharel em Ciencia da Computacao (UNIP, form. jul. 2026)."
-  ],
 
   // Newest first. Build Engenharia uses `roles` (an array) to show a real
   // promotion; every other entry uses the flat role/period/current shape.
@@ -26,14 +16,14 @@ const CONTENT = {
     {
       company: "Build Engenharia",
       roles: [
-        { title: "Estagiario em Infraestrutura de TI e Automacao Predial", period: "set. 2025 - jul. 2026", current: false },
+        { title: "Estagiário em Infraestrutura de TI e Automação Predial", period: "set. 2025 - jul. 2026", current: false },
         { title: "Analista de Redes Jr.", period: "jul. 2026 - atual", current: true }
       ],
-      desc: "Empresa especializada em tecnologia predial e seguranca eletronica. Atuacao dividida em tres frentes:",
+      desc: "Atuação em infraestrutura de TI, redes corporativas e automação predial.",
       highlights: [
-        "Servidores: montagem de hardware, instalacao e configuracao de Windows Server 2016/2019/2022 e Linux Ubuntu Server; DHCP, DNS e File Server; virtualizacao com VMware ESXi e Hyper-V.",
-        "Redes corporativas: switches Cisco e HP, roteadores MikroTik, firewalls pfSense e FortiGate; criacao de VLANs e regras de firewall; monitoramento via SNMP e Zabbix; diagnostico de incidentes em producao.",
-        "Automacao predial e seguranca: CFTV, controle de acesso e CLPs (Controladores Logicos Programaveis)."
+        "Servidores: montagem de hardware, instalação e configuração de Windows Server e Ubuntu Server; DHCP, DNS e servidor de arquivos; virtualização com VMware ESXi e Hyper-V.",
+        "Redes corporativas: switches Cisco e HP, roteadores MikroTik, pfSense e FortiGate; VLANs, regras de firewall, monitoramento via SNMP e Zabbix e diagnóstico de incidentes.",
+        "Automação predial e segurança: CFTV, controle de acesso e controladores lógicos programáveis (CLPs)."
       ]
     },
     {
@@ -41,31 +31,31 @@ const CONTENT = {
       role: "Atendimento ao cliente",
       period: "jun. 2024 - mar. 2025",
       current: false,
-      desc: "Atendimento direto ao cliente e operacao de caixa em ambiente de alto volume."
+      desc: "Atendimento direto ao cliente e operação de caixa em ambiente de alto volume."
     },
     {
-      company: "Lemos e Lemos Assessoria em Seguranca do Trabalho",
-      role: "Estagiario de engenharia",
+      company: "Lemos e Lemos Assessoria em Segurança do Trabalho",
+      role: "Estagiário de engenharia",
       period: "dez. 2021 - abr. 2022",
       current: false,
-      desc: "Suporte administrativo: relatorios tecnicos, controle de contas a pagar/receber e prazos contratuais."
+      desc: "Suporte administrativo: relatórios técnicos, controle de contas a pagar e receber e prazos contratuais."
     },
     {
-      company: "Incubadora Tecnologica UTFPR",
-      role: "Bolsista de gestao",
+      company: "Incubadora Tecnológica UTFPR",
+      role: "Bolsista de gestão",
       period: "nov. 2020 - nov. 2021",
       current: false,
-      desc: "Suporte a startups em fase de incubacao: acompanhamento de indicadores, relatorios tecnicos e gerenciais."
+      desc: "Suporte a startups em incubação: acompanhamento de indicadores, relatórios técnicos e gerenciais."
     }
   ],
 
   education: [
     {
-      title: "Bacharelado em Ciencia da Computacao",
-      place: "Universidade Paulista (UNIP), Sao Paulo",
+      title: "Bacharelado em Ciência da Computação",
+      place: "Universidade Paulista (UNIP), São Paulo",
       period: "ago. 2022 - jul. 2026",
       current: false,
-      desc: "Formacao concluida, conciliada com atuacao pratica em infraestrutura de TI."
+      desc: "Formação concluída, conciliada com atuação prática em infraestrutura de TI."
     }
   ],
 
@@ -114,61 +104,60 @@ const CONTENT = {
     { name: "EFSET English Certificate 75/100 (C2 Proficient)", issuer: "EF SET", date: "22 set. 2021" }
   ],
 
-  // EDIT ME: add one object per project. Newest first. `demo` presence
-  // controls the host-card status label (online vs source-only) — do not
-  // add a demo link unless it is a real, reachable URL.
+  // Closed scopes: archived studies and completed academic deliverables.
   projects: [
     {
-      name: "whatsapp-report-assistant",
-      period: "nov. 2026 - atual",
-      statusLabel: "execução local",
-      desc: "Assistente local para registros de manutenção enviados pelo WhatsApp: arquiva fontes, pede contexto, vincula respostas ao chamado e retoma pendências depois que o computador liga. IA textual com Ollama e Qwen3, sem API paga.",
-      note: "Código completo público e sanitizado, com instalação local e continuidade opcional entre agentes. Dados, sessões e credenciais fora do Git. Geração final do relatório, análise visual e conversa livre ainda não estão implementadas.",
-      stack: ["Node.js", "SQLite", "Ollama", "Qwen3", "Python", "Windows"],
-      link: "https://github.com/leodah20/whatsapp-report-assistant",
-      linkLabel: "código completo",
-      blog: "/blog/whatsapp-report-assistant/"
+      name: "Chatbot acadêmico",
+      period: "2025–2026",
+      kind: "TCC em equipe · Concluído",
+      desc: "Desenvolvi o front-end administrativo e a integração com a API para gestão de avisos, calendário e conteúdo acadêmico. A demonstração é estática.",
+      stack: ["Python", "Flask", "Jinja2", "REST"],
+      demo: "chatbot-front-demo/",
+      link: "https://github.com/leodah20/chatbot-front"
     },
     {
-      name: "pokemon-trainer-companion",
-      period: "2026 - atual",
-      featured: true,
-      progress: 94,
-      progressLabel: "94% — 34/36 features (v1.0 Beta)",
-      desc: "App mobile (React Native + backend NestJS) para treinadores de Pokemon GO: calculadora de IV, ranking de PvP, contadores de raid, Pokedex com lore, e um overlay flutuante com IA (Gemini) que le a tela via OCR e da dicas em tempo real, sem login na conta do jogo.",
-      stack: ["React Native", "TypeScript", "Kotlin", "NestJS", "Prisma", "Gemini AI"],
-      link: "https://github.com/leodah20/pokemon-trainer-companion"
+      name: "Pokémon Trainer Companion",
+      period: "2026",
+      kind: "Protótipo Android · Estudo concluído",
+      desc: "Explorei um overlay de leitura de tela no Android usando OCR e um backend para interpretar o resultado. O recorte é a arquitetura do protótipo, não um aplicativo em manutenção.",
+      stack: ["React Native", "TypeScript", "Kotlin", "NestJS"],
+      link: "https://github.com/leodah20/pokemon-trainer-companion",
+      blog: "blog/pokemon-trainer-companion/"
     },
     {
       name: "VZBet",
-      period: "2026 - atual",
-      desc: "App de palpites de placar para times de futebol de varzea (amador/local): torcedores preveem o placar de cada partida, ganham pontos por acerto (3 no placar exato, 1 no resultado certo, 0 no errado) e disputam um ranking. Sem dinheiro real - premios sao combinados por fora do app.",
-      stack: ["NestJS", "Prisma", "PostgreSQL", "TypeScript", "React", "Vite"],
-      link: "https://github.com/leodah20/vzbet"
+      period: "2026",
+      kind: "Modelagem de produto · Estudo concluído",
+      desc: "Modelei palpites e pontuação para futebol de várzea. O estudo documenta as regras e como evitar calcular o mesmo resultado mais de uma vez.",
+      stack: ["NestJS", "Prisma", "PostgreSQL", "React"],
+      link: "https://github.com/leodah20/vzbet",
+      blog: "blog/vzbet/"
     },
     {
-      name: "ecofuturo",
+      name: "Ecofuturo",
       period: "2026",
-      desc: "Site sobre energias renovaveis no Brasil, feito para a disciplina de Programacao Web Responsiva (UNIP). Tabela comparativa de fontes de energia, grafico interativo (Chart.js), calculadora de pegada de carbono, simulador de energia solar com dados do INPE/CRESESB e quiz interativo.",
-      stack: ["HTML5", "CSS3", "JavaScript", "Chart.js"],
+      kind: "Projeto acadêmico · Concluído",
+      desc: "Site sobre energia renovável no Brasil, com gráficos comparativos, calculadora de carbono, simulador solar e quiz.",
+      stack: ["HTML", "CSS", "JavaScript", "Chart.js"],
       demo: "https://leodah20.github.io/APS/",
       link: "https://github.com/leodah20/APS"
     },
     {
-      name: "chatbot-front",
-      period: "2025 - atual",
-      desc: "Painel administrativo (Flask) para gestao academica universitaria: avisos, conteudo, calendario, docentes e duvidas frequentes. Consome uma API REST (FastAPI + Supabase) e se integra a um chatbot com NLU em Rasa. Projeto em grupo (TCC) — atuacao no front-end e na integracao com a API.",
-      note: "O demo abaixo e um prototipo estatico (sem backend real) so para mostrar o front-end.",
-      stack: ["Python", "Flask", "Jinja2", "REST API"],
-      demo: "https://leodah20.github.io/chatbot-front-demo/",
-      link: "https://github.com/leodah20/chatbot-front"
+      name: "Claude Remote Server",
+      period: "2026",
+      kind: "Laboratório de redes · Estudo concluído",
+      desc: "Montei um laboratório para continuar sessões de desenvolvimento de outro dispositivo e documentei a escolha da VPN e os limites do ambiente.",
+      stack: ["Linux", "SSH", "WireGuard", "RouterOS"],
+      link: "https://github.com/leodah20/claude-remote-server",
+      blog: "blog/claude-remote-server/"
     }
   ],
 
   contact: [
     { label: "github",   value: "github.com/leodah20",                          href: "https://github.com/leodah20" },
     { label: "linkedin", value: "linkedin.com/in/leonardo-cordeiro-sutil",       href: "https://www.linkedin.com/in/leonardo-cordeiro-sutil" },
-    { label: "blog",     value: "medium.com/@leoh.cordeiros",                    href: "https://medium.com/@leoh.cordeiros" },
+    { label: "blog",     value: "Blog de estudos",                             href: "blog/" },
+    { label: "Medium",   value: "medium.com/@leoh.cordeiros",                   href: "https://medium.com/@leoh.cordeiros" },
     { label: "email",    value: "leoh.cordeiros@gmail.com",                      href: "mailto:leoh.cordeiros@gmail.com" }
   ]
 

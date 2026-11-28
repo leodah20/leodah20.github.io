@@ -23,23 +23,19 @@ function readJson(file) {
 
 function sidebarNav(prefix) {
   const home = `${prefix}index.html`;
-  return `<nav class="sidebar" id="sidebar">
-  <div class="sidebar__brand">$_</div>
+  return `<nav class="sidebar" id="sidebar" aria-label="Navegação principal">
+  <a class="sidebar__brand" href="${home}"><span aria-hidden="true">$_</span> Leonardo</a>
   <ul class="sidebar__nav">
-    <li><a href="${home}#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
-    <li><a href="${home}#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
-    <li><a href="${home}#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
-    <li><a href="${home}#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
-    <li><a href="${home}#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
-    <li><a href="${home}#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+    <li><a href="${home}#projects"><span class="sidebar__label">Projetos</span></a></li>
+    <li><a href="${home}#experience"><span class="sidebar__label">Currículo</span></a></li>
+    <li><a href="${home}#skills"><span class="sidebar__label">Tecnologias</span></a></li>
+    <li><a href="${home}#certifications" class="nav-detail"><span class="sidebar__label">Certificações</span></a></li>
+    <li><a href="${home}#github-status" class="nav-detail"><span class="sidebar__label">GitHub</span></a></li>
+    <li><a href="${home}#contact"><span class="sidebar__label">Contato</span></a></li>
+    <li><a href="${prefix}blog/" aria-current="true"><span class="sidebar__label">Blog</span></a></li>
   </ul>
-  <ul class="sidebar__nav sidebar__nav--secondary">
-    <li><a href="${prefix}blog/index.html" class="is-active" title="Você está no blog"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog<span class="sidebar__external-icon" aria-hidden="true">&#8599;</span></span></a></li>
-  </ul>
-  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
-    <span data-theme-icon></span>
-  </button>
+  <div class="sidebar__tools"><button class="theme-toggle" id="themeToggle" type="button" hidden>Alterar tema</button>
+  <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="false" hidden>Pausar movimento</button></div>
 </nav>`;
 }
 
@@ -52,14 +48,18 @@ function pageShell({ title, description, bodyHtml, depth }) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(description)}">
+<meta property="og:title" content="${escapeHtml(title)}">
+<meta property="og:description" content="${escapeHtml(description)}">
 <link rel="icon" type="image/svg+xml" href="${prefix}favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${prefix}css/style.css">
+<link rel="stylesheet" href="${prefix}css/orbital.css?v=1">
 <link rel="stylesheet" href="${prefix}css/blog.css">
 </head>
 <body class="blog-body">
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
 <div class="crt-overlay" aria-hidden="true"></div>
 <div class="bg-aurora" aria-hidden="true"></div>
 <div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
@@ -67,13 +67,10 @@ function pageShell({ title, description, bodyHtml, depth }) {
 <div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 ${sidebarNav(prefix)}
-<main class="blog-main">
+<main class="blog-main" id="main" tabindex="-1">
 ${bodyHtml}
 </main>
-<footer class="footer">
-  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
-</footer>
-<script src="${prefix}blog/blog.js"></script>
+<script src="${prefix}js/shell.js"></script>
 </body>
 </html>
 `;
@@ -86,10 +83,11 @@ function chapterNav(series, chapterIndex) {
   if (prev && prev.status === "published") {
     links.push(`<a class="article-nav__link article-nav__link--prev" href="../${prev.slug}/">&larr; ${escapeHtml(prev.title)}</a>`);
   }
+  links.push(`<a class="article-nav__link" href="../">Voltar à série</a>`);
   if (next && next.status === "published") {
     links.push(`<a class="article-nav__link article-nav__link--next" href="../${next.slug}/">${escapeHtml(next.title)} &rarr;</a>`);
   }
-  return links.length ? `<nav class="article-nav">${links.join("")}</nav>` : "";
+  return `<nav class="article-nav" aria-label="Capítulos da série">${links.join("")}</nav>`;
 }
 
 function buildChapterPage(series, chapter, chapterIndex) {
@@ -104,7 +102,7 @@ function buildChapterPage(series, chapter, chapterIndex) {
     </p>
     <h1 class="article__title">${escapeHtml(chapter.articleTitle || chapter.title)}</h1>
     <p class="article__subtitle">${escapeHtml(chapter.subtitle)}</p>
-    <p class="article__meta">${escapeHtml(String(chapter.readingMinutes))} min de leitura</p>
+    <p class="article__meta">${chapter.readingMinutes} min de leitura · Parte ${chapter.number} de ${series.chapters.length}</p>
     <div class="article__body">
 ${html}
     </div>
@@ -122,7 +120,6 @@ ${html}
 function buildSeriesPage(series) {
   const items = series.chapters
     .map((c) => {
-      if (c.status === "published") {
         return `<li class="series-toc__item series-toc__item--published">
           <a href="${c.slug}/">
             <span class="series-toc__number">${String(c.number).padStart(2, "0")}</span>
@@ -130,13 +127,6 @@ function buildSeriesPage(series) {
           </a>
           <p class="series-toc__oneline">${escapeHtml(c.oneLine)}</p>
         </li>`;
-      }
-      return `<li class="series-toc__item series-toc__item--planned">
-        <span class="series-toc__number">${String(c.number).padStart(2, "0")}</span>
-        <span class="series-toc__title">${escapeHtml(c.title)}</span>
-        <span class="badge series-toc__badge">planejado</span>
-        <p class="series-toc__oneline">${escapeHtml(c.oneLine)}</p>
-      </li>`;
     })
     .join("\n");
 
@@ -145,7 +135,8 @@ function buildSeriesPage(series) {
     <p class="article__breadcrumb"><a href="../">#blog</a> / ${escapeHtml(series.projectTitle)}</p>
     <h1 class="series__title">${escapeHtml(series.projectTitle)}</h1>
     <p class="series__summary">${escapeHtml(series.seriesSummary)}</p>
-    <p class="series__repo-link"><a href="${escapeHtml(series.repoUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(series.repoLabel || "source")} &rarr;</a></p>
+    <p class="article__meta">Série concluída · ${series.chapters.length} ${series.chapters.length === 1 ? "capítulo" : "capítulos"}</p>
+    <p class="series__repo-link"><a href="${escapeHtml(series.repoUrl)}">${escapeHtml(series.repoLabel || "Ver código")}</a></p>
     <ol class="series-toc">
 ${items}
     </ol>
@@ -163,15 +154,14 @@ function buildBlogIndex(allSeries) {
   const cards = allSeries
     .map((series) => {
       const published = series.chapters.filter((c) => c.status === "published").length;
-      return `<article class="host-card series-card">
+      return `<article class="host-card series-card${series.featured ? " host-card--featured" : ""}">
         <div class="host-card__head">
-          <h3 class="host-card__name">${escapeHtml(series.projectTitle)}</h3>
-          <span class="host-card__status"><span class="host-card__status-dot"></span>${published} cap. publicado${published === 1 ? "" : "s"}</span>
+          <h2 class="host-card__name">${escapeHtml(series.projectTitle)}</h2>
+          <span class="host-card__status">Série concluída · ${published} ${published === 1 ? "capítulo" : "capítulos"}</span>
         </div>
         <p class="host-card__desc">${escapeHtml(series.seriesSummary)}</p>
         <div class="host-card__links">
-          <a class="host-card__link" href="${series.slug}/">ler série</a>
-          <a class="host-card__link" href="${escapeHtml(series.repoUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(series.repoLabel || "source")}</a>
+          <a class="host-card__link" href="${series.slug}/">Ler série</a>
         </div>
       </article>`;
     })
@@ -184,7 +174,8 @@ function buildBlogIndex(allSeries) {
       <span class="window__title">blog/ — series</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la blog/ --series</p>
+      <h1 class="series__title">Blog de estudos</h1>
+      <p class="series__summary blog-index__intro">Séries curtas sobre decisões que tomei nos meus projetos, do código à infraestrutura.</p>
       <div class="hosts-grid" id="blogSeriesGrid">
 ${cards}
       </div>
@@ -205,7 +196,24 @@ function main() {
     .filter((f) => f.endsWith(".json") && f !== "index.json")
     .sort();
 
-  const allSeries = manifestFiles.map((f) => readJson(path.join(DATA_DIR, f)));
+  const allSeries = manifestFiles.map((f) => {
+    const series = readJson(path.join(DATA_DIR, f));
+    if (series.slug !== f.slice(0, -5) || !/^[a-z0-9-]+$/.test(series.slug)
+        || !Array.isArray(series.chapters) || series.chapters.length < 1 || series.chapters.length > 3) {
+      throw new Error(`Série inválida: ${f}`);
+    }
+    const seen = new Set();
+    for (const [idx, chapter] of series.chapters.entries()) {
+      if (chapter.status !== "published" || chapter.number !== idx + 1 || !/^[a-z0-9-]+$/.test(chapter.slug)
+          || chapter.file !== chapter.slug + ".md" || seen.has(chapter.slug)
+          || !Number.isSafeInteger(chapter.readingMinutes) || chapter.readingMinutes < 1
+          || !fs.existsSync(path.join(DATA_DIR, series.slug, chapter.file))) {
+        throw new Error(`Capítulo inválido ou sem texto em ${f}: ${idx + 1}`);
+      }
+      seen.add(chapter.slug);
+    }
+    return series;
+  }).sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
 
   for (const series of allSeries) {
     const seriesDir = path.join(BLOG_DIR, series.slug);
@@ -224,7 +232,7 @@ function main() {
 
   fs.writeFileSync(path.join(BLOG_DIR, "index.html"), buildBlogIndex(allSeries));
 
-  // Also write a small manifest the homepage's #blog section fetches client-side.
+  // Índice de metadados para consumidores que não precisam do HTML.
   fs.writeFileSync(
     path.join(BLOG_DIR, "data", "index.json"),
     JSON.stringify(

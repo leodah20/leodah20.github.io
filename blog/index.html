@@ -5,39 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog — Leonardo Cordeiro</title>
 <meta name="description" content="Bastidores reais dos meus projetos: decisões, arquitetura, código e o que deu certo (ou não).">
+<meta property="og:title" content="Blog — Leonardo Cordeiro">
+<meta property="og:description" content="Bastidores reais dos meus projetos: decisões, arquitetura, código e o que deu certo (ou não).">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/orbital.css?v=1">
 <link rel="stylesheet" href="../css/blog.css">
 </head>
 <body class="blog-body">
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
 <div class="crt-overlay" aria-hidden="true"></div>
 <div class="bg-aurora" aria-hidden="true"></div>
 <div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
 <div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
 <div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
-<nav class="sidebar" id="sidebar">
-  <div class="sidebar__brand">$_</div>
+<nav class="sidebar" id="sidebar" aria-label="Navegação principal">
+  <a class="sidebar__brand" href="../index.html"><span aria-hidden="true">$_</span> Leonardo</a>
   <ul class="sidebar__nav">
-    <li><a href="../index.html#whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
-    <li><a href="../index.html#skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
-    <li><a href="../index.html#certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
-    <li><a href="../index.html#github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
-    <li><a href="../index.html#projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
-    <li><a href="../index.html#contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+    <li><a href="../index.html#projects"><span class="sidebar__label">Projetos</span></a></li>
+    <li><a href="../index.html#experience"><span class="sidebar__label">Currículo</span></a></li>
+    <li><a href="../index.html#skills"><span class="sidebar__label">Tecnologias</span></a></li>
+    <li><a href="../index.html#certifications" class="nav-detail"><span class="sidebar__label">Certificações</span></a></li>
+    <li><a href="../index.html#github-status" class="nav-detail"><span class="sidebar__label">GitHub</span></a></li>
+    <li><a href="../index.html#contact"><span class="sidebar__label">Contato</span></a></li>
+    <li><a href="../blog/" aria-current="true"><span class="sidebar__label">Blog</span></a></li>
   </ul>
-  <ul class="sidebar__nav sidebar__nav--secondary">
-    <li><a href="../blog/index.html" class="is-active" title="Você está no blog"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog<span class="sidebar__external-icon" aria-hidden="true">&#8599;</span></span></a></li>
-  </ul>
-  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
-    <span data-theme-icon></span>
-  </button>
+  <div class="sidebar__tools"><button class="theme-toggle" id="themeToggle" type="button" hidden>Alterar tema</button>
+  <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="false" hidden>Pausar movimento</button></div>
 </nav>
-<main class="blog-main">
+<main class="blog-main" id="main" tabindex="-1">
 
   <section class="window is-revealed" id="blog-index">
     <div class="window__chrome">
@@ -45,70 +45,63 @@
       <span class="window__title">blog/ — series</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la blog/ --series</p>
+      <h1 class="series__title">Blog de estudos</h1>
+      <p class="series__summary blog-index__intro">Séries curtas sobre decisões que tomei nos meus projetos, do código à infraestrutura.</p>
       <div class="hosts-grid" id="blogSeriesGrid">
-<article class="host-card series-card">
+<article class="host-card series-card host-card--featured">
         <div class="host-card__head">
-          <h3 class="host-card__name">claude-remote-server</h3>
-          <span class="host-card__status"><span class="host-card__status-dot"></span>1 cap. publicado</span>
+          <h2 class="host-card__name">Runavolt: Central de Chamados</h2>
+          <span class="host-card__status">Série concluída · 2 capítulos</span>
         </div>
-        <p class="host-card__desc">Transformar um notebook velho parado + um MikroTik em um servidor pessoal 24/7 pra rodar o Claude Code de qualquer lugar, direto do celular, sem VPS paga e sem expor uma porta sequer pra internet. Cada capítulo pega uma camada — decisão de rede, WireGuard no RouterOS, o notebook virando servidor, tmux, o fluxo de uma sessão real — e mostra a decisão técnica antes da configuração.</p>
+        <p class="host-card__desc">Como saí de registros espalhados para uma Central que liga chamados, evidências e revisão mensal.</p>
         <div class="host-card__links">
-          <a class="host-card__link" href="claude-remote-server/">ler série</a>
-          <a class="host-card__link" href="https://github.com/leodah20/claude-remote-server" target="_blank" rel="noopener noreferrer">source</a>
+          <a class="host-card__link" href="whatsapp-report-assistant/">Ler série</a>
         </div>
       </article>
 <article class="host-card series-card">
         <div class="host-card__head">
-          <h3 class="host-card__name">Pokémon Trainer Companion</h3>
-          <span class="host-card__status"><span class="host-card__status-dot"></span>1 cap. publicado</span>
+          <h2 class="host-card__name">Laboratório de acesso remoto</h2>
+          <span class="host-card__status">Série concluída · 1 capítulo</span>
         </div>
-        <p class="host-card__desc">O PTC é um app de Pokémon GO em React Native com backend NestJS e um módulo nativo Android em Kotlin. O objetivo não é ser mais uma calculadora de IV: é uma janela flutuante que lê a tela ao vivo via OCR on-device e dá dicas contextuais, sem login na Niantic e sem tocar na memória do jogo. A decisão de arquitetura que sustenta o overlay, o módulo nativo, o pipeline de OCR, o backend, o grounding da IA e o que ficou deliberadamente fora do beta.</p>
+        <p class="host-card__desc">Como usei um notebook reaproveitado, uma VPN e sessões persistentes para estudar acesso remoto de desenvolvimento.</p>
         <div class="host-card__links">
-          <a class="host-card__link" href="pokemon-trainer-companion/">ler série</a>
-          <a class="host-card__link" href="https://github.com/leodah20/pokemon-trainer-companion" target="_blank" rel="noopener noreferrer">source</a>
+          <a class="host-card__link" href="claude-remote-server/">Ler série</a>
         </div>
       </article>
 <article class="host-card series-card">
         <div class="host-card__head">
-          <h3 class="host-card__name">Portfólio como NOC Dashboard</h3>
-          <span class="host-card__status"><span class="host-card__status-dot"></span>1 cap. publicado</span>
+          <h2 class="host-card__name">Pokémon Trainer Companion</h2>
+          <span class="host-card__status">Série concluída · 1 capítulo</span>
         </div>
-        <p class="host-card__desc">Como reconstruí meu portfólio (leodah20.github.io) de uma coluna de texto monoespaçado para um &quot;NOC dashboard&quot;: diagrama de topologia de skills clicável, cards estilo host monitorado, LED wall de certificações e calendário de contribuições real — tudo em HTML, CSS e JS puro, sem framework e sem build step.</p>
+        <p class="host-card__desc">Estudo de um overlay Android: captura autorizada, leitura por OCR e contexto para o backend.</p>
         <div class="host-card__links">
-          <a class="host-card__link" href="portfolio-noc-dashboard/">ler série</a>
-          <a class="host-card__link" href="https://github.com/leodah20/leodah20.github.io" target="_blank" rel="noopener noreferrer">source</a>
+          <a class="host-card__link" href="pokemon-trainer-companion/">Ler série</a>
         </div>
       </article>
 <article class="host-card series-card">
         <div class="host-card__head">
-          <h3 class="host-card__name">VZBet</h3>
-          <span class="host-card__status"><span class="host-card__status-dot"></span>1 cap. publicado</span>
+          <h2 class="host-card__name">Por dentro deste portfólio</h2>
+          <span class="host-card__status">Série concluída · 1 capítulo</span>
         </div>
-        <p class="host-card__desc">O VZBet é um app de palpites de placar para futebol de várzea: NestJS + Prisma + PostgreSQL no backend, Clean Architecture, e nenhum centavo passando por dentro do app. Modelagem do banco, camadas, armadilhas do Prisma 7, segurança e frontend — as decisões e os bugs reais no caminho. É um projeto pessoal em construção: onde ainda não fiz, eu digo que não fiz.</p>
+        <p class="host-card__desc">O terminal, a galáxia e as decisões de engenharia deste site estático.</p>
         <div class="host-card__links">
-          <a class="host-card__link" href="vzbet/">ler série</a>
-          <a class="host-card__link" href="https://github.com/leodah20/vzbet" target="_blank" rel="noopener noreferrer">source</a>
+          <a class="host-card__link" href="portfolio-noc-dashboard/">Ler série</a>
         </div>
       </article>
 <article class="host-card series-card">
         <div class="host-card__head">
-          <h3 class="host-card__name">Assistente local de relatórios pelo WhatsApp</h3>
-          <span class="host-card__status"><span class="host-card__status-dot"></span>1 cap. publicado</span>
+          <h2 class="host-card__name">VZBet</h2>
+          <span class="host-card__status">Série concluída · 1 capítulo</span>
         </div>
-        <p class="host-card__desc">Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.</p>
+        <p class="host-card__desc">Um estudo de modelagem e pontuação para palpites de futebol de várzea, sem pagamentos no app.</p>
         <div class="host-card__links">
-          <a class="host-card__link" href="whatsapp-report-assistant/">ler série</a>
-          <a class="host-card__link" href="https://github.com/leodah20/whatsapp-report-assistant" target="_blank" rel="noopener noreferrer">código completo</a>
+          <a class="host-card__link" href="vzbet/">Ler série</a>
         </div>
       </article>
       </div>
     </div>
   </section>
 </main>
-<footer class="footer">
-  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
-</footer>
-<script src="../blog/blog.js"></script>
+<script src="../js/shell.js"></script>
 </body>
 </html>

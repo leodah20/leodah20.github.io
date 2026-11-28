@@ -1,93 +1,92 @@
 [
   {
+    "slug": "whatsapp-report-assistant",
+    "projectTitle": "Runavolt: Central de Chamados",
+    "seriesSummary": "Como saí de registros espalhados para uma Central que liga chamados, evidências e revisão mensal.",
+    "repoUrl": "https://leodah20.github.io/runavolt-blog-publico/estudos/",
+    "repoLabel": "Ver documentação do projeto",
+    "publishedChapters": 2,
+    "latestChapter": {
+      "number": 2,
+      "slug": "02-evidencias-e-operacao",
+      "title": "Evidências, permissões e operação",
+      "subtitle": "Como a Central ganhou um painel operacional sem virar uma porta de administração remota.",
+      "oneLine": "Histórico, mídia, papéis de acesso e o que o inspetor HTTP mostra de verdade.",
+      "status": "published",
+      "readingMinutes": 2,
+      "file": "02-evidencias-e-operacao.md"
+    }
+  },
+  {
     "slug": "claude-remote-server",
-    "projectTitle": "claude-remote-server",
-    "seriesSummary": "Transformar um notebook velho parado + um MikroTik em um servidor pessoal 24/7 pra rodar o Claude Code de qualquer lugar, direto do celular, sem VPS paga e sem expor uma porta sequer pra internet. Cada capítulo pega uma camada — decisão de rede, WireGuard no RouterOS, o notebook virando servidor, tmux, o fluxo de uma sessão real — e mostra a decisão técnica antes da configuração.",
+    "projectTitle": "Laboratório de acesso remoto",
+    "seriesSummary": "Como usei um notebook reaproveitado, uma VPN e sessões persistentes para estudar acesso remoto de desenvolvimento.",
     "repoUrl": "https://github.com/leodah20/claude-remote-server",
     "publishedChapters": 1,
     "latestChapter": {
       "number": 1,
-      "title": "A decisão de rede: por que VPN no MikroTik e não VPS paga nem porta aberta",
-      "articleTitle": "Um notebook velho, um MikroTik e zero portas abertas",
-      "oneLine": "As três saídas possíveis pro problema de acessar minha máquina de casa remotamente, o tradeoff de cada uma e o desenho final da topologia (VPN 10.10.10.0/24, notebook em 192.168.88.50, zero porta exposta).",
+      "title": "Acesso remoto sem expor o terminal",
+      "articleTitle": "Acesso remoto sem expor o terminal",
+      "oneLine": "A topologia, o papel de cada componente e onde termina o laboratório.",
       "status": "published",
       "slug": "01-decisao-de-rede",
-      "subtitle": "Capítulo 1: por que a VPN mora no roteador, e não numa VPS paga nem atrás de um port forwarding.",
-      "readingMinutes": 6,
+      "subtitle": "A decisão de rede por trás de um laboratório com WireGuard, SSH e tmux.",
+      "readingMinutes": 2,
       "file": "01-decisao-de-rede.md"
     }
   },
   {
     "slug": "pokemon-trainer-companion",
     "projectTitle": "Pokémon Trainer Companion",
-    "seriesSummary": "O PTC é um app de Pokémon GO em React Native com backend NestJS e um módulo nativo Android em Kotlin. O objetivo não é ser mais uma calculadora de IV: é uma janela flutuante que lê a tela ao vivo via OCR on-device e dá dicas contextuais, sem login na Niantic e sem tocar na memória do jogo. A decisão de arquitetura que sustenta o overlay, o módulo nativo, o pipeline de OCR, o backend, o grounding da IA e o que ficou deliberadamente fora do beta.",
+    "seriesSummary": "Estudo de um overlay Android: captura autorizada, leitura por OCR e contexto para o backend.",
     "repoUrl": "https://github.com/leodah20/pokemon-trainer-companion",
     "publishedChapters": 1,
     "latestChapter": {
       "number": 1,
-      "title": "Por que o overlay existe (e o que ele obriga na arquitetura)",
-      "articleTitle": "Pokémon Trainer Companion, cap. 1: um overlay que lê a tela do jogo",
-      "oneLine": "O problema real de sair do jogo pra usar um app, a restrição \"nada de integração com a Niantic\", e como React Native + NestJS + módulo nativo Kotlin foram organizados em volta disso.",
+      "title": "O overlay e o caminho dos dados",
+      "articleTitle": "O overlay e o caminho dos dados",
+      "oneLine": "Do consentimento de captura ao texto interpretado, com limites explícitos.",
       "status": "published",
       "slug": "01-por-que-o-overlay-existe",
-      "subtitle": "Todo app de treinador na loja é a mesma calculadora de IV com uma skin diferente. Eu queria resolver o problema que ninguém resolve: ter que sair do jogo.",
-      "readingMinutes": 6,
+      "subtitle": "O que muda na arquitetura quando a entrada é uma leitura de tela, não um formulário.",
+      "readingMinutes": 2,
       "file": "01-por-que-o-overlay-existe.md"
     }
   },
   {
     "slug": "portfolio-noc-dashboard",
-    "projectTitle": "Portfólio como NOC Dashboard",
-    "seriesSummary": "Como reconstruí meu portfólio (leodah20.github.io) de uma coluna de texto monoespaçado para um \"NOC dashboard\": diagrama de topologia de skills clicável, cards estilo host monitorado, LED wall de certificações e calendário de contribuições real — tudo em HTML, CSS e JS puro, sem framework e sem build step.",
+    "projectTitle": "Por dentro deste portfólio",
+    "seriesSummary": "O terminal, a galáxia e as decisões de engenharia deste site estático.",
     "repoUrl": "https://github.com/leodah20/leodah20.github.io",
     "publishedChapters": 1,
     "latestChapter": {
       "number": 1,
-      "title": "Estático por decisão, não por preguiça",
-      "articleTitle": "Meu portfólio virou um NOC dashboard — e continua sendo HTML, CSS e JS puro",
-      "oneLine": "Por que mantive o portfólio em HTML/CSS/JS puro sem build step, o que isso obrigou a resolver na unha (SVG sem lib, dados sem backend) e como o calendário de contribuições virou um JSON commitado por GitHub Actions.",
+      "title": "Por que mantive o portfólio estático",
+      "articleTitle": "Por que mantive o portfólio estático",
+      "oneLine": "HTML, CSS e JavaScript, calendário local e um blog que vira HTML no build.",
       "status": "published",
       "slug": "01-estatico-por-decisao",
-      "subtitle": "Zero framework, zero build step, zero backend. A parte difícil não foi o visual: foi o calendário de contribuições do GitHub.",
-      "readingMinutes": 7,
+      "subtitle": "Um terminal de verdade como conceito visual, com dados e conteúdo separados da interface.",
+      "readingMinutes": 2,
       "file": "01-estatico-por-decisao.md"
     }
   },
   {
     "slug": "vzbet",
     "projectTitle": "VZBet",
-    "seriesSummary": "O VZBet é um app de palpites de placar para futebol de várzea: NestJS + Prisma + PostgreSQL no backend, Clean Architecture, e nenhum centavo passando por dentro do app. Modelagem do banco, camadas, armadilhas do Prisma 7, segurança e frontend — as decisões e os bugs reais no caminho. É um projeto pessoal em construção: onde ainda não fiz, eu digo que não fiz.",
+    "seriesSummary": "Um estudo de modelagem e pontuação para palpites de futebol de várzea, sem pagamentos no app.",
     "repoUrl": "https://github.com/leodah20/vzbet",
     "publishedChapters": 1,
     "latestChapter": {
       "number": 1,
-      "title": "6 tabelas e uma função pura: a modelagem do VZBet",
-      "articleTitle": "VZBet #1 — 6 tabelas e uma função pura",
-      "oneLine": "O domínio do app, o diagrama ER real das 6 tabelas do Prisma e a regra de pontuação (simples 3/0, múltipla 7/0) que é o coração do produto.",
+      "title": "A regra de pontuação antes da interface",
+      "articleTitle": "A regra de pontuação antes da interface",
+      "oneLine": "Entidades, uma regra testável e uma transação para fechar a rodada.",
       "status": "published",
       "slug": "01-modelagem-do-vzbet",
-      "subtitle": "Antes de escrever endpoint, eu tive que decidir o que o app é: e a resposta cabe em um diagrama ER e numa função de 12 linhas.",
-      "readingMinutes": 7,
+      "subtitle": "O que o banco precisa saber e como evitar pontuar duas vezes o mesmo jogo.",
+      "readingMinutes": 2,
       "file": "01-modelagem-do-vzbet.md"
-    }
-  },
-  {
-    "slug": "whatsapp-report-assistant",
-    "projectTitle": "Assistente local de relatórios pelo WhatsApp",
-    "seriesSummary": "Sair da exportação mensal do WhatsApp para uma coleta contínua, com perguntas de contexto e retomada após desligamento. As decisões de persistência, IA local e limites de envio por trás de um protótipo que ainda não gera o relatório final sozinho.",
-    "repoUrl": "https://github.com/leodah20/whatsapp-report-assistant",
-    "repoLabel": "código completo",
-    "publishedChapters": 1,
-    "latestChapter": {
-      "number": 1,
-      "title": "Antes do relatório automático, a fonte precisa sobreviver",
-      "articleTitle": "Um assistente no WhatsApp, uma fila no SQLite e nenhuma API de IA paga",
-      "oneLine": "Como separei coleta de interpretação, por que um teste de ping ou uma foto não encerram um chamado, e o que aprendi quando o bot confirmou só uma de duas respostas.",
-      "status": "published",
-      "slug": "01-fonte-antes-do-relatorio",
-      "subtitle": "O primeiro problema não era escrever mais rápido. Era parar de reconstruir o mês inteiro a partir de uma exportação de conversa.",
-      "readingMinutes": 7,
-      "file": "01-fonte-antes-do-relatorio.md"
     }
   }
 ]

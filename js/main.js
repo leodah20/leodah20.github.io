@@ -1,70 +1,6 @@
 (function () {
   "use strict";
 
-  /* ---------- theme ---------- */
-  const root = document.documentElement;
-  const toggleBtn = document.getElementById("themeToggle");
-  const iconEl = toggleBtn.querySelector("[data-theme-icon]");
-
-  function applyTheme(theme) {
-    root.setAttribute("data-theme", theme);
-    iconEl.textContent = theme === "light" ? "☾" : "☀";
-    localStorage.setItem("theme", theme);
-  }
-
-  const savedTheme = localStorage.getItem("theme");
-  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
-  applyTheme(savedTheme || (prefersLight ? "light" : "dark"));
-
-  toggleBtn.addEventListener("click", () => {
-    const current = root.getAttribute("data-theme");
-    applyTheme(current === "light" ? "dark" : "light");
-  });
-
-  /* ---------- session uptime ticker ---------- */
-  const uptimeEl = document.getElementById("sidebarUptime");
-  if (uptimeEl) {
-    const sessionStartedAt = Date.now();
-    function formatUptime(ms) {
-      const totalSeconds = Math.floor(ms / 1000);
-      const mins = Math.floor(totalSeconds / 60);
-      const secs = totalSeconds % 60;
-      return String(mins).padStart(2, "0") + ":" + String(secs).padStart(2, "0");
-    }
-    function tickUptime() {
-      uptimeEl.textContent = formatUptime(Date.now() - sessionStartedAt);
-    }
-    tickUptime();
-    setInterval(tickUptime, 1000);
-  }
-
-  /* ---------- twinkling starfield ---------- */
-  function generateStarShadows(count, size) {
-    const w = window.innerWidth * 1.4;
-    const h = window.innerHeight * 1.4;
-    const offsetX = w * 0.2;
-    const offsetY = h * 0.2;
-    const shadows = [];
-    for (let i = 0; i < count; i++) {
-      const x = Math.round(Math.random() * w - offsetX);
-      const y = Math.round(Math.random() * h - offsetY);
-      shadows.push(x + "px " + y + "px 0 " + size + "px var(--fg)");
-    }
-    return shadows.join(",");
-  }
-
-  function paintStars(id, count, size) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.width = "1px";
-    el.style.height = "1px";
-    el.style.background = "transparent";
-    el.style.boxShadow = generateStarShadows(count, size);
-  }
-
-  paintStars("bgStarsLarge", 22, 1.6);
-  paintStars("bgStarsMedium", 40, 1.05);
-  paintStars("bgStarsSmall", 65, 0.6);
 
   /* ---------- sidebar active-section tracking ---------- */
   const sidebarLinks = Array.from(document.querySelectorAll(".sidebar__nav a"));
@@ -106,27 +42,6 @@
     markActiveIfAtBottom();
   }
 
-  /* ---------- hero typing effect ---------- */
-  const typedCmdEl = document.getElementById("typedCmd");
-  const typedOutputEl = document.getElementById("typedOutput");
-
-  function typeText(el, text, speed, done) {
-    let i = 0;
-    (function step() {
-      if (i <= text.length) {
-        el.textContent = text.slice(0, i);
-        i++;
-        setTimeout(step, speed);
-      } else if (done) {
-        done();
-      }
-    })();
-  }
-
-  typedOutputEl.textContent = CONTENT.heroOutput.join("\n");
-  typeText(typedCmdEl, CONTENT.heroTyped, 90, () => {
-    setTimeout(() => typedOutputEl.classList.add("is-visible"), 150);
-  });
 
   /* ---------- experience ---------- */
   const experienceList = document.getElementById("experienceList");
@@ -491,7 +406,7 @@
   const GH_CACHE_TTL_MS = 10 * 60 * 1000;
 
   const GH_EVENT_LABELS = {
-    PushEvent: (e) => "push em " + e.repo.name + " (" + (e.payload.commits ? e.payload.commits.length : 0) + " commit(s))",
+    PushEvent: (e) => "push em " + e.repo.name,
     CreateEvent: (e) => "criou " + (e.payload.ref_type || "algo") + " em " + e.repo.name,
     PublicEvent: (e) => "tornou " + e.repo.name + " publico",
     WatchEvent: (e) => "deu star em " + e.repo.name,
@@ -682,128 +597,39 @@
 
   loadGithubStatus();
 
-  /* ---------- projects (host cards) ---------- */
+  /* ---------- completed portfolio work ---------- */
   const hostsGrid = document.getElementById("hostsGrid");
-  if (!CONTENT.projects.length) {
-    const empty = document.createElement("p");
-    empty.className = "empty-state";
-    empty.textContent = "cannot access 'hosts/*': entries coming soon";
-    hostsGrid.appendChild(empty);
-  } else {
-    CONTENT.projects.forEach((p) => {
-      const card = document.createElement("article");
-      card.className = "host-card" + (p.featured ? " host-card--featured" : "");
-
-      const head = document.createElement("div");
-      head.className = "host-card__head";
-
-      const name = document.createElement("h3");
-      name.className = "host-card__name";
-      name.textContent = p.name;
-      if (p.featured) {
-        const badge = document.createElement("span");
-        badge.className = "badge host-card__badge";
-        badge.textContent = "destaque";
-        name.appendChild(badge);
-      }
-      head.appendChild(name);
-
-      const isOnline = Boolean(p.demo);
-      const status = document.createElement("span");
-      status.className = "host-card__status" + (isOnline ? "" : " is-source");
-      const statusDot = document.createElement("span");
-      statusDot.className = "host-card__status-dot";
-      status.appendChild(statusDot);
-      status.appendChild(document.createTextNode(p.statusLabel || (isOnline ? "online" : "source only")));
-      head.appendChild(status);
-
-      card.appendChild(head);
-
-      if (p.period) {
-        const period = document.createElement("p");
-        period.className = "host-card__period";
-        period.textContent = p.period;
-        card.appendChild(period);
-      }
-
-      const desc = document.createElement("p");
-      desc.className = "host-card__desc";
-      desc.textContent = p.desc;
-      card.appendChild(desc);
-
-      if (p.stack && p.stack.length) {
-        const stack = document.createElement("div");
-        stack.className = "host-card__stack";
-        p.stack.forEach((s) => {
-          const span = document.createElement("span");
-          span.textContent = s;
-          stack.appendChild(span);
-        });
-        card.appendChild(stack);
-      }
-
-      if (typeof p.progress === "number") {
-        const progressWrap = document.createElement("div");
-        progressWrap.className = "host-card__progress";
-
-        const track = document.createElement("div");
-        track.className = "host-card__progress-track";
-        const bar = document.createElement("div");
-        bar.className = "host-card__progress-bar";
-        bar.style.width = Math.max(0, Math.min(100, p.progress)) + "%";
-        track.appendChild(bar);
-        progressWrap.appendChild(track);
-
-        const label = document.createElement("p");
-        label.className = "host-card__progress-label";
-        label.textContent = p.progressLabel || (p.progress + "%");
-        progressWrap.appendChild(label);
-
-        card.appendChild(progressWrap);
-      }
-
-      if (p.note) {
-        const note = document.createElement("p");
-        note.className = "host-card__note";
-        note.textContent = p.note;
-        card.appendChild(note);
-      }
-
-      const links = document.createElement("div");
-      links.className = "host-card__links";
-
-      if (p.demo) {
-        const demo = document.createElement("a");
-        demo.className = "host-card__link";
-        demo.href = p.demo;
-        demo.target = "_blank";
-        demo.rel = "noopener noreferrer";
-        demo.textContent = "live demo";
-        links.appendChild(demo);
-      }
-
-      if (p.link) {
-        const link = document.createElement("a");
-        link.className = "host-card__link";
-        link.href = p.link;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = p.linkLabel || "source";
-        links.appendChild(link);
-      }
-
-      if (p.blog) {
-        const blog = document.createElement("a");
-        blog.className = "host-card__link";
-        blog.href = p.blog;
-        blog.textContent = "bastidores no blog";
-        links.appendChild(blog);
-      }
-
-      card.appendChild(links);
-
-      hostsGrid.appendChild(card);
-    });
+  for (const project of CONTENT.projects) {
+    const card = document.createElement("article");
+    card.className = "host-card";
+    const title = document.createElement("h4");
+    title.className = "host-card__name";
+    title.textContent = project.name;
+    const status = document.createElement("p");
+    status.className = "host-card__period";
+    status.textContent = project.kind + " · " + project.period;
+    const description = document.createElement("p");
+    description.className = "host-card__desc";
+    description.textContent = project.desc;
+    const stack = document.createElement("div");
+    stack.className = "host-card__stack";
+    for (const technology of project.stack) {
+      const label = document.createElement("span");
+      label.textContent = technology;
+      stack.append(label);
+    }
+    const actions = document.createElement("div");
+    actions.className = "host-card__links";
+    for (const [label, href] of [["Ver código", project.link], ["Ver demonstração", project.demo], ["Ler estudo", project.blog]]) {
+      if (!href) continue;
+      const link = document.createElement("a");
+      link.className = "host-card__link";
+      link.textContent = label;
+      link.href = href;
+      actions.append(link);
+    }
+    card.append(title, status, description, stack, actions);
+    hostsGrid.append(card);
   }
 
   /* ---------- contact ---------- */
@@ -828,35 +654,7 @@
     contactList.appendChild(li);
   });
 
-  /* ---------- scroll reveal (also triggers skills-chart bar widths) ---------- */
-  const revealTargets = Array.from(document.querySelectorAll(".window"));
-
-  function revealSection(section) {
-    if (section.classList.contains("is-revealed")) return;
-    section.classList.add("is-revealed");
-    section.querySelectorAll(".skills-chart__bar[data-width]").forEach((bar) => {
-      bar.style.width = bar.dataset.width;
-    });
-  }
-
-  if ("IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            revealSection(entry.target);
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-    revealTargets.forEach((section) => revealObserver.observe(section));
-
-    // Safety net: never leave content permanently invisible if the observer
-    // is slow, throttled (e.g. backgrounded tab), or otherwise misbehaves.
-    setTimeout(() => revealTargets.forEach(revealSection), 1200);
-  } else {
-    revealTargets.forEach(revealSection);
-  }
+  document.querySelectorAll(".skills-chart__bar[data-width]").forEach(bar => {
+    bar.style.width = bar.dataset.width;
+  });
 })();

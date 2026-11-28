@@ -1,18 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Leonardo Cordeiro — Portfolio</title>
-<meta name="description" content="Leonardo Cordeiro — Computer Scientist transitioning into Sound &amp; Music Computing. Projects, skills, background.">
+<title>Leonardo Cordeiro Sutil | Portfólio</title>
+<meta name="description" content="Portfólio de Leonardo Cordeiro Sutil, desenvolvedor e analista de redes. Projetos, currículo e notas técnicas.">
+<meta name="theme-color" content="#10101c">
+<meta property="og:title" content="Leonardo Cordeiro Sutil | Portfólio">
+<meta property="og:description" content="Desenvolvimento de software, redes e infraestrutura. Projetos, currículo e notas técnicas.">
+<link rel="canonical" href="https://leodah20.github.io/">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/orbital.css?v=1">
 </head>
-<body>
+<body class="portfolio-body">
 
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
 <div class="crt-overlay" aria-hidden="true"></div>
 <div class="bg-aurora" aria-hidden="true"></div>
 <div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
@@ -20,35 +26,59 @@
 <div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
 <div class="bg-grid" aria-hidden="true"></div>
 
-<nav class="sidebar" id="sidebar">
-  <div class="sidebar__brand">$_</div>
+<nav class="sidebar" id="sidebar" aria-label="Navegação principal">
+  <a class="sidebar__brand" href="#whoami"><span aria-hidden="true">$_</span> Leonardo</a>
   <ul class="sidebar__nav">
-    <li><a href="#whoami" data-section="whoami"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#whoami</span></a></li>
-    <li><a href="#skills" data-section="skills"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#skills</span></a></li>
-    <li><a href="#certifications" data-section="certifications"><span class="sidebar__dot" style="--dot-color:var(--accent-3)"></span><span class="sidebar__label">#certifications</span></a></li>
-    <li><a href="#github-status" data-section="github-status"><span class="sidebar__dot" style="--dot-color:var(--accent)"></span><span class="sidebar__label">#github</span></a></li>
-    <li><a href="#projects" data-section="projects"><span class="sidebar__dot" style="--dot-color:var(--ok)"></span><span class="sidebar__label">#projects</span></a></li>
-    <li><a href="#contact" data-section="contact"><span class="sidebar__dot" style="--dot-color:var(--fg-dim)"></span><span class="sidebar__label">#contact</span></a></li>
+    <li><a href="#projects" data-section="projects" class="nav-primary"><span class="sidebar__label">Projetos</span></a></li>
+    <li><a href="#experience" data-section="experience"><span class="sidebar__label">Currículo</span></a></li>
+    <li><a href="#skills" data-section="skills"><span class="sidebar__label">Tecnologias</span></a></li>
+    <li><a href="#certifications" data-section="certifications" class="nav-detail"><span class="sidebar__label">Certificações</span></a></li>
+    <li><a href="#github-status" data-section="github-status" class="nav-detail"><span class="sidebar__label">GitHub</span></a></li>
+    <li><a href="#contact" data-section="contact"><span class="sidebar__label">Contato</span></a></li>
+    <li><a href="blog/"><span class="sidebar__label">Blog</span></a></li>
   </ul>
-  <ul class="sidebar__nav sidebar__nav--secondary">
-    <li><a href="blog/index.html" title="Abre o blog em outra pagina"><span class="sidebar__dot" style="--dot-color:var(--accent-2)"></span><span class="sidebar__label">#blog<span class="sidebar__external-icon" aria-hidden="true">&#8599;</span></span></a></li>
-  </ul>
-  <div class="sidebar__uptime" id="sidebarUptime" title="tempo nesta sessão">00:00</div>
-  <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
-    <span data-theme-icon></span>
-  </button>
+  <div class="sidebar__tools"><button class="theme-toggle" id="themeToggle" type="button" hidden>Alterar tema</button>
+  <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="false" hidden>Pausar movimento</button></div>
 </nav>
 
-<main>
+<main id="main" tabindex="-1">
 
-  <section class="window" id="whoami">
-    <div class="window__chrome">
+  <section class="window profile-hero" id="whoami" aria-labelledby="portfolio-title">
+    <div class="window__chrome" aria-hidden="true">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
       <span class="window__title">bash — 80x24</span>
     </div>
     <div class="window__body hero">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ <span id="typedCmd"></span><span class="caret" aria-hidden="true"></span></p>
-      <div id="typedOutput" class="hero__output"></div>
+      <p class="line terminal-command" aria-hidden="true"><span class="prompt">leonardo</span>:<span class="path">~</span>$ whoami<span class="caret" aria-hidden="true"></span></p>
+      <h1 id="portfolio-title">Leonardo Cordeiro Sutil</h1>
+      <p class="profile-role">Desenvolvedor e analista de redes</p>
+      <p class="profile-intro">Sou formado em Ciência da Computação pela UNIP. Trabalho com redes e infraestrutura e desenvolvo software para organizar rotinas técnicas, de atendimentos a relatórios.</p>
+      <div class="profile-actions"><a class="action action--primary" href="#projects">Ver projetos</a><a class="action" href="#experience">Ver currículo</a></div>
+    </div>
+  </section>
+
+  <section class="window" id="projects" aria-labelledby="projects-title">
+    <div class="window__chrome" aria-hidden="true">
+      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
+      <span class="window__title">projects/</span>
+    </div>
+    <div class="window__body">
+      <h2 class="section-title" id="projects-title">Projetos</h2>
+      <article class="project-feature">
+        <div class="project-feature__copy">
+          <p class="project-state project-state--active">Em desenvolvimento</p>
+          <h3>Runavolt <span>Central de Chamados</span></h3>
+          <p>Desenvolvi uma central de manutenção que reúne registros do WhatsApp, e-mails e evidências no mesmo chamado. A equipe acompanha pendências e revisa as fontes antes do relatório mensal.</p>
+          <p class="project-feature__stack">Node.js · SQLite · Python · Ollama · Web e Android</p>
+          <div class="profile-actions"><a class="action action--primary" href="https://leodah20.github.io/runavolt-blog-publico/demonstracao/">Ver demonstração</a><a class="action" href="blog/whatsapp-report-assistant/">Ler bastidores</a></div>
+        </div>
+        <a class="project-feature__visual" href="https://leodah20.github.io/runavolt-blog-publico/demonstracao/" aria-label="Ver a demonstração da Central de Chamados">
+          <img src="whatsapp-report-assistant/assets/demo/pc-fila.png" width="1366" height="768" alt="Interface da Central de Chamados com filas, detalhes e evidências de atendimentos fictícios" loading="lazy" decoding="async">
+        </a>
+      </article>
+      <h3 class="project-archive-title">Projetos e estudos concluídos</h3>
+      <p class="project-archive-intro">Trabalhos acadêmicos, protótipos e experimentos com os resultados que documentei em cada um.</p>
+      <div id="hostsGrid" class="hosts-grid"></div>
     </div>
   </section>
 
@@ -58,7 +88,7 @@
       <span class="window__title">experience.md</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat experience.md</p>
+      <h2 class="section-title">Experiência</h2>
       <div id="experienceList"></div>
     </div>
   </section>
@@ -69,7 +99,7 @@
       <span class="window__title">education.md</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat education.md</p>
+      <h2 class="section-title">Formação</h2>
       <div id="educationList"></div>
     </div>
   </section>
@@ -80,7 +110,7 @@
       <span class="window__title">skills/ — topology</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ map skills/ --topology</p>
+      <h2 class="section-title">Tecnologias</h2>
       <div class="topology">
         <div class="topology__diagram">
           <svg id="topologySvg" viewBox="0 0 460 460" role="img" aria-label="Diagrama de categorias de skills"></svg>
@@ -101,7 +131,7 @@
       <span class="window__title">certifications/ — led wall</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ ls -la certifications/ --led</p>
+      <h2 class="section-title">Certificações</h2>
       <div class="led-wall">
         <div class="led-wall__featured" id="certsFeatured"></div>
         <div class="led-wall__regular" id="certsRegular"></div>
@@ -117,7 +147,7 @@
       <span class="window__title">github.com/leodah20 — live status</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ curl api.github.com/users/leodah20</p>
+      <h2 class="section-title">Atividade no GitHub</h2>
       <div id="ghSummary" class="gh-summary">
         <p class="gh-status__hint">carregando dados ao vivo do GitHub...</p>
       </div>
@@ -135,34 +165,20 @@
     </div>
   </section>
 
-  <section class="window" id="projects">
-    <div class="window__chrome">
-      <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
-      <span class="window__title">projects/ — hosts</span>
-    </div>
-    <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ status hosts/ --all</p>
-      <div id="hostsGrid" class="hosts-grid"></div>
-    </div>
-  </section>
-
   <section class="window" id="contact">
     <div class="window__chrome">
       <span class="dot dot--red"></span><span class="dot dot--yellow"></span><span class="dot dot--green"></span>
       <span class="window__title">contact.txt</span>
     </div>
     <div class="window__body">
-      <p class="line"><span class="prompt">guest@leodah20</span>:<span class="path">~</span>$ cat contact.txt</p>
+      <h2 class="section-title">Contato</h2>
       <ul class="contact-list" id="contactList"></ul>
     </div>
   </section>
 
 </main>
 
-<footer class="footer">
-  <p>$ echo "built by hand, not a template" <span class="caret caret--footer" aria-hidden="true"></span></p>
-</footer>
-
+<script src="js/shell.js"></script>
 <script src="js/content.js"></script>
 <script src="js/main.js"></script>
 </body>

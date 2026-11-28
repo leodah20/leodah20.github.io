@@ -1,0 +1,22 @@
+name: Conferir blog estático
+
+on:
+  push:
+    paths: ["blog/**", ".github/workflows/check-blog.yml"]
+  pull_request:
+    paths: ["blog/**", ".github/workflows/check-blog.yml"]
+
+permissions:
+  contents: read
+
+jobs:
+  blog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - run: node blog/build.mjs
+      - run: node --test blog/blog.test.mjs
+      - run: git diff --exit-code -- blog && test -z "$(git ls-files --others --exclude-standard blog)"

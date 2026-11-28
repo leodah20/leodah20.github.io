@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evidências, permissões e operação — Runavolt: Central de Chamados</title>
+<meta name="description" content="Como a Central ganhou um painel operacional sem virar uma porta de administração remota.">
+<meta property="og:title" content="Evidências, permissões e operação — Runavolt: Central de Chamados">
+<meta property="og:description" content="Como a Central ganhou um painel operacional sem virar uma porta de administração remota.">
+<link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/orbital.css?v=1">
+<link rel="stylesheet" href="../../../css/blog.css">
+</head>
+<body class="blog-body">
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+<div class="crt-overlay" aria-hidden="true"></div>
+<div class="bg-aurora" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--large" id="bgStarsLarge" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--medium" id="bgStarsMedium" aria-hidden="true"></div>
+<div class="bg-stars bg-stars--small" id="bgStarsSmall" aria-hidden="true"></div>
+<div class="bg-grid" aria-hidden="true"></div>
+<nav class="sidebar" id="sidebar" aria-label="Navegação principal">
+  <a class="sidebar__brand" href="../../../index.html"><span aria-hidden="true">$_</span> Leonardo</a>
+  <ul class="sidebar__nav">
+    <li><a href="../../../index.html#projects"><span class="sidebar__label">Projetos</span></a></li>
+    <li><a href="../../../index.html#experience"><span class="sidebar__label">Currículo</span></a></li>
+    <li><a href="../../../index.html#skills"><span class="sidebar__label">Tecnologias</span></a></li>
+    <li><a href="../../../index.html#certifications" class="nav-detail"><span class="sidebar__label">Certificações</span></a></li>
+    <li><a href="../../../index.html#github-status" class="nav-detail"><span class="sidebar__label">GitHub</span></a></li>
+    <li><a href="../../../index.html#contact"><span class="sidebar__label">Contato</span></a></li>
+    <li><a href="../../../blog/" aria-current="true"><span class="sidebar__label">Blog</span></a></li>
+  </ul>
+  <div class="sidebar__tools"><button class="theme-toggle" id="themeToggle" type="button" hidden>Alterar tema</button>
+  <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="false" hidden>Pausar movimento</button></div>
+</nav>
+<main class="blog-main" id="main" tabindex="-1">
+
+  <article class="article">
+    <p class="article__breadcrumb">
+      <a href="../../">#blog</a> / <a href="../">Runavolt: Central de Chamados</a> / cap. 2
+    </p>
+    <h1 class="article__title">Evidências, permissões e operação</h1>
+    <p class="article__subtitle">Como a Central ganhou um painel operacional sem virar uma porta de administração remota.</p>
+    <p class="article__meta">2 min de leitura · Parte 2 de 2</p>
+    <div class="article__body">
+<p>A primeira versão da Central resolvia a coleta. À medida que ela passou a organizar atendimentos de verdade, apareceu uma segunda pergunta: quem pode ver, editar ou administrar cada parte?</p>
+<h2 id="evidencia-nao-e-so-anexo">Evidência não é só anexo</h2>
+<p>A foto, o e-mail e a transcrição ajudam a explicar o que aconteceu. No chamado, quero conseguir ler o contexto e abrir a fonte sem perder o registro original. Se duas cópias chegam com o mesmo conteúdo, a apresentação pode agrupá-las sem apagar os originais. Uma atualização que traz algo novo não deve sumir nesse agrupamento.</p>
+<h2 id="a-central-e-a-operacao-tem-funcoes-diferentes">A Central e a Operação têm funções diferentes</h2>
+<p>A equipe trabalha nos chamados pela Central. Administração de contas e permissões, diagnóstico da infraestrutura e tráfego ficam no console local, separado. Essa divisão permite conceder a um colaborador acesso às evidências sem entregar a gestão de usuários ou a telemetria do servidor.</p>
+<p>O inspetor se inspira no fluxo de leitura do Wireshark: lista a troca e mostra seu detalhe quando ela é selecionada. Aqui são metadados HTTP, como método, rota, código de resposta, duração e tamanhos. Ele não captura pacotes de rede nem lê o conteúdo das mensagens.</p>
+<p>Esse é o fechamento da série: da fonte arquivada ao uso no dia a dia, o que torna a informação útil é poder conferi-la e decidir quem realmente precisa acessá-la. As <a href="https://leodah20.github.io/runavolt-blog-publico/demonstracao/#diagnostico-local" target="_blank" rel="noopener noreferrer">telas da Operação na vitrine</a> usam somente dados fictícios.</p>
+    </div>
+    <nav class="article-nav" aria-label="Capítulos da série"><a class="article-nav__link article-nav__link--prev" href="../01-fonte-antes-do-relatorio/">&larr; Antes do relatório, guardar a fonte</a><a class="article-nav__link" href="../">Voltar à série</a></nav>
+  </article>
+</main>
+<script src="../../../js/shell.js"></script>
+</body>
+</html>
